@@ -1,0 +1,128 @@
+.dropdown:hover > .dropdown-menu{
+    display: block;
+    margin-top: 0;
+}
+.dropdown-menu {
+    min-width: 75px !important;
+
+}
+.dropdown > .dropdown:active {
+    /*Without this, clicking will make it sticky*/
+      pointer-events: none;
+  }
+
+body{
+  background-color: antiquewhite;
+}
+#userDropdownButton {
+    height: 35px !important;
+    width: 150px;
+    padding: 0.1rem 0.6rem !important;
+    position: relative;
+    margin-right: 10px;
+    margin-top: 0% ;
+
+    font-size: 1rem !important;
+    line-height: 1 !important;
+    display: flex;    
+    align-items: center !important;
+    text-align: center !important;
+    background-color: #FEF9E1;
+    color: gray;
+}
+#userDropdownButton i{
+  width: auto;
+  padding-right: 3px!important;
+  font-size: 1rem !important;
+  line-height: 1 !important;
+
+}
+#cart{
+  position: relative !important;
+  margin-left: 10px !important;
+  font-size: 1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding: 0.5rem 0.5rem !important;
+  top: 4px;
+  background-color: green;
+  border-color: transparent;
+  color: whitesmoke;
+}
+
+header{
+  background-color: #A31D1D;
+  color: black;
+}
+.search-bar-custom{
+  width: 700px;
+  justify-content: center;
+}
+.search-bar input[type = 'text']{
+  position: relative;
+  height: 30px !important;
+  padding-top: 15px;
+
+}
+.search-bar{
+  height: 45px;
+}
+.search-bar input[type='text']:focus{
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+#search-form{
+  padding-top: 5px !important;
+}
+#glass{
+  margin-bottom: 1px;
+}
+/* From Uiverse.io by andrew-demchenk0 */ 
+/* before adding the img to the div with the 
+"card-img" class, remove css styles 
+.card-img .img::before and .card-img .img::after,
+then set the desired styles for .card-img. */
+
+.card-img-top {
+  width: 100%;
+  height: 15vw;
+  object-fit: cover;
+}
+.main-logo{
+  width: 75% !important;
+}
+#carouselExampleCaptions{
+  border-radius: 250px !important;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  height: 40%;
+}
+.carousel > .carousel-inner > .carousel-item > img{
+  width:100px; /* Yeap you can change the width and height*/
+  height:295px;
+  border-radius: 250px;
+}
+
+.test{
+  margin-top: 10px;
+  width: 85%;
+}
+.modal-content {
+  width: 700px !important;
+  right: 110px !important;
+}
+.search-button{
+  background-color: transparent;
+  border-color: transparent;
+  width: 20px;
+  padding: none;
+}
+
+.btn-cart {
+  background-color: rgb(103, 171, 2);
+  margin-top:3px !important;
+  height: 36px;
+  
+}

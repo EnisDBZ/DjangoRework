@@ -1,0 +1,42 @@
+{%load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Ürün Görseli</th>
+                <th>Ürün Adı</th>
+                <th>Adet</th>
+                <th>Adet Fiyatı</th>
+                <th>Toplam Fiyat</th>
+                <th>Sil</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td><img src="{{ item.cart_name.product_image.url }}" width="50"></td>
+                <td>{{ item.cart_name.product_name }}</td>
+                <td>{{ item.cart_quantity }}</td>
+                <td>{{ item.cart_name.product_price }}₺</td>
+                <td>{{ item.cart_total }}₺</td>
+                <td>
+                    <a href="{% url 'intern_app:remove_from_cart' item.id %}" class="btn btn-danger btn-sm">Sil</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">Sepetiniz boş.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="text-end fw-bold">Toplam: {{ total_price }}₺</div>
+</body>
+</html>

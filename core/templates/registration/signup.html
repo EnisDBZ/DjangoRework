@@ -1,0 +1,47 @@
+{%load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'intern_app/css/signup.css'%}">
+    <title>Kayıt Ol</title>
+</head>
+<body>
+    <div class="container">
+        <div class="signup-box">
+            <form action="" method="post">
+                {%csrf_token%}
+                <h1>Hoşgeldiniz kayıt olabilirsiniz</h1>
+                {%if error%}
+                    <p>{{error}}</p>
+                {%endif%}
+                <div class="input-container">
+                    <input type="text" name="username" id="input" required="" autocomplete="one-time-code">
+                    <label for="input" class="label">Kullanıcı Adınız</label>
+                    <div class="underline"></div>
+                </div>
+                <div class="input-container">
+                    <input type="email" name="email" id="input" required="" autocomplete="one-time-code">
+                    <label for="input" class="label">E-posta Adresiniz</label>
+                    <div class="underline"></div>
+                </div>
+                <div class="input-container">
+                    <input type="password" name="password" id="input" required autocomplete="one-time-code">
+                    <label for="input" class="label">Şifreniz</label>
+                    <div class="underline"></div>
+                </div>
+                <div class="input-container">
+                    <input type="password" name="confirm_password" id="input" required autocomplete="one-time-code">
+                    <label for="input" class="label">Şifrenizi Onaylayın</label>
+                    <div class="underline"></div>
+                </div>
+                <button class="cta" name="signup">
+                    <span class="hover-underline-animation">Kayıt Ol</span>
+                </button>
+                <p class="bilgi">Hesabınız var mı?<span class="link"><a href="{% url 'intern_app:login'%}">Hemen </a></span> giriş yapın.</p>
+            </form>
+        </div>
+    </div>
+    
+</body>
+</html>

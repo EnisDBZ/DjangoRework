@@ -1,0 +1,72 @@
+{%load static%}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="text-center">
+        <div id="cart_result" class="container p-4 rounded shadow-sm w-50">
+            
+            <h2 class="mb-4">Sepetinizdeki Ürünler</h2>
+           
+                {% if not cart_items  %}
+                <p>Burada görüntülenecek bir ürün yok</p>   
+                {% else  %}
+            <table class="table table-bordered table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                       
+                        <th scope="col">Ürün Görseli</th>
+                        <th scope="col">Ürün Adı</th>
+                        <th scope="col">Adet</th>
+                        <th scope="col">Adet Fiyatı</th>
+                        <th scope="col">Toplam Fiyat</th>
+                        <th scope="col"></th>
+                        
+                        {%endif%}
+                        
+                    </tr>
+                   
+                </thead>
+                
+                <tbody>
+                    {% for item in cart_items %}
+                    <tr class="pt-4" align="center">
+                        <td align="center">
+                            <img src="{{ item.cart_name.product_image.url }}" width="75px" height="75px" style="object-fit: contain;" alt="{{ item.cart_product_name.product_name }}">
+                        </td>
+                        <td class="pt-4">{{ item.cart_name.product_name }}</td>
+                        <td class="pt-4">
+                            <form action="{% url 'intern_app:update_cart' item.id %}" method="POST">
+                                {% csrf_token %}
+                                <input type="number" value="{{ item.cart_quantity }}" id="quantityCart" name="quantity" min="1" max="999">
+                                <button type="submit" class="btn btn-primary btn-sm">Güncelle</button>
+                            </form>
+                        </td>
+                        <td class="pt-4">{{ item.cart_name.product_price }}₺</td>
+                        <td class="pt-4">{{ item.cart_total }}₺</td>
+                        <td class="pt-4">
+                            <a href="{% url 'intern_app:remove_from_cart' item.id %}">
+                                <button class="btn btn-danger btn-sm">Kaldır</button>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="fw-bold fs-5">Toplam Fiyat: {{ total_price }}₺</div>
+            <a href="#">
+                <button class="btn btn-secondary btn-sm">Ödemeye Geç</button>
+            </a>
+        </div>
+    </div>
+</div>    
+</body>
+</html>
+

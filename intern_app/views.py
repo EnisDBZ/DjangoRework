@@ -1,14 +1,25 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth import authenticate,login,logout,get_user_model
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
-from .models import Products , CartItem
+from .models import Products , CartItem , Categories
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 
 # Create your views here.
+def categories_list(request):
+    categories = Categories.objects.all()  # Tüm kategorileri al
+    return render(request, "intern_app/categories.html", {"categories": categories})
+
+def categories(request, slug):
+    category = get_object_or_404(Categories,slug=slug)
+    products = Products.objects.filter(product_category = category)
+
+
+    return render(request, "intern_app/categories_added.html", {"category": category, "products": products})
+
 def search_view(request):
     if request.method == 'POST':
         search_query = request.POST.get('search_query')

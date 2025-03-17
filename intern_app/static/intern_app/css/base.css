@@ -3,7 +3,7 @@
     margin-top: 0;
 }
 .dropdown-menu {
-    min-width: 75px !important;
+  min-width: 75px !important;
 
 }
 .dropdown > .dropdown:active {
@@ -58,20 +58,25 @@ header{
 .search-bar-custom{
   width: 700px;
   justify-content: center;
+  border-radius: 100px!important  ;
 }
-.search-bar input[type = 'text']{
+.search-bar input[type = 'search']{
   position: relative;
   height: 30px !important;
   padding-top: 15px;
+  align-items: center;
 
+  
 }
 .search-bar{
   height: 45px;
+ 
 }
 .search-bar input[type='text']:focus{
   border-color: inherit;
   -webkit-box-shadow: none;
   box-shadow: none;
+  
 }
 #search-form{
   padding-top: 5px !important;
@@ -124,5 +129,58 @@ then set the desired styles for .card-img. */
   background-color: rgb(103, 171, 2);
   margin-top:3px !important;
   height: 36px;
+  width: 7rem;
   
 }
+.login_and_cart{
+  margin-left: 65rem !important;
+  display: flex;
+  position: relative;
+  border-color: black solid;
+  bottom: 65px;
+  
+}
+.skibidi{
+  margin-left: 68rem;
+  margin-bottom: 10rem!important;
+  width:10rem;
+  position: absolute;
+    top: 25px;
+    right: 150px;
+    display: flex;
+    align-items: center;
+
+}
+.log_cart{
+  margin-left: 65rem;
+  margin-bottom: 15rem;
+}
+.header_one_alt{
+  height: 5.7rem;
+}
+
+.img {
+  display: flex;  /* İçeriği div'in içinde hizalar */
+  align-items: center; /* Dikey hizalamayı düzeltir */
+  justify-content: center; /* Yatay hizalamayı düzeltir */
+  overflow: hidden; /* Taşan kısımları gizler */
+  padding: 20; /* Fazladan boşlukları kaldırır */
+  margin: 30; /* Gereksiz boşlukları sıfırlar */
+  width: 90%; /* Resmin dışarı taşmasını önler */
+  background: rgba(255, 255, 255,0.1);
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 7.5px );
+  -webkit-backdrop-filter: blur( 7.5px );
+  border-radius: 10px;
+  border: 0.1px solid rgba( 255, 255, 255, 0.1 );
+}
+
+
+.img-box .img img {
+  width: 50%; /* Resmin div'i tamamen kaplamasını sağlar */
+  
+  height: auto; /* Oranlarını korur */
+  display: block; /* Resmin altında boşluk oluşmasını engeller */
+}
+
+

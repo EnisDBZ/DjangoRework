@@ -5,6 +5,7 @@ from django.core.validators import EmailValidator,MinLengthValidator
 # Create your models here.
 class Categories(models.Model):
     name = models.CharField(max_length=255,unique=True)
+    description = models.CharField(max_length=255,null=True)
     image = models.ImageField(upload_to='category_images/')
     slug = models.SlugField(unique=True)
 

@@ -99,9 +99,14 @@ def signup_view(request):
 
 # Shopping #
 
-def product_view(request):
+def product_view(request,category_id = None):
     products = Products.objects.all()
-    return render(request,'intern_app/index.html',{'products':products})
+    category = None
+    if category_id:
+        category = get_object_or_404(Categories,id = category_id)
+        products = Products.objects.filter(product_category=category)
+    return render(request,'intern_app/index.html',{'products':products, 'category':category})
+
 
 def update_cart(request, item_id):
     if request.method == 'POST':

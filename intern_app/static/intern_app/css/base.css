@@ -59,23 +59,26 @@ header{
   width: 700px;
   justify-content: center;
   border-radius: 100px!important  ;
+  
+
 }
 .search-bar input[type = 'search']{
   position: relative;
   height: 30px !important;
-  padding-top: 15px;
-  align-items: center;
-
-  
+  padding-top: 10px;
+  outline: none;
+  right: 20px !important;
 }
 .search-bar{
   height: 45px;
+
  
 }
-.search-bar input[type='text']:focus{
-  border-color: inherit;
+.search-bar input[type='search']:focus{
+  border-color: white!important;
   -webkit-box-shadow: none;
   box-shadow: none;
+  outline: none !important;
   
 }
 #search-form{
@@ -182,5 +185,6 @@ then set the desired styles for .card-img. */
   height: auto; /* Oranlarını korur */
   display: block; /* Resmin altında boşluk oluşmasını engeller */
 }
+
 
 

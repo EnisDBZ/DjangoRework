@@ -1,7 +1,29 @@
 {%extends 'base.html'%}
 {%load static%}
 {%block content%}
-<h2>{{ category.name }}</h2> <!-- ✅ Kategori başlığını göster -->
+<h2 style="text-align: center; padding-top: 20px;">{{ sub_category.name }}</h2> <!-- ✅ Kategori başlığını göster -->
+{% if sub_categories%}
+<link rel="stylesheet" href="{%static 'intern_app/css/category.css'%}">
+<div class="container-fluid test">
+    <div class=" card_wrap row row-cols-2 row-cols-md-3 row-cols-lg-2 g-5 p-5 ms-0 " >
+        {% for sub_category in sub_categories %}
+        <div class="col">
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+                <img src="{{sub_category.image.url}}" alt="{{ sub_category.name }}" class="card__image" style="object-fit: cover;">
+              
+                <a href="{% url 'intern_app:category_products' slug=sub_category.slug %}" class="stretched-link"></a>
+         
+
+                <div class="card__content">
+                    <p class="card__title">{{sub_category.name}}
+                    </p><p class="card__description">{{sub_category.description}}</p>
+                </div>
+            </div>
+        </div>        
+        {% endfor %}
+    </div> 
+</div> 
+{%endif%}
 
 <div class="container-fluid test">
     <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-3 p-2" > <!-- Maksimum 6 sütun olacak şekilde ayarlandı -->
@@ -13,7 +35,9 @@
                      alt="{{ product.product_name }}">
                 <div class="card-body p-2">
                     <h6 class="card-title text-primary">{{ product.product_name }}</h6>
+                    <p class="card-text text-muted" style="font-size: 0.8rem;">Kategori:{{ category.name }}</p>
                     <p class="card-text text-muted" style="font-size: 0.8rem;">{{ product.product_description }}</p>
+                    
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item fw-bold" style="font-size: 0.9rem;">{{ product.product_price }}₺</li>

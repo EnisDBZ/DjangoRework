@@ -1,24 +1,46 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from django.contrib.auth import authenticate,login,logout,get_user_model
+from django.contrib.auth import authenticate,login,logout,get_user_model,update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
-from .models import Products , CartItem , Categories
+from .models import Products , CartItem , Categories 
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 
+
+
 # Create your views here.
 def categories_list(request):
-    categories = Categories.objects.all()  # Tüm kategorileri al
-    return render(request, "intern_app/categories.html", {"categories": categories})
+    categories = Categories.get_main_categories() # Tüm kategorileri al
+   
+
+    context = {
+        'categories':categories,
+     
+       
+    }
+    return render(request, "intern_app/categories.html",context)
 
 def categories(request, slug):
     category = get_object_or_404(Categories,slug=slug)
-    products = Products.objects.filter(product_category = category)
+    products = Products.objects.filter(product_category=category)
+    sub_categories = category.sub_categories.all()
+    context = {
+        'category':category,
+        'products' : products,
+        'sub_categories': sub_categories
+    }
+
+    return render(request, "intern_app/categories_added.html", context)
 
 
-    return render(request, "intern_app/categories_added.html", {"category": category, "products": products})
+"""def subcategory(request):
+    sub_category = SubCategories.objects.all()
+    context ={
+        'sub_category' : sub_category
+    }
+    return render(request,'intern_app/sub_categories.html',context)"""
 
 def search_view(request):
     if request.method == 'POST':
@@ -32,8 +54,77 @@ def search_view(request):
 def index(request):
     return render(request,'intern_app/index.html')
 
+@login_required
+def setting(request):
+    return render(request,'intern_app/setting.html')
+
 # Authentication #
 User = get_user_model()
+
+def update_names(request):
+    if request.method == 'POST':
+        isim = request.POST.get('isim')
+        soyisim = request.POST.get('soyisim')
+
+        if len(isim) < 2:
+            messages.error(request,'İsminiz en az 2 karakterli olabilir!')
+            return redirect('intern_app:update_names')
+        if len(soyisim) < 2:
+            messages.error(request,'Soyisminiz en az 2 karakterli olabilir!')
+            return redirect('intern_app:update_names')
+        
+        request.user.first_name = isim
+        request.user.last_name = soyisim
+        request.user.save()
+
+        update_session_auth_hash(request,request.user) #Kullanıcı çıkış yapmasın
+        messages.success(request,'Bilgileriniz başarıyla güncellendi!')
+        return redirect('intern_app:settings')
+    return render(request,'intern_app/setting.html')
+
+
+def update_email(request):
+    if request.method == 'POST':
+        old_email = request.POST.get('old_email')
+        new_email = request.POST.get('new_email')
+
+        if request.user.email != old_email:
+            messages.error(request,'Eski e-posta adresinizi yanlış girdiniz!')
+            return redirect('intern_app:update_email')
+        
+        #Değiştirilmek istenen e-posta kullanımda mı ?
+        if User.objects.filter(email = new_email).exists():
+            messages.error(request,'Bu eposta adresi zaten kullanılmakta!')
+            return redirect('intern_app:update_email')
+        
+        request.user.email = new_email
+        request.user.save()
+
+        update_session_auth_hash(request,request.user)
+        messages.success(request,'E-posta adresiniz başarıyla güncellendi!')
+        return redirect('intern_app:settings')
+    return render(request,'intern_app/setting.html')
+def update_password(request):
+    if request.method == 'POST':
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+
+        if not request.user.check_password(old_password):
+            messages.error(request,'Eski şifrenizi yanlış girdiniz!')
+            return redirect('intern_app:update_password')
+        
+        if len(new_password) < 8:
+            messages.error(request,'Yeni şifreniz en az 8 karakter olmak zorunda!')
+            return redirect("intern_app:update_password")
+        
+        request.user.set_password(new_password)
+        request.user.save()
+        update_session_auth_hash(request,request.user) # Oturumu açık tutmak için
+
+        messages.success(request,'Şifreniz başarıyla güncellendi!')
+        return redirect('intern_app:settings')
+    
+    return render(request,"intern_app/setting.html")
 
 def redirect_url_(request):
     if request.user.is_authenticated :

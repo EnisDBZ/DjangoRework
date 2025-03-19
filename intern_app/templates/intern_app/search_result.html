@@ -6,6 +6,7 @@
         <div>
             <!-- Check if there is a result in the database-->
             {% if posts %}
+            <h1>Yaptığınız "{{query}}" sorgusuna göre sonuçlar:</h1>
                 <!-- Loop through search query if there is a result -->
                 <div class="container-fluid test">
                     <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-3 p-2"> <!-- Maksimum 6 sütun olacak şekilde ayarlandı -->
@@ -40,7 +41,7 @@
                     </div>
                 </div>
             {% else %}
-                <h3 style="text-align: center; margin-top: 10rem;">Aradığınız sonuç bulunamadı.</h3>
+                <h3 style="text-align: center; margin-top: 10rem;">Aradığınız "{{query}}" sorgusuna göre bir sonuç bulunamadı.</h3>
             {% endif %}
         </div>
     </div>

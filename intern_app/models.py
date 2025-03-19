@@ -8,11 +8,20 @@ class Categories(models.Model):
     description = models.CharField(max_length=255,null=True)
     image = models.ImageField(upload_to='category_images/')
     slug = models.SlugField(unique=True)
+    sub_categories = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="parent_categories")
+
+    @staticmethod
+    def get_all_categories():
+        return Categories.objects.all()
+    @staticmethod
+    def get_main_categories():
+        # Başka bir kategorinin alt kategorisi OLMAYAN ana kategorileri getir
+        return Categories.objects.filter(parent_categories__isnull=True)
 
     def __str__(self):
         return self.name
     
-    def Meta():
+    class Meta():
         verbose_name = 'Kategori'
         verbose_name_plural = 'Kategoriler'
 
@@ -25,7 +34,8 @@ class PersonUser(AbstractUser):
     
 class Products(models.Model):
     product_name = models.CharField(max_length=255)
-    product_category = models.ForeignKey(Categories, on_delete=models.CASCADE,related_name='products' ,null=True)
+    product_category = models.ManyToManyField(Categories,related_name="products")
+    #product_category = models.ForeignKey(Categories, on_delete=models.CASCADE,related_name='products' ,null=True)
     product_description = models.TextField(null=True)
     product_price = models.DecimalField(max_digits=9,decimal_places=2)    
     product_image = models.ImageField(upload_to='products/')   

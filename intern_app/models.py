@@ -4,11 +4,11 @@ from django.core.validators import EmailValidator,MinLengthValidator
 
 # Create your models here.
 class Categories(models.Model):
-    name = models.CharField(max_length=255,unique=True)
-    description = models.CharField(max_length=255,null=True)
-    image = models.ImageField(upload_to='category_images/')
-    slug = models.SlugField(unique=True)
-    sub_categories = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="parent_categories")
+    name = models.CharField(max_length=255,unique=True,verbose_name="Kategori İsmi")
+    description = models.CharField(max_length=255,null=True,verbose_name="Kategori Açıklaması")
+    image = models.ImageField(upload_to='category_images/',verbose_name="Kategori Görseli")
+    slug = models.SlugField(unique=True,verbose_name="Alan Adı")
+    sub_categories = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="parent_categories",verbose_name="Alt Kategoriler")
 
     @staticmethod
     def get_all_categories():
@@ -17,6 +17,7 @@ class Categories(models.Model):
     def get_main_categories():
         # Başka bir kategorinin alt kategorisi OLMAYAN ana kategorileri getir
         return Categories.objects.filter(parent_categories__isnull=True)
+
 
     def __str__(self):
         return self.name
@@ -33,12 +34,12 @@ class PersonUser(AbstractUser):
         return self.username
     
 class Products(models.Model):
-    product_name = models.CharField(max_length=255)
-    product_category = models.ManyToManyField(Categories,related_name="products")
+    product_name = models.CharField(max_length=255, verbose_name="Ürün Adı")
+    product_category = models.ManyToManyField(Categories,related_name="products",verbose_name="Ürün Kategorisi")
     #product_category = models.ForeignKey(Categories, on_delete=models.CASCADE,related_name='products' ,null=True)
-    product_description = models.TextField(null=True)
-    product_price = models.DecimalField(max_digits=9,decimal_places=2)    
-    product_image = models.ImageField(upload_to='products/')   
+    product_description = models.TextField(null=True,verbose_name="Ürün Açıklaması")
+    product_price = models.DecimalField(max_digits=9,decimal_places=2,verbose_name="Ürün Fiyatı")    
+    product_image = models.ImageField(upload_to='products/',verbose_name="Ürün Görseli")   
 
     def __str__(self):
         return self.product_name

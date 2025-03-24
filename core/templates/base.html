@@ -1,17 +1,19 @@
 {%load static%}
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--Bootstrap-->
-    <link rel="stylesheet" href="{%static 'intern_app/css/bootstrap.css'%}">
-    <link rel="stylesheet" href="{% static 'intern_app/css/bootstrap-icons.css' %}">
-    <script src="{%static 'intern_app/js/bootstrap.js'%}"></script>
-    <!--Bootstrap-->
-    <script src="{%static 'intern_app/js/dropdown.js'%}"></script>
-    <link rel="stylesheet" href="{%static 'intern_app/css/base.css'%}">
-    <title>Hoşgeldiniz</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--Bootstrap-->
+  <link rel="stylesheet" href="{%static 'intern_app/css/bootstrap.css'%}">
+  <link rel="stylesheet" href="{% static 'intern_app/css/bootstrap-icons.css' %}">
+  <script src="{%static 'intern_app/js/bootstrap.js'%}"></script>
+  <!--Bootstrap-->
+  <script src="{%static 'intern_app/js/dropdown.js'%}"></script>
+  <link rel="stylesheet" href="{%static 'intern_app/css/base.css'%}">
+  <title>Hoşgeldiniz</title>
 </head>
+
 <body>
   <header>
     <div class="container  header-base">
@@ -27,243 +29,389 @@
 
         <div class="col-sm-6 offset-sm-2 offset-md-0 col-lg-5 d-none d-lg-block search-bar-custom">
           <div class="search-bar border rounded-2 px-3 border-dark-subtle">
-            <form id="search-form" class="text-center d-flex align-items-center " role="search" action="{% url 'intern_app:search' %}" method="POST">
+            <form id="search-form" class="text-center d-flex align-items-center " role="search"
+              action="{% url 'intern_app:search' %}" method="POST">
               {%csrf_token%}
-              <input 
-              type="search" 
-              class="form-control border-0 bg-transparent" 
-              name="search_query"
-              required aria-label="Search"
-              autocomplete="off"
-              placeholder="İstediğiniz ürünü arayın.">
+              <input type="search" class="form-control border-0 bg-transparent" name="search_query" required
+                aria-label="Search" autocomplete="off" placeholder="İstediğiniz ürünü arayın.">
               <button class="search-button">
-              <svg xmlns="http://www.w3.org/2000/svg" id ='glass' width="24" height="24" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z"></path>
-              </svg>
-            </button>
+                <svg xmlns="http://www.w3.org/2000/svg" id='glass' width="24" height="24" viewBox="0 0 24 24">
+                  <path fill="currentColor"
+                    d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z">
+                  </path>
+                </svg>
+              </button>
             </form>
           </div>
         </div>
-      
-          <div class="col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mb-0 mb-sm-0 justify-content-center justify-content-sm-start me-5   skibidi">
-         
-            <div class="d-none d-lg-flex align-items-end  ">
-              <ul class="d-flex justify-content-end list-unstyled m-0">
-                <li>
-                  <div class="dropdown pt-1" id ="userDropdown">
+
+        <div
+          class="col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mb-0 mb-sm-0 justify-content-center justify-content-sm-start me-5   skibidi">
+
+          <div class="d-none d-lg-flex align-items-end  ">
+            <ul class="d-flex justify-content-end list-unstyled m-0">
+              <li>
+                <div class="dropdown pt-1" id="userDropdown">
+                  {%csrf_token%}
+                  <a href="{%url 'login'%}" class="btn" id="userDropdownButton" role="button" aria-expanded="false">
+
+                    <i class="bi bi-person-circle">
+                    </i>
                     {%csrf_token%}
-                    <a  href="{%url 'login'%}" class="btn" id="userDropdownButton" role="button" aria-expanded="false">
-                      
-                      <i class="bi bi-person-circle"> 
-                      </i>
-                      {%csrf_token%}
-                      {%if user.is_authenticated%}
-                       Merhaba, {{user.username}}!
-                      {%else%}
-                       Giriş Yap
-                      {% endif %}
-                    </a>
-                  
-                    <ul class="dropdown-menu ">
-                      {%if not user.is_authenticated%}
-                      <li><a class="dropdown-item  " href="{%url 'login'%}">Giriş Yap</a></li>
-                      <li><a class="dropdown-item  " href="{%url 'intern_app:signup'%}">Kayıt Ol</a></li>
-                      
-                      {%elif user.is_superuser or user.is_staff%} 
-                      <li><a href="{% url 'intern_app:settings'%}" class="dropdown-item">Ayarlar</a></li>
-                      <li><a href="{%url 'admin:index' %}" class="dropdown-item">Yönetici Paneli</a></li>
-                      <li><a class="dropdown-item  " href="{% url 'logout' %}?next=/">Çıkış yap</a></li>
-                      {%else%}
-                      <li><a href="{% url 'intern_app:settings'%}" class="dropdown-item">Ayarlar</a></li>
-                      <li><a class="dropdown-item  " href="{% url 'logout' %}?next=/">Çıkış yap</a></li>
-                      
-                      {%endif%}
-                      
-                    </ul>
-                  </div>
-                </li>       
-                <li class="">
-                  <a class="btn btn-secondary btn-cart" href="#" role="button" aria-expanded="false"> 
-                    <i class="bi bi-basket3 pe-2"></i>
-                    Sepetim               
-  
+                    {%if user.is_authenticated%}
+                    Merhaba, {{user.username}}!
+                    {%else%}
+                    Giriş Yap
+                    {% endif %}
                   </a>
-                </li>
-              </ul>
-  
-            </div>
 
-        </div>
-      </div>
+                  <ul class="dropdown-menu ">
+                    {%if not user.is_authenticated%}
+                    <li><a class="dropdown-item  " href="{%url 'login'%}">Giriş Yap</a></li>
+                    <li><a class="dropdown-item  " href="{%url 'intern_app:signup'%}">Kayıt Ol</a></li>
 
+                    {%elif user.is_superuser or user.is_staff%}
+                    <li><a href="{% url 'intern_app:settings'%}" class="dropdown-item">Ayarlar</a></li>
+                    <li><a href="{%url 'admin:index' %}" class="dropdown-item">Yönetici Paneli</a></li>
+                    <li><a class="dropdown-item  " href="{% url 'logout' %}?next=/">Çıkış yap</a></li>
+                    {%else%}
+                    <li><a href="{% url 'intern_app:settings'%}" class="dropdown-item">Ayarlar</a></li>
+                    <li><a class="dropdown-item  " href="{% url 'logout' %}?next=/">Çıkış yap</a></li>
 
-    <div class="container-fluid">
-      <hr class="m-0">
-    </div>
+                    {%endif%}
 
-    <div class="container">
-      <nav class="main-menu d-flex navbar navbar-expand-lg ">
-
-        <div class="d-flex d-lg-none align-items-end mt-3">
-          <ul class="d-flex justify-content-end list-unstyled m-0">
-            <li>
-              <a href="account.html" class="mx-3">
-                <iconify-icon icon="healthicons:person" class="fs-4"></iconify-icon>
-              </a>
-            </li>
-            <li>
-              <a href="wishlist.html" class="mx-3">
-                <iconify-icon icon="mdi:heart" class="fs-4"></iconify-icon>
-              </a>
-            </li>
-
-            <li>
-              <a href="#" class="mx-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-                <iconify-icon icon="mdi:cart" class="fs-4 position-relative"></iconify-icon>
-                <span class="position-absolute translate-middle badge rounded-circle bg-primary pt-2">
-                  03
-                </span>
-              </a>
-            </li>
-
-            <li>
-              <a href="#" class="mx-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSearch" aria-controls="offcanvasSearch">
-                <iconify-icon icon="tabler:search" class="fs-4"></iconify-icon>
-                
-              </a>
-            </li>
-          </ul>
-
-        </div>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-
-          <div class="offcanvas-header justify-content-center">
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-          </div>
-
-          <div class="offcanvas-body  justify-content-start align-items-end">
-
-            <ul class="navbar-nav menu-list list-unstyled d-flex gap-md-3 mb-0 ">
-              <li class="nav-item">
-                <a href="{%url 'intern_app:index'%}" class="nav-link active">Anasayfa</a>
+                  </ul>
+                </div>
               </li>
-              <ul class="navbar-nav menu-list list-unstyled d-flex gap-md-3 mb-0 ">
-                <li class="nav-item">
-                  <a href="{%url 'intern_app:categories' %}" class="nav-link active"><i class="bi bi-list"></i>Kategoriler</a>
-                </li>
-              <!--
-              <li class="nav-item">
-                <a href="index.html" class="nav-link">Shop</a>
-              </li>
-              <li class="nav-item">
-                <a href="index.html" class="nav-link">Blog</a>
-              </li>
-              <li class="nav-item">
-                <a href="index.html" class="nav-link">Contact</a>
-              </li>
-              <li class="nav-item">
-                <a href="index.html" class="nav-link">Others</a>
+              <li class="">
+                <a class="btn btn-secondary btn-cart" href="#" role="button" aria-expanded="false">
+                  <i class="bi bi-basket3 pe-2"></i>
+                  Sepetim
+
+                </a>
               </li>
             </ul>
-            -->
-           
 
-            </div>
           </div>
+
         </div>
-      </nav>
-</div>
-</header>
+      </div>
 
-<!-- Sepetim Modal -->
-<div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="cartModalLabel">Sepetiniz</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+
+      <div class="container-fluid">
+        <hr class="m-0">
+      </div>
+
+      <div class="container">
+        <nav class="main-menu d-flex navbar navbar-expand-lg ">
+
+          <div class="d-flex d-lg-none align-items-end mt-3">
+            <ul class="d-flex justify-content-end list-unstyled m-0">
+              <li>
+                <a href="account.html" class="mx-3">
+                  <iconify-icon icon="healthicons:person" class="fs-4"></iconify-icon>
+                </a>
+              </li>
+              <li>
+                <a href="wishlist.html" class="mx-3">
+                  <iconify-icon icon="mdi:heart" class="fs-4"></iconify-icon>
+                </a>
+              </li>
+
+              <li>
+                <a href="#" class="mx-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart"
+                  aria-controls="offcanvasCart">
+                  <iconify-icon icon="mdi:cart" class="fs-4 position-relative"></iconify-icon>
+                  <span class="position-absolute translate-middle badge rounded-circle bg-primary pt-2">
+                    03
+                  </span>
+                </a>
+              </li>
+
+              <li>
+                <a href="#" class="mx-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSearch"
+                  aria-controls="offcanvasSearch">
+                  <iconify-icon icon="tabler:search" class="fs-4"></iconify-icon>
+
+                </a>
+              </li>
+            </ul>
+
           </div>
-          <div class="modal-body">
-              {% if cart_items %}
-                 
-                      
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <table class="table table-bordered table-striped table-hover">
-                          <thead class="thead-dark">
-                              <tr>
-                                 
-                                  <th scope="col">Ürün Görseli</th>
-                                  <th scope="col">Ürün Adı</th>
-                                  <th scope="col">Adet</th>
-                                  <th scope="col">Adet Fiyatı</th>
-                                  <th scope="col">Toplam Fiyat</th>
-                                  <th scope="col"></th>
-                   
-                              </tr>
-                             
-                          </thead>
-                    
-                  <tbody>
-                    {% for item in cart_items %}
-                    <tr class="pt-4" align="center">
-                        <td align="center">
-                            <img src="{{ item.cart_name.product_image.url }}" width="75px" height="75px" style="object-fit: contain;" alt="{{ item.cart_product_name.product_name }}">
-                        </td>
-                        <td class="pt-4">{{ item.cart_name.product_name }}</td>
-                        <td class="pt-4">
-                            <form action="{% url 'intern_app:update_cart' item.id %}" method="POST">
-                                {% csrf_token %}
-                                <input type="number" class="form-control text-center" style="width: 50px; font-size: 0.8rem;" value="{{ item.cart_quantity }}" id="quantityCart" name="quantity" min="1" max="999">
-                                <button type="submit" class="btn btn-primary btn-sm mt-2"><i class="bi bi-arrow-repeat"></i></button>
-                            </form>
-                        </td>
-                        <td class="pt-4">{{ item.cart_name.product_price }}₺</td>
-                        <td class="pt-4">{{ item.cart_total }}₺</td>
-                        <td class="pt-4">
-                            <a href="{% url 'intern_app:remove_from_cart' item.id %}">
-                                <button class="btn btn-danger btn-sm">Kaldır</button>
+
+          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+            aria-controls="offcanvasNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+            aria-labelledby="offcanvasNavbarLabel">
+
+            <div class="offcanvas-header justify-content-center">
+              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+
+            <div class="offcanvas-body  justify-content-start align-items-end">
+
+              <ul class="navbar-nav menu-list list-unstyled d-flex gap-md-3 mb-0 ">
+                <li class="nav-item">
+                  <a href="{%url 'intern_app:index'%}" class="nav-link active" style="font-style: italic;">Anasayfa</a>
+                </li>
+                <ul class="navbar-nav menu-list list-unstyled d-flex gap-md-3 mb-0">
+                  <li class="nav-item dropdown  custom-category-dropdown">
+                    <a href="{% url 'intern_app:categories' %}" class="nav-link d-flex align-items-center gap-1"
+                      aria-expanded="false">
+                      <i class="bi bi-list"> Kategoriler</i>
+                    </a>
+
+                    <ul class="dropdown-menu custom-category-menu shadow border-0 mt-2 rounded">
+                      {% for category in categories %}
+                      <li class="dropdown-submenu position-relative">
+                        <a class="dropdown-item d-flex justify-content-start align-items-center btn"
+                          href="{% url 'intern_app:category_products' category.slug %}">
+                          {{ category.name }}
+                          {% if category.sub_categories.all %}
+                          <i class="bi bi-chevron-right"></i> <!-- Sağ ok ikonu -->
+                          {% endif %}
+                        </a>
+
+                        {% if category.sub_categories.all %}
+                        <ul class="dropdown-menu  start-100 imlosingmymind">
+
+                          {% for sub_category in category.sub_categories.all %}
+
+                          <li>
+                            <a class="dropdown-item "
+                              href="{% url 'intern_app:category_products' slug=sub_category.slug %}">
+                              {{ sub_category.name }}
                             </a>
-                        </td>
-                    </tr>
+                          </li>
+                          {% endfor %}
+
+                        </ul>
+
+                        {% endif %}
+                      </li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  <ul class="new-navbar-nav navbar-nav new-menu-list menu-list list-unstyled d-flex gap-md-3 mb-0">
+                    {% for category in categories %}
+                    <li class="new-nav-item nav-item new-dropdown dropdown new-custom-category-dropdown position-relative">
+                        <a href="{% url 'intern_app:category_products' category.slug %}" class="nav-link active"
+                           style="font-style: italic;">{{ category.name }}</a>
+                
+                        {% if category.sub_categories.all %}
+                        <ul class="new-dropdown-menu dropdown-menu new-custom-category-menu shadow border-0 mt-2 rounded">
+                            {% for sub_category in category.sub_categories.all %}
+                            <li>
+                                <a class="new-dropdown-item dropdown-item"
+                                   href="{% url 'intern_app:category_products' slug=sub_category.slug %}">
+                                   {{ sub_category.name }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </li>
                     {% endfor %}
-                </tbody>
+                </ul>
+
+        </nav>
+      </div>
+  </header>
+
+  <!-- Sepetim Modal -->
+  <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="cartModalLabel">Sepetiniz</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+        </div>
+        <div class="modal-body">
+          {% if cart_items %}
+
+
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <table class="table table-bordered table-striped table-hover">
+              <thead class="thead-dark">
+                <tr>
+
+                  <th scope="col">Ürün Görseli</th>
+                  <th scope="col">Ürün Adı</th>
+                  <th scope="col">Adet</th>
+                  <th scope="col">Adet Fiyatı</th>
+                  <th scope="col">Toplam Fiyat</th>
+                  <th scope="col"></th>
+
+                </tr>
+
+              </thead>
+
+              <tbody>
+                {% for item in cart_items %}
+                <tr class="pt-4" align="center">
+                  <td align="center">
+                    <img src="{{ item.cart_name.product_image.url }}" width="75px" height="75px"
+                      style="object-fit: contain;" alt="{{ item.cart_product_name.product_name }}">
+                  </td>
+                  <td class="pt-4">{{ item.cart_name.product_name }}</td>
+                  <td class="pt-4">
+                    <form action="{% url 'intern_app:update_cart' item.id %}" method="POST">
+                      {% csrf_token %}
+                      <div class="d-flex justify-content-center quantity-input-base align-items-center gap-1">
+                        <button type="button" class="btn gray1" id="decrease-{{item.id}}"
+                          onclick="changeQuantity(-1,{{item.id}})">
+                          <i class="bi bi-dash-lg"></i>
+                        </button>
+                        <input type="number" name="quantity" id="quantity-{{item.id}}" min="1" max="999"
+                          value="{{ item.cart_quantity }}" required class="form-control text-center"
+                          style="width: 80px; font-size: 1rem;"
+                          oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        <button type="button" class="btn gray2" id="increase-{{item.id}}"
+                          onclick="changeQuantity(1,{{item.id}})">
+                          <i class="bi bi-plus-lg"></i>
+                        </button>
+                      </div>
+                      <button type="submit" class="btn btn-primary btn-sm mt-2"><i
+                          class="bi bi-arrow-repeat"></i></button>
+                    </form>
+                  </td>
+                  <td class="pt-4">{{ item.cart_name.product_price }}₺</td>
+                  <td class="pt-4">{{ item.cart_total }}₺</td>
+                  <td class="pt-4">
+                    <a href="{% url 'intern_app:remove_from_cart' item.id %}">
+                      <button class="btn btn-danger btn-sm"><i class="bi bi-trash3"></i></button>
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
             </table>
             <div class="text-end mt-3 fw-bold fs-5 total-price">Toplam Fiyat: {{ total_price }}₺</div>
-              {% else %}
-                  <p>Sepetiniz boş.</p>
-              {% endif %}
-          </div>
+            {% else %}
+            <p>Sepetiniz boş.</p>
+            {% endif %}
+        </div>
       </div>
+    </div>
   </div>
-</div>
+  {%block banner%}
+  <div class="banner-sol">
+      <img src="{%static 'intern_app/images/pattern2_blue.png'%}" alt="">
+      <img src="{%static 'intern_app/images/pattern2_blue.png'%}" alt="">
+      <img src="{%static 'intern_app/images/pattern2_blue.png'%}" alt="">
+      <img src="{%static 'intern_app/images/pattern2_blue.png'%}" alt="">
+   
+  </div>
+  <div class="banner-sag">
+      <img src="{%static 'intern_app/images/pattern2_blue.png'%}" alt="">
+      
+  
+  
+  </div>
+  {%endblock%}
+  
+  {%block content%}
 
-{%block content%}
+  {%endblock%}
 
-{%endblock%}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function(){
-    $(".btn-cart").click(function(e){
-        e.preventDefault();  // Butona tıklayınca sayfa yenilenmesini önle
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $(".btn-cart").click(function (e) {
+        e.preventDefault(); // Butona tıklayınca sayfa yenilenmesini önle
 
         $.ajax({
-            url: "{% url 'intern_app:cart' %}",  // Django'daki cart_view fonksiyonunu çağırıyoruz
-            type: "GET",
-            success: function(response) {
-                $("#cartModalBody").html(response); // Modal içine HTML'i koy
-                $("#cartModal").modal("show"); // Modalı aç
-            },
-            error: function() {
-                $("#cartModalBody").html("<p>Sepet yüklenirken hata oluştu.</p>");
-            }
+          url: "{% url 'intern_app:cart' %}", // Django'daki cart_view fonksiyonunu çağırıyoruz
+          type: "GET",
+          success: function (response) {
+            $("#cartModalBody").html(response); // Modal içine HTML'i koy
+            $("#cartModal").modal("show"); // Modalı aç
+          },
+          error: function () {
+            $("#cartModalBody").html("<p>Sepet yüklenirken hata oluştu.</p>");
+          }
+        });
+      });
+    });
+  </script>
+
+  <script>
+    function changeQuantity(amount, productId) {
+      // Dinamik olarak doğru input alanını seçiyoruz
+      let input = document.getElementById('quantity-' + productId);
+      let currentValue = parseInt(input.value) || 1; // Safeguard against NaN
+      let newValue = currentValue + amount;
+
+      // Ensure value stays within the min/max range
+      if (newValue >= 1 && newValue <= 999) {
+        input.value = newValue;
+      }
+    }
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      let categoryDropdown = document.querySelector(".custom-category-dropdown");
+      let dropdownMenu = categoryDropdown.querySelector(".custom-category-menu");
+      let timeout;
+
+      function showDropdown() {
+        clearTimeout(timeout);
+        categoryDropdown.classList.add("show");
+        dropdownMenu.classList.add("show");
+      }
+
+      function hideDropdown() {
+        timeout = setTimeout(() => {
+          categoryDropdown.classList.remove("show");
+          dropdownMenu.classList.remove("show");
+        }, 50); // 300ms gecikme
+      }
+
+      categoryDropdown.addEventListener("mouseenter", showDropdown);
+      categoryDropdown.addEventListener("mouseleave", hideDropdown);
+      dropdownMenu.addEventListener("mouseenter", showDropdown);
+      dropdownMenu.addEventListener("mouseleave", hideDropdown);
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+    let dropdowns = document.querySelectorAll(".new-custom-category-dropdown");
+
+    dropdowns.forEach(function (dropdown) {
+        let menu = dropdown.querySelector(".new-dropdown-menu");
+        let timeout;  // Kapanma zamanlayıcısı
+
+        // Menü açıldığında kapanma iptal edilir
+        dropdown.addEventListener("mouseenter", function () {
+            clearTimeout(timeout);
+            menu.style.display = "block";
+        });
+
+        // Fare çıkınca 300ms bekleyip kapatma işlemi başlatılır
+        dropdown.addEventListener("mouseleave", function () {
+            timeout = setTimeout(() => {
+                menu.style.display = "none";
+            }, 50); // 300ms gecikme
+        });
+
+        // Menüye tekrar girilirse kapanma iptal edilir
+        menu.addEventListener("mouseenter", function () {
+            clearTimeout(timeout);
+        });
+
+        menu.addEventListener("mouseleave", function () {
+            timeout = setTimeout(() => {
+                menu.style.display = "none";
+            }, 300);
         });
     });
 });
-</script>
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.9"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.13"></script>
 </body>
+
 </html>

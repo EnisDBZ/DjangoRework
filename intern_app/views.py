@@ -11,8 +11,10 @@ from django.http import JsonResponse
 
 
 # Create your views here.
+
+
 def categories_list(request):
-    categories = Categories.get_main_categories() # Tüm kategorileri al
+    categories = Categories.get_main_categories() # Tüm ana kategorileri al
    
 
     context = {

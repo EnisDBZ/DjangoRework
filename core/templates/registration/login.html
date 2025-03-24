@@ -1,43 +1,54 @@
 {%load static%}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Giriş Yapınız</title>
-    <link rel="stylesheet" href="{%static 'intern_app/css/login.css'%}">
-</head>
-<body>
+    <link rel="stylesheet" href="{%static 'intern_app/css/login.css'%}" />
+  </head>
+  <body>
     {%if user.is_authenticated%}
-    <script type = "text/javascript">
-        
-            window.location.href = "{%url 'intern_app:redirect_url'%}"
+    <script type="text/javascript">
+      window.location.href = "{%url 'intern_app:redirect_url'%}";
     </script>
-{%endif%}
+    {%endif%}
     <div class="container">
-        <div class="login-box">
-            <form action="" method="post">
-                {%csrf_token%}
-                <h1>Merhaba, lütfen giriş yapınız</h1>
-                {%if error%}
-                    <p>{{error}}</p>
-                {%endif%}
-                <div class="input-container">
-                    <input type="text" name="username" id="input" required >
-                    <label for="input" class="label">Kullanıcı Adınız</label>
-                    <div class="underline"></div>
-                </div>
-               
-                <div class="input-container">
-                    <input type="password" name="password" id="input" required autocomplete="off">
-                    <label for="input" class="label">Şifreniz</label>
-                    <div class="underline"></div>
-                </div>
-                <button class="cta" name="login">
-                    <span class="hover-underline-animation"> Giriş Yap </span>
-                </button>
-                <p class="bilgi">Hesabınız yok mu ? <span class="link"><a href="{% url 'intern_app:signup' %}">Buradan</a></span> açabilirsiniz.</p>
-            </form>
-        </div>
+      <div class="login-box">
+        <form action="" method="post">
+          {%csrf_token%}
+          <h1>Merhaba, lütfen giriş yapınız</h1>
+          {%if error%}
+          <p>{{error}}</p>
+          {%endif%}
+          <div class="input-container">
+            <input type="text" name="username" id="input" required />
+            <label for="input" class="label">Kullanıcı Adınız</label>
+            <div class="underline"></div>
+          </div>
+
+          <div class="input-container">
+            <input
+              type="password"
+              name="password"
+              id="input"
+              required
+              autocomplete="off"
+            />
+            <label for="input" class="label">Şifreniz</label>
+            <div class="underline"></div>
+          </div>
+          <button class="cta" name="login">
+            <span class="hover-underline-animation"> Giriş Yap </span>
+          </button>
+          <p class="bilgi">
+            Hesabınız yok mu ?
+            <span class="link"
+              ><a href="{% url 'intern_app:signup' %}">Buradan</a></span
+            >
+            açabilirsiniz.
+          </p>
+        </form>
+      </div>
     </div>
-</body>
+  </body>
 </html>

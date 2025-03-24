@@ -3,7 +3,7 @@
     margin-top: 0;
 }
 .dropdown-menu {
-  min-width: 75px !important;
+  min-width: 15px !important;
 
 }
 .dropdown > .dropdown:active {
@@ -11,8 +11,51 @@
       pointer-events: none;
   }
 
+/* Dropdown'un içindeki submenu */
+.dropdown-submenu {
+  position: absolute;
+
+}
+.dropdown-submenu > .dropdown-menu {
+  position: absolute;
+  top: -5px;
+  left: 100%; /* Ana menünün tam sağında çıkmasını sağlar */
+  margin-top: -1px; /* Menü çizgisinin kesişmesini önlemek için */
+  display: none;
+}
+.imlosingmymind li a{
+  position: relative;
+ 
+  
+}
+.imlosingmymind{
+ 
+  left: 100%;
+  top: 0;
+  display: none;
+  background-color: white; /* Arka plan rengi */
+  border: 1px solid #ddd; /* Kenarlık */
+  border-radius: 5px; /* Köşeleri yuvarlat */
+  padding: 5px 0;
+  min-width: 200px; /* Menü genişliği */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+  z-index: 1000; /* Üstte kalmasını sağlar */
+}
+
+
+.dropdown-submenu .dropdown-menu {
+  min-height: 20px;
+  min-width: 200px;
+}
+
+/* Ana kategori üzerine gelince alt menüyü göster */
+.dropdown-submenu:hover > .dropdown-menu {
+  display: block;
+}
+
+
 body{
-  background-color: antiquewhite;
+  background-color: antiquewhite !important;
 }
 #userDropdownButton {
     height: 35px !important;
@@ -105,7 +148,9 @@ then set the desired styles for .card-img. */
   border-radius: 250px !important;
   padding-top: 5px;
   padding-bottom: 5px;
+  margin: auto;
   height: 40%;
+  width:70%;
 }
 .carousel > .carousel-inner > .carousel-item > img{
   width:100px; /* Yeap you can change the width and height*/
@@ -115,7 +160,7 @@ then set the desired styles for .card-img. */
 
 .test{
   margin-top: 10px;
-  width: 85%;
+  width: 75%;
 }
 .modal-content {
   width: 700px !important;
@@ -185,6 +230,292 @@ then set the desired styles for .card-img. */
   height: auto; /* Oranlarını korur */
   display: block; /* Resmin altında boşluk oluşmasını engeller */
 }
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.quantity-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+.quantity-input input {
+  border: none;
+  text-align: center;
+  font-size: 1rem;
+  width: 60px;
+  padding: 5px;
+}
+
+.quantity-input input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.quantity-input button {
+  border: none;
+
+  background-color: transparent;
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.quantity-input button.red:hover {
+  background-color: #ff0000;
+}
+.quantity-input button.green:hover {
+  background-color: #00ff48;
+}
 
 
+.quantity-input-base button:active {
+  background-color: #e0e0e0;
+}
 
+.quantity-input-base {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  width: 100px;
+  background-color: white;
+}
+
+.quantity-input-base input {
+  border: none;
+  text-align: center;
+  font-size: 5rem;
+  width: 50px!important;
+  
+}
+
+.quantity-input-base input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.quantity-input-base button {
+  border: none;
+  background-color: transparent;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  text-align: center;
+  width: 10px;
+  cursor: pointer;
+ 
+  transition: background-color 0.3s ease;
+}
+.gray1:hover{
+  background-color: rgb(150, 150, 150);
+}
+.gray2:hover{
+  background-color: rgb(150, 150, 150);
+}
+.gray1,
+.gray2{
+  border-radius:50% ;
+}
+.gray2{
+  width: 50px; 
+}
+.gray2 i{
+  position: relative;
+  margin-left: -15px;
+}
+.sepet:hover{
+  background-color: #00ff48;
+}
+.sepet:focus{
+  background-color: #00ff48;
+}
+.sepet{
+  border-color: #00ff48;
+  
+}
+
+/* Ana kategoriye hover yapıldığında dropdown menü açılır */
+.new-dropdown:hover > .new-dropdown-menu {
+  display: block;
+  margin-top: 0;
+}
+
+/* Dropdown Menü Stili */
+.new-dropdown-menu {
+  min-width: 200px !important;
+  background: white;
+  border-radius: 8px;
+  padding: 10px 0;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+/* Dropdown tıklanınca yapışmasını önlemek için */
+.new-dropdown > .new-dropdown:active {
+  pointer-events: none;
+}
+
+/* Dropdown'un içindeki submenu */
+.new-dropdown-submenu {
+  position: absolute;
+}
+
+/* Alt menü sağ tarafa açılır */
+.new-dropdown-submenu > .new-dropdown-menu {
+  position: absolute;
+  top: -5px;
+  left: 100%;
+  margin-top: -1px;
+  display: none;
+}
+
+/* Submenu içindeki bağlantılar */
+.new-imlosingmymind li a {
+  position: relative;
+}
+
+/* Submenu için stil */
+.new-imlosingmymind {
+  left: 100%;
+  top: 0;
+  display: none;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px 0;
+  min-width: 200px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+/* Submenu boyutu */
+.new-dropdown-submenu .new-dropdown-menu {
+  min-height: 20px;
+  min-width: 200px;
+}
+
+/* Ana kategori üzerine gelince alt menüyü göster */
+.new-dropdown-submenu:hover > .new-dropdown-menu {
+  display: block;
+}
+.banner-sol {
+  float: left;
+  position: sticky;
+  top: 20px;  /* Sayfa kaydırıldıkça üstte biraz boşluk bırakır */
+  left: 10px;
+  width: 150px;
+  height: 550px;
+  border: 2px solid #333;  /* Daha modern bir renk */
+  border-radius: 10px;  /* Köşeleri yuvarlatır */
+  background-color: #f4f4f4;  /* Arka plan rengi */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Hafif bir gölge ekler */
+  padding: 16px;  /* İçerideki öğelere boşluk ekler */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;  /* İçerik üstten başlar */
+  z-index: 999;  /* Diğer öğelerin üstünde olmasını sağlar */
+}
+
+/* Banner sol kısmındaki içeriklerin stilini geliştiriyoruz */
+.banner-sol img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;  /* Görsellerin köşelerini yuvarlatır */
+  margin-bottom: 20px;
+}
+
+.banner-sol h3 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.banner-sol p {
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Responsive design için banner'ın boyutlarını iyileştiriyoruz */
+@media (max-width: 768px) {
+  .banner-sol {
+    width: 120px;
+    height: auto;
+    padding: 15px;
+  }
+
+  .banner-sol h3 {
+    font-size: 16px;
+  }
+
+  .banner-sol p {
+    font-size: 12px;
+  }
+}
+.banner-sag {
+  float: right;
+  position: sticky;
+  top: 20px;  /* Sayfa kaydırıldıkça üstte biraz boşluk bırakır */
+  right: 10px;
+  width: 150px;
+  height: 550px;
+  border: 2px solid #333;  /* Daha modern bir renk */
+  border-radius: 10px;  /* Köşeleri yuvarlatır */
+  background-color: #f4f4f4;  /* Arka plan rengi */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Hafif bir gölge ekler */
+  padding: 16px;  /* İçerideki öğelere boşluk ekler */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;  /* İçerik üstten başlar */
+  z-index: 999;  /* Diğer öğelerin üstünde olmasını sağlar */
+}
+
+/* Banner sağ kısmındaki içeriklerin stilini geliştiriyoruz */
+.banner-sag img {
+  width: 100%;
+  height: 560px;
+  border-radius: 8px;  /* Görsellerin köşelerini yuvarlatır */
+  margin-bottom: 20px;
+  
+}
+
+.banner-sag h3 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.banner-sag p {
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Responsive design için banner'ın boyutlarını iyileştiriyoruz */
+@media (max-width: 768px) {
+  .banner-sag {
+    width: 120px;
+    height: auto;
+    padding: 15px;
+  }
+
+  .banner-sag h3 {
+    font-size: 16px;
+  }
+
+  .banner-sag p {
+    font-size: 12px;
+  }
+}

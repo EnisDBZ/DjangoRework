@@ -1,0 +1,126 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5ebe0;
+}
+body::-webkit-scrollbar{
+    display: none;
+}
+a{
+    text-decoration: none;
+}
+/* Sidebar */
+#sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    margin-left: 0;
+    background-color: #630000;
+    padding-top: 20px;
+
+}
+
+#sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+/* Navbar */
+.navbar{
+    
+    
+    left: 250px;
+    top: 0;
+    
+}
+
+/* İçerik */
+.content {
+    margin-left: 260px ;
+    margin-top: 70px;
+}
+
+/* Kart */
+.card-main {
+    width: 300px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.card-body i {
+    font-size: 40px;
+}
+
+.table-custom{
+    margin-left: 250px !important;
+    width: 50%;
+}
+#card-table{
+    width: auto;
+    border-radius: 10px !important;
+    
+}
+#navbar {
+    transition: all 0.3s ease;  /* Smooth geçiş */
+    position: relative;  /* Left özelliği için position kullanmak gerekebilir */
+  }
+
+.image i {
+    font-size: 50px;
+}
+.bitchass:hover{
+   background-color: transparent !important; /* Oevladi a taginin üzerine gelindiğindeki arka plan rengi
+                                                Sadece sidebar logosunda geçerli                        */
+
+}
+.user-panel{
+    border-top:solid rgba(255, 255, 255, 0.726) 2px;
+    border-bottom: solid rgba(255, 255, 255, 0.712) 2px;
+    justify-content: center;
+    align-items: center;
+}
+.user-panel .info{
+    position: relative;
+    display: inline-block;
+    padding: 5px 5px 5px 10px;
+  
+   
+    
+}
+.user-panel .info a{
+    color: white;
+    
+}
+.user-panel .info a:hover{
+    color: white;
+    background-color: transparent !important;
+    
+}
+.d-block{
+    display: block !important;
+}
+
+#kirinti_ebevyn{
+    
+    
+    padding: 10px;
+    
+}
+#ekmek-kirintisi{
+    position: relative;
+    top: 5px;
+    left: 10px;
+    
+}
+#baslik{
+    border-right: 2px solid  rgba(71, 71, 71, 0.477);
+    padding-right: 10px;
+}
+.tum_blok{
+    border-bottom: 2px solid rgba(71, 71, 71, 0.792);
+}
+.xx-ekle{
+    position: relative;
+    bottom: 55px;
+    
+}

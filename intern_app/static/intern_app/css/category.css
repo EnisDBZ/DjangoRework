@@ -1,9 +1,6 @@
 body::-webkit-scrollbar{
     display: none;
 }
-.card_wrap{
-    margin-left: 10rem!important;
-}
   .card {
     position: relative;
     width: 300px;

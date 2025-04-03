@@ -1,3 +1,41 @@
+::placeholder {
+  color: rgb(255, 255, 255) !important;
+  opacity: 0.7 !important; /* Firefox */
+}
+.h1-q{
+  position: relative;
+  padding-bottom: 50px;
+}
+h1{
+  position: absolute;
+  left: 200px;
+}
+.update{
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  bottom: 100px;
+  right: 280px;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+.update > i{
+  position: relative;
+  right: 2.5px;
+
+}
+.update:hover{
+  animation: rotate360 0.5s linear;
+}
+@keyframes rotate360 {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.thead-dark{
+
+  text-align: center;
+}
+
 .dropdown:hover > .dropdown-menu{
     display: block;
     margin-top: 0;
@@ -111,6 +149,7 @@ header{
   padding-top: 10px;
   outline: none;
   right: 20px !important;
+  color: whitesmoke;
 }
 .search-bar{
   height: 45px;
@@ -129,6 +168,7 @@ header{
 }
 #glass{
   margin-bottom: 1px;
+  color: white  ;
 }
 /* From Uiverse.io by andrew-demchenk0 */ 
 /* before adding the img to the div with the 
@@ -233,11 +273,12 @@ then set the desired styles for .card-img. */
 input[type=number]::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
+
 .quantity-input {
   display: flex;
   align-items: center;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 30px;
   overflow: hidden;
   font-family: Arial, sans-serif;
 }
@@ -279,6 +320,8 @@ input[type=number]::-webkit-inner-spin-button {
 
 .quantity-input-base {
   display: flex;
+  position: relative;
+  bottom: 6px;
   align-items: center;
   border: 1px solid #ddd;
   border-radius: 30px;
@@ -337,7 +380,7 @@ input[type=number]::-webkit-inner-spin-button {
 }
 .sepet{
   border-color: #00ff48;
-  
+  width: 200px;
 }
 
 /* Ana kategoriye hover yapıldığında dropdown menü açılır */

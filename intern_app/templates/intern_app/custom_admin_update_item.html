@@ -1,0 +1,15 @@
+{%extends "custom-admin-base.html"%}
+{% load static%}
+
+{%block ekmekkirintisi%} {%endblock ekmekkirintisi%}
+{%block content%}
+
+<link rel="stylesheet" href="{%static 'intern_app/css/custom-admin-form.css'%}">
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Güncelle</button>
+    </form>
+
+{%endblock%}

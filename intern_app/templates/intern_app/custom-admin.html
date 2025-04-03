@@ -1,0 +1,24 @@
+{% extends 'custom-admin-base.html'%}
+{%load static%}
+{%block content%}
+    <!-- İçerik Alanı -->
+   
+    <div class="container-fluid test">
+        <div class=" card_wrap row row-cols-2 row-cols-md-3 row-cols-lg-3 g-5 p-5 ms-0 " >
+    {%for model in models%}
+    <div class="col">
+      <div class="card-main card shadow  p-4 text-center" >
+        <a href="{% url 'intern_app:yonetici_paneli_sayfa' app_label=model.app_label model_name=model.model_name %}">
+        <div class="card-body">
+          <i class="bi bi-person-fill fs-1 text-danger"></i>
+          <h2 class="text-danger">{{ model.verbose_name}}</h2>
+          <p class="text-muted">Kullanıcıları buradan yönetin</p>
+        </div>
+       </a>
+      </div>
+    </div>
+      {%endfor%}
+    </div>
+</div>
+   
+{%endblock%}

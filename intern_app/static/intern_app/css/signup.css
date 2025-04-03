@@ -13,7 +13,7 @@ p{
 .bilgi{
   position: relative;
   margin-left: 5rem;
-  color: rgba(118, 118, 118, 0.641)
+  color: rgba(41, 41, 41, 0.641)
 
 }
 body{
@@ -102,7 +102,7 @@ body::-webkit-scrollbar{
     position: absolute;
     top: 0;
     left: 0;
-    color: #767676;
+    color: #303030;
     transition: all 0.3s ease;
     pointer-events: none;
   }
@@ -170,7 +170,7 @@ body::-webkit-scrollbar{
 
 .hover-underline-animation {
     position: relative;
-    color: rgb(189, 189, 189);
+    color: rgb(50, 50, 50);
     padding-bottom: 10px;
   }
   
@@ -182,7 +182,7 @@ body::-webkit-scrollbar{
     height: 2px;
     bottom: 0;
     left: -3%;
-    background-color: #c4c4c4;
+    background-color: #494949;
     transform-origin: bottom right;
     transition: transform 0.25s ease-out;
   }

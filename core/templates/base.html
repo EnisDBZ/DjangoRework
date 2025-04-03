@@ -11,6 +11,7 @@
   <!--Bootstrap-->
   <script src="{%static 'intern_app/js/dropdown.js'%}"></script>
   <link rel="stylesheet" href="{%static 'intern_app/css/base.css'%}">
+  <link rel="stylesheet" href="{% static 'intern_app/css/base-loader.css' %}">
   <title>Hoşgeldiniz</title>
 </head>
 
@@ -30,7 +31,7 @@
         <div class="col-sm-6 offset-sm-2 offset-md-0 col-lg-5 d-none d-lg-block search-bar-custom">
           <div class="search-bar border rounded-2 px-3 border-dark-subtle">
             <form id="search-form" class="text-center d-flex align-items-center " role="search"
-              action="{% url 'intern_app:search' %}" method="POST">
+              action="{% url 'intern_app:search' %}" method="GET" value="{{ request.GET.search_query }}">
               {%csrf_token%}
               <input type="search" class="form-control border-0 bg-transparent" name="search_query" required
                 aria-label="Search" autocomplete="off" placeholder="İstediğiniz ürünü arayın.">
@@ -122,9 +123,6 @@
                 <a href="#" class="mx-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart"
                   aria-controls="offcanvasCart">
                   <iconify-icon icon="mdi:cart" class="fs-4 position-relative"></iconify-icon>
-                  <span class="position-absolute translate-middle badge rounded-circle bg-primary pt-2">
-                    03
-                  </span>
                 </a>
               </li>
 
@@ -155,12 +153,13 @@
 
               <ul class="navbar-nav menu-list list-unstyled d-flex gap-md-3 mb-0 ">
                 <li class="nav-item">
-                  <a href="{%url 'intern_app:index'%}" class="nav-link active" style="font-style: italic;">Anasayfa</a>
+                  <a href="{%url 'intern_app:index'%}" class="nav-link active"
+                    style="font-style: italic; color: white;">Anasayfa</a>
                 </li>
                 <ul class="navbar-nav menu-list list-unstyled d-flex gap-md-3 mb-0">
                   <li class="nav-item dropdown  custom-category-dropdown">
-                    <a href="{% url 'intern_app:categories' %}" class="nav-link d-flex align-items-center gap-1"
-                      aria-expanded="false">
+                    <a href="{% url 'intern_app:categories' %}" style="color: white;"
+                      class="nav-link d-flex align-items-center gap-1" aria-expanded="false">
                       <i class="bi bi-list"> Kategoriler</i>
                     </a>
 
@@ -176,7 +175,7 @@
                         </a>
 
                         {% if category.sub_categories.all %}
-                        <ul class="dropdown-menu  start-100 imlosingmymind">
+                        <ul class="dropdown-menu  start-100 ">
 
                           {% for sub_category in category.sub_categories.all %}
 
@@ -197,25 +196,26 @@
                   </li>
                   <ul class="new-navbar-nav navbar-nav new-menu-list menu-list list-unstyled d-flex gap-md-3 mb-0">
                     {% for category in categories %}
-                    <li class="new-nav-item nav-item new-dropdown dropdown new-custom-category-dropdown position-relative">
-                        <a href="{% url 'intern_app:category_products' category.slug %}" class="nav-link active"
-                           style="font-style: italic;">{{ category.name }}</a>
-                
-                        {% if category.sub_categories.all %}
-                        <ul class="new-dropdown-menu dropdown-menu new-custom-category-menu shadow border-0 mt-2 rounded">
-                            {% for sub_category in category.sub_categories.all %}
-                            <li>
-                                <a class="new-dropdown-item dropdown-item"
-                                   href="{% url 'intern_app:category_products' slug=sub_category.slug %}">
-                                   {{ sub_category.name }}
-                                </a>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
+                    <li
+                      class="new-nav-item nav-item new-dropdown dropdown new-custom-category-dropdown position-relative">
+                      <a href="{% url 'intern_app:category_products' category.slug %}" class="nav-link active"
+                        style="font-style: italic;color: white;">{{ category.name }}</a>
+
+                      {% if category.sub_categories.all %}
+                      <ul class="new-dropdown-menu dropdown-menu new-custom-category-menu shadow border-0 mt-2 rounded">
+                        {% for sub_category in category.sub_categories.all %}
+                        <li>
+                          <a class="new-dropdown-item dropdown-item"
+                            href="{% url 'intern_app:category_products' slug=sub_category.slug %}">
+                            {{ sub_category.name }}
+                          </a>
+                        </li>
+                        {% endfor %}
+                      </ul>
+                      {% endif %}
                     </li>
                     {% endfor %}
-                </ul>
+                  </ul>
 
         </nav>
       </div>
@@ -234,8 +234,8 @@
 
 
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            <table class="table table-bordered table-striped table-hover">
-              <thead class="thead-dark">
+            <table class="table table-borderless table-striped table-hover ">
+              <thead class="thead-dark align-middle ">
                 <tr>
 
                   <th scope="col">Ürün Görseli</th>
@@ -251,17 +251,17 @@
 
               <tbody>
                 {% for item in cart_items %}
-                <tr class="pt-4" align="center">
+                <tr class="pt-4 table-group-divider vertical-align-middle" align="center">
                   <td align="center">
                     <img src="{{ item.cart_name.product_image.url }}" width="75px" height="75px"
                       style="object-fit: contain;" alt="{{ item.cart_product_name.product_name }}">
                   </td>
                   <td class="pt-4">{{ item.cart_name.product_name }}</td>
-                  <td class="pt-4">
+                  <td class="pt-4 ">
                     <form action="{% url 'intern_app:update_cart' item.id %}" method="POST">
                       {% csrf_token %}
                       <div class="d-flex justify-content-center quantity-input-base align-items-center gap-1">
-                        <button type="button" class="btn gray1" id="decrease-{{item.id}}"
+                        <button type="button submit" class="btn gray1" id="decrease-{{item.id}}"
                           onclick="changeQuantity(-1,{{item.id}})">
                           <i class="bi bi-dash-lg"></i>
                         </button>
@@ -269,13 +269,11 @@
                           value="{{ item.cart_quantity }}" required class="form-control text-center"
                           style="width: 80px; font-size: 1rem;"
                           oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                        <button type="button" class="btn gray2" id="increase-{{item.id}}"
+                        <button type="button submit" class="btn gray2" id="increase-{{item.id}}"
                           onclick="changeQuantity(1,{{item.id}})">
                           <i class="bi bi-plus-lg"></i>
                         </button>
                       </div>
-                      <button type="submit" class="btn btn-primary btn-sm mt-2"><i
-                          class="bi bi-arrow-repeat"></i></button>
                     </form>
                   </td>
                   <td class="pt-4">{{ item.cart_name.product_price }}₺</td>
@@ -288,8 +286,15 @@
                 </tr>
                 {% endfor %}
               </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="999" class="text-end mt-3 fw-bold fs-5 total-price">
+                    Toplam Fiyat: {{ total_price }}₺
+                  </td>
+                </tr>
+              </tfoot>
             </table>
-            <div class="text-end mt-3 fw-bold fs-5 total-price">Toplam Fiyat: {{ total_price }}₺</div>
+
             {% else %}
             <p>Sepetiniz boş.</p>
             {% endif %}
@@ -299,60 +304,113 @@
   </div>
   {%block banner%}
   <div class="banner-sol">
-      <img src="{%static 'intern_app/images/pattern2_blue.png'%}" alt="">
-      <img src="{%static 'intern_app/images/pattern2_blue.png'%}" alt="">
-      <img src="{%static 'intern_app/images/pattern2_blue.png'%}" alt="">
-      <img src="{%static 'intern_app/images/pattern2_blue.png'%}" alt="">
-   
+    <img src="{%static 'intern_app/images/pattern2_blue.png'%}" alt="">
+    <img src="{%static 'intern_app/images/pattern2_blue.png'%}" alt="">
+    <img src="{%static 'intern_app/images/pattern2_blue.png'%}" alt="">
+    <img src="{%static 'intern_app/images/pattern2_blue.png'%}" alt="">
+
   </div>
   <div class="banner-sag">
-      <img src="{%static 'intern_app/images/pattern2_blue.png'%}" alt="">
-      
-  
-  
+    <img src="{%static 'intern_app/images/pattern2_blue.png'%}" alt="">
+
+
+
   </div>
   {%endblock%}
-  
+  <!-- From Uiverse.io by Nawsome -->
+  <!-- Yükleme ekranı -->
+  <div class="background-container">
+    <div aria-label="Orange and tan hamster running in a metal wheel" role="img" class="wheel-and-hamster">
+      <div class="wheel"></div>
+      <div class="hamster">
+        <div class="hamster__body">
+          <div class="hamster__head">
+            <div class="hamster__ear"></div>
+            <div class="hamster__eye"></div>
+            <div class="hamster__nose"></div>
+          </div>
+          <div class="hamster__limb hamster__limb--fr"></div>
+          <div class="hamster__limb hamster__limb--fl"></div>
+          <div class="hamster__limb hamster__limb--br"></div>
+          <div class="hamster__limb hamster__limb--bl"></div>
+          <div class="hamster__tail"></div>
+        </div>
+      </div>
+      <div class="spoke"></div>
+    </div>
+  </div>
   {%block content%}
 
   {%endblock%}
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
+    // Modalın sepet olarak gözükmesi ve dinamik olması için //
     $(document).ready(function () {
+      // Show modal on button click and set state in localStorage
       $(".btn-cart").click(function (e) {
-        e.preventDefault(); // Butona tıklayınca sayfa yenilenmesini önle
+        e.preventDefault(); // Prevent page reload on button click
 
         $.ajax({
-          url: "{% url 'intern_app:cart' %}", // Django'daki cart_view fonksiyonunu çağırıyoruz
+          url: "{% url 'intern_app:cart' %}",
           type: "GET",
           success: function (response) {
-            $("#cartModalBody").html(response); // Modal içine HTML'i koy
-            $("#cartModal").modal("show"); // Modalı aç
+            $("#cartModalBody").html(response); // Set modal content
+            $("#cartModal").modal("show"); // Show the modal
+            localStorage.setItem('cartModalOpen', 'true'); // Store modal open state
           },
           error: function () {
             $("#cartModalBody").html("<p>Sepet yüklenirken hata oluştu.</p>");
           }
         });
       });
+
+      // Check if the modal should be open on page load
+      if (localStorage.getItem('cartModalOpen') === 'true') {
+        $.ajax({
+          url: "{% url 'intern_app:cart' %}",
+          type: "GET",
+          success: function (response) {
+            $("#cartModalBody").html(response); // Set modal content
+            $("#cartModal").modal("show"); // Show the modal
+          },
+          error: function () {
+            $("#cartModalBody").html("<p>Sepet yüklenirken hata oluştu.</p>");
+          }
+        });
+      }
+
+      // Close the modal when clicked outside (Bootstrap will do this by default)
+      $('#cartModal').on('hidden.bs.modal', function () {
+        localStorage.removeItem('cartModalOpen'); // Remove the modal state when it's closed
+      });
     });
   </script>
 
   <script>
     function changeQuantity(amount, productId) {
-      // Dinamik olarak doğru input alanını seçiyoruz
+      // Get the correct input element for the product
       let input = document.getElementById('quantity-' + productId);
       let currentValue = parseInt(input.value) || 1; // Safeguard against NaN
+
+      // Calculate the new value
       let newValue = currentValue + amount;
 
-      // Ensure value stays within the min/max range
+      // Log the current value and the amount for debugging
+      console.log('Current Value:', currentValue, 'Amount:', amount, 'New Value:', newValue);
+
+      // Ensure new value stays within the min/max range and is positive
       if (newValue >= 1 && newValue <= 999) {
         input.value = newValue;
+      } else {
+        console.log('New value is out of bounds. No update performed.');
       }
     }
   </script>
 
+
   <script>
+    // Dropdown için üzerine gelindiğinde hemen kapanmaması için //
     document.addEventListener("DOMContentLoaded", function () {
       let categoryDropdown = document.querySelector(".custom-category-dropdown");
       let dropdownMenu = categoryDropdown.querySelector(".custom-category-menu");
@@ -377,41 +435,43 @@
       dropdownMenu.addEventListener("mouseleave", hideDropdown);
     });
     document.addEventListener("DOMContentLoaded", function () {
-    let dropdowns = document.querySelectorAll(".new-custom-category-dropdown");
+      let dropdowns = document.querySelectorAll(".new-custom-category-dropdown");
 
-    dropdowns.forEach(function (dropdown) {
+      dropdowns.forEach(function (dropdown) {
         let menu = dropdown.querySelector(".new-dropdown-menu");
-        let timeout;  // Kapanma zamanlayıcısı
+        let timeout; // Kapanma zamanlayıcısı
 
         // Menü açıldığında kapanma iptal edilir
         dropdown.addEventListener("mouseenter", function () {
-            clearTimeout(timeout);
-            menu.style.display = "block";
+          clearTimeout(timeout);
+          menu.style.display = "block";
         });
 
         // Fare çıkınca 300ms bekleyip kapatma işlemi başlatılır
         dropdown.addEventListener("mouseleave", function () {
-            timeout = setTimeout(() => {
-                menu.style.display = "none";
-            }, 50); // 300ms gecikme
+          timeout = setTimeout(() => {
+            menu.style.display = "none";
+          }, 50); // 300ms gecikme
         });
 
         // Menüye tekrar girilirse kapanma iptal edilir
         menu.addEventListener("mouseenter", function () {
-            clearTimeout(timeout);
+          clearTimeout(timeout);
         });
 
         menu.addEventListener("mouseleave", function () {
-            timeout = setTimeout(() => {
-                menu.style.display = "none";
-            }, 300);
+          timeout = setTimeout(() => {
+            menu.style.display = "none";
+          }, 300);
         });
+      });
     });
-});
-
   </script>
   <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.9"></script>
   <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.13"></script>
+  <script src="{%static 'intern_app/js/loader.js'%}"></script>
+  <script src="https://unpkg.com/htmx.org@1.7.0"></script>
+
 </body>
 
 </html>

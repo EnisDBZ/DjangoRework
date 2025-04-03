@@ -1,0 +1,16 @@
+{%extends "custom-admin-base.html"%}
+{% load static%}
+
+{%block content%}
+
+<link rel="stylesheet" href="{%static 'intern_app/css/custom-admin-form.css'%}">
+    <h1>{{ model_name }} sayfasına ekleme yap.</h1>
+    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Kaydet</button>
+    </form>
+    
+{%endblock%}
+{%block ekmekkirintisi%} {%endblock%}

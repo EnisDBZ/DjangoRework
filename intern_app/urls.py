@@ -1,6 +1,7 @@
 from django.urls import path 
 
 from . import views
+from . import custom_admin
 
 app_name = "intern_app"
 
@@ -21,5 +22,12 @@ urlpatterns = [
     path('search/',views.search_view,name="search"),
     path('categories/',views.categories_list,name="categories"),
     path('categories/<slug:slug>/', views.categories, name='category_products'),
+
+    # Custom Admin panelinin URL'leri
+    path("yonetici-paneli/",custom_admin.admin_links,name="yonetici-paneli"),
+    path("yonetici-paneli/<str:app_label>/<str:model_name>/",custom_admin.admin_links_pages,name = "yonetici_paneli_sayfa"),
+    path("yonetici-paneli/<str:model_name>/sil/<int:model_id>",custom_admin.model_silme,name="obje_sil"),
+    path("yonetici-paneli/<str:app_label>/ekle/<str:model_name>" ,custom_admin.dynamic_model_item_add, name="add_model"),
+    path('yonetici-paneli/<str:app_label>/update/<str:model_name>/<int:object_id>/', custom_admin.dynamic_model_item_update, name='update_model'),
 
 ]

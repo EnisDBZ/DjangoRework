@@ -2,50 +2,69 @@
 {%load static%}
 {%block content%}
 {% if query %}
+<div>
     <div>
-        <div>
-            <!-- Check if there is a result in the database-->
-            {% if posts %}
+        <!-- Check if there is a result in the database-->
+        {% if posts %}
+        <div class="h1-q">
             <h1>Yaptığınız "{{query}}" sorgusuna göre sonuçlar:</h1>
-                <!-- Loop through search query if there is a result -->
-                <div class="container-fluid test">
-                    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-3 p-2"> <!-- Maksimum 6 sütun olacak şekilde ayarlandı -->
-                        {% for post in posts %}
-                            <div class="col"> <!-- Kartları hizalamak için her kartı bir "col" içine aldık -->
-                                <div class="card shadow-sm border-0 rounded-4 h-100">
-                                    <img src="{{ post.product_image.url }}" class="card-img-top p-1" 
-                                         style="object-fit: contain; max-height: 150px;" 
-                                         alt="{{ post.product_name }}">
-                                    <div class="card-body p-2">
-                                        <h6 class="card-title text-primary">{{ post.product_name }}</h6>
-                                        <p class="card-text text-muted" style="font-size: 0.8rem;">{{ post.product_description }}</p>
-                                    </div>
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item fw-bold" style="font-size: 0.9rem;">{{ post.product_price }}₺</li>
-                                    </ul>
-                                    <div class="card-footer bg-white border-0 text-center p-2">
-                                        <!-- Sepete Ekle formu -->
-                                        <form method="POST" action="{% url 'intern_app:add_to_cart' post.id %}">
-                                            {% csrf_token %}
-                                            <div class="d-flex justify-content-center align-items-center gap-1">
-                                                <input type="number" name="quantity" min="1" max="999"
-                                                       value="1" required
-                                                       class="form-control text-center" style="width: 50px; font-size: 0.8rem;">
-                                                <button type="submit" class="btn btn-sm btn-outline-primary">Sepete Ekle</button>
-                                            </div>
-                                        </form>
-                                    </div>
+        </div>
+        <!-- Loop through search query if there is a result -->
+        <div class="container-fluid test">
+            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3 p-2">
+                <!-- Maksimum 6 sütun olacak şekilde ayarlandı -->
+                {% for post in posts %}
+                <div class="col">
+                    <!-- Kartları hizalamak için her kartı bir "col" içine aldık -->
+                    <div class="card shadow-sm border-0 rounded-4 h-100">
+                        <img src="{{ post.product_image.url }}" class="card-img-top p-1"
+                            style="object-fit: contain; max-height: 150px;" alt="{{ post.product_name }}">
+                        <div class="card-body p-2">
+                            <h6 class="card-title text-primary">{{ post.product_name }}</h6>
+                            <p class="card-text text-muted" style="font-size: 0.8rem;">{{ post.product_description }}
+                            </p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item fw-bold" style="font-size: 0.9rem;">{{ post.product_price }}₺
+                            </li>
+                        </ul>
+                        <div class="card-footer bg-white border-0 text-center p-2">
+                            <!-- Sepete Ekle formu -->
+                            <form method="POST" action="{% url 'intern_app:add_to_cart' post.id %}">
+                                {% csrf_token %}
+
+                                <div class="d-flex justify-content-center quantity-input align-items-center gap-1">
+                                    <button type="button" class="btn red" id="decrease-{{post.id}}"
+                                        onclick="changeQuantity(-1,{{post.id}})">
+                                        <i class="bi bi-dash-lg"></i>
+                                    </button>
+                                    <input type="number" name="quantity" id="quantity-{{post.id}}" min="1" max="999"
+                                        value="{{ request.POST.quantity|default:1 }}" required
+                                        class="form-control text-center" style="width: 80px; font-size: 1rem;"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <button type="button" class="btn green" id="increase-{{post.id}}"
+                                        onclick="changeQuantity(1,{{post.id}})">
+                                        <i class="bi bi-plus-lg"></i>
+                                    </button>
                                 </div>
-                            </div>
-                        {% endfor %}
+                                <div class="d-flex justify-content-center align-items-center gap-1 pt-3">
+
+                                    <button type="submit" class="btn sepet">Sepete Ekle</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            {% else %}
-                <h3 style="text-align: center; margin-top: 10rem;">Aradığınız "{{query}}" sorgusuna göre bir sonuç bulunamadı.</h3>
-            {% endif %}
+                {% endfor %}
+            </div>
         </div>
+        {% else %}
+        <h3 style="text-align: center; margin-top: 10rem;">Aradığınız "{{query}}" sorgusuna göre bir sonuç bulunamadı.
+        </h3>
+        {% endif %}
     </div>
+</div>
 {% else %}
-    <h1>Please enter a search query</h1>
+<h1>Lütfen bir sorgu giriniz.</h1>
 {% endif %}
 {%endblock%}

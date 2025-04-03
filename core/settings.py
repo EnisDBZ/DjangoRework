@@ -70,6 +70,8 @@ TEMPLATES = [
                 'intern_app.context_processors.cart_items_processor',
                 'intern_app.context_processors.categories_processor',
                 'intern_app.context_processors.sub_categories_processor',
+                'intern_app.context_processors.admin_links',
+      
                                                                       
             ],
         },
@@ -143,6 +145,7 @@ AUTH_USER_MODEL = 'intern_app.PersonUser'
 # FOR MEDIA 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
     "site_title": "Yönetici Paneli",
@@ -152,7 +155,7 @@ JAZZMIN_SETTINGS = {
 
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
     "site_brand": "LPF",
-
+   
 
     # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
     "login_logo": None,
@@ -174,7 +177,7 @@ JAZZMIN_SETTINGS = {
 
     # List of model admins to search from the search bar, search bar omitted if excluded
     # If you want to use a single search field you dont need to use a list, you can use a simple string 
-    "search_model": ["auth.User", "auth.Group"],
+    "search_model": ["intern_app.PersonUser", "auth.Group"],
 
     # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
     "user_avatar": None,

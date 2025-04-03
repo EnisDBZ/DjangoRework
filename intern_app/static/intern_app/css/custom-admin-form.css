@@ -1,0 +1,73 @@
+/* Genel form stili */
+form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 30px auto;
+}
+
+/* Başlık stili */
+form h2 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Form alanı için stil */
+input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* Textarea için özel stil */
+textarea {
+    resize: vertical; /* Kullanıcıların yüksekliği ayarlayabilmesi için */
+    height: 150px;
+}
+
+/* Etiketlerin stilini düzenleme */
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    color: #555;
+}
+
+/* Submit butonu */
+button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+}
+
+/* Submit butonu hover efekti */
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Hata mesajlarını vurgulamak için stil */
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Başarı mesajları için stil */
+.success {
+    color: green;
+    font-size: 14px;
+    margin-top: 5px;
+}

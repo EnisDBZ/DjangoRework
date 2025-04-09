@@ -6,7 +6,7 @@ body::-webkit-scrollbar{
     display: none;
 }
 a{
-    text-decoration: none;
+    text-decoration:none;
 }
 /* Sidebar */
 #sidebar {
@@ -15,8 +15,9 @@ a{
     position: fixed;
     top: 0;
     margin-left: 0;
-    background-color: #630000;
+    background-color: #c30202!important;
     padding-top: 20px;
+    box-shadow: 1px 1px 10px black ;
 
 }
 
@@ -25,6 +26,7 @@ a{
     border-radius: 5px;
 }
 
+
 /* Navbar */
 .navbar{
     
@@ -32,6 +34,14 @@ a{
     left: 250px;
     top: 0;
     
+}
+.dropdown-menu {
+    background-color: #F5EBE0 !important;
+    box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.149);
+}
+.dropdown-menu > li :hover{
+    background-color: #efe0ce;
+ 
 }
 
 /* İçerik */
@@ -52,12 +62,19 @@ a{
 }
 
 .table-custom{
-    margin-left: 250px !important;
-    width: 50%;
+    width: 85%;
+    
+}
+
+.table-custom > thead {
+    border-bottom: 2px solid black;
+}
+.table-custom > tr {
+    border-bottom: 2px solid rgba(128, 128, 128, 0.418);
 }
 #card-table{
     width: auto;
-    border-radius: 10px !important;
+    border-radius: 30px !important;
     
 }
 #navbar {
@@ -120,7 +137,6 @@ a{
     border-bottom: 2px solid rgba(71, 71, 71, 0.792);
 }
 .xx-ekle{
-    position: relative;
-    bottom: 55px;
-    
+    position: absolute;
+    right: 1.4rem!important;
 }

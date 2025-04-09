@@ -26,7 +26,7 @@
     <nav class="navbar navbar-expand-lg shadow" id="navbar">
       <div class="container-fluid">
         <!-- Menü Butonu -->
-        <button class="btn btn-outline-dark me-2" id="sidebarToggle">
+        <button class="btn me-2 lg" id="sidebarToggle">
           <i class="bi bi-list"></i>
         </button>
 
@@ -58,8 +58,7 @@
                 class="dropdown-menu dropdown-menu-end"
                 aria-labelledby="profileDropdown"
               >
-                <li><a class="dropdown-item" href="#">Profilim</a></li>
-                <li><a class="dropdown-item" href="#">Ayarlar</a></li>
+                <li><a class="dropdown-item" href="{%url 'intern_app:settings'%}">Ayarlar</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li>
                   <a class="dropdown-item text-danger" href="{% url 'logout' %}?next=/">Çıkış Yap</a>
@@ -113,19 +112,36 @@
       transition: margin-left 0.3s ease;
     "
   >
-  {%block ekmekkirintisi%}
+
   <div class="container-fluid" id="kirinti_ebevyn">
     <div class="row align-items-center justify-content-between" id="kirinti">
       <div class="col-12 col-md-auto d-flex flex-grow-1 align-items-center ">
-        <h1 class="h3  pr-3 mr-3 " id="baslik"> {{verbose_name}} </h1>
+        <h1 class="h3  pr-3 mr-3 " id="baslik"> {%if verbose_name%}{{verbose_name}}{%else%}Anasayfa{%endif%} </h1>
         <ol class="breadcrumb" id="ekmek-kirintisi">
           <li class="breadcrumb-item"><a href="{%url 'intern_app:yonetici-paneli'%}">Giriş</a></li>
           <li class="breadcrumb-item active">{{verbose_name}}</li>
+            {%if model_name != "categories"  %}
+          <li class="breadcrumb-item active">{{ model_object }}</li>
+            {%else%}
+          <li class="breadcrumb-item active">{{ model_object }}</li>
+            {%endif%}
         </ol>
+     
+          <div class="xx-ekle ">
+          {%if 'yonetici_paneli_sayfa'  in request.resolver_match.view_name %}
+          <a href="{%url 'intern_app:add_model' app_label=app_label model_name=model_name%}" class="btn btn-success float-right">
+            <i class="bi bi-plus-circle-fill"></i>&nbsp;{{verbose_name}} ekle
+          </a>
+          {%endif%}
+         
+        </div>
       </div>
+      
     </div>
+    
+   
   </div>
-  {%endblock%}
+  
 {%block content%}
 
 {%endblock%}
@@ -133,5 +149,6 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>  
     <script src="{%static 'intern_app/js/custom_admin.js'%}"></script>
+    <script src="{%static 'intern_app/js/jquery.js'%}"></script>
   </body>
 </html>

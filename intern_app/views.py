@@ -188,7 +188,7 @@ def login_view(request):
             # Eğer kullanıcı yetkili ise direkt olarak yönetici paneline değil ise anasayfaya yönlendiriyoruz.
             if user.is_staff or user.is_superuser:
                 login(request, user)
-                return redirect('/admin/')
+                return redirect('intern_app:yonetici-paneli')
             elif user.is_authenticated:
                 return redirect('intern_app:index')
 

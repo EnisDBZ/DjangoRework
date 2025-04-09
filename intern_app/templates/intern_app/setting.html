@@ -34,9 +34,11 @@
             <a onclick="tabs(1)" class="tab">
                 <i class="bi bi-gear-fill"></i>
             </a>
-            <a href="{%url 'intern_app:index'%}" class="back-btn">
+        
+        <a href="#" id="redirectButton" class="back-btn">
                 <i class="bi bi-arrow-left-circle-fill"></i>
             </a>
+            
             </nav>
         </div>
         <div class="right-box">
@@ -83,6 +85,7 @@
         </div>
     </div>
     <script src="{%static 'intern_app/js/jquery.js'%}"></script>
+    <!-- Arayüzü değiştirme -->
     <script>
       
 
@@ -103,6 +106,18 @@
         $(".tab").click(function(){
             $(this).addClass("active").siblings().removeClass("active")
         })
+    </script>
+    <!-- Ayarlardaki geri dönme butonuna tıklandığında geldiğin sayfaya göre yönlendirme -->
+    <script>
+        document.getElementById("redirectButton").addEventListener("click", function() {
+            var referer = document.referrer; // başvuru urlsini al
+            
+            if (referer.includes('yonetici-paneli/')) {
+                window.location.href = "{% url 'intern_app:yonetici-paneli' %}";  // eğer url 'yonetici-paneli' ise panele geri dön
+            } else {
+                window.location.href = "{% url 'intern_app:index' %}";  // içermiyorsa ana sayfaya yönlendir
+            }
+        });
     </script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 from django.db import models
+from autoslug import AutoSlugField
 from django.contrib.auth.models import AbstractUser,Permission
 from django.core.validators import EmailValidator,MinLengthValidator
 
@@ -7,9 +8,11 @@ class Categories(models.Model):
     name = models.CharField(max_length=255,unique=True,verbose_name="Kategori İsmi")
     description = models.CharField(max_length=255,null=True,verbose_name="Kategori Açıklaması")
     image = models.ImageField(upload_to='category_images/',verbose_name="Kategori Görseli")
-    slug = models.SlugField(unique=True,verbose_name="Alan Adı")
-    sub_categories = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="parent_categories",verbose_name="Alt Kategoriler")
-    is_sub_cat = models.BooleanField(default=False,verbose_name="Alt Kategori mi?")
+    slug = AutoSlugField(populate_from="name",unique=True,verbose_name="Alan Adı")
+    sub_categories = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="parent_categories",verbose_name="Alt Kategori olmasını istediğiniz kategorileri seçin:",
+                                            help_text="Birden fazla kategori seçmek için CTRL tuşuna basılı tutunuz." \
+                                            "\n Aynı zamanda seçimi iptal etmek için CTRL tuşuna basılı tutup seçimi iptal edilmek istenen kategoriye tıklayın. ")
+   
     # Modelin tüm objelerini almak için basitleştirilmiş fonksiyon
     @staticmethod
     def get_all_categories():
@@ -43,6 +46,7 @@ class PersonUser(AbstractUser):
 
     def __str__(self):
         return self.username
+ 
     
     class Meta():
         verbose_name ="Kullanıcı"
@@ -51,7 +55,8 @@ class PersonUser(AbstractUser):
     
 class Products(models.Model):
     product_name = models.CharField(max_length=255, verbose_name="Ürün Adı")
-    product_category = models.ManyToManyField(Categories,related_name="products",verbose_name="Ürün Kategorisi")
+    product_category = models.ManyToManyField(Categories,related_name="products",verbose_name="Ürün Kategorisi",help_text="Birden fazla kategori seçmek için CTRL tuşuna basılı tutunuz. \n Aynı zamanda seçimi iptal etmek için CTRL tuşuna basılı tutup seçimi iptal edilmek istenen kategoriye tıklayın.")
+    
     #product_category = models.ForeignKey(Categories, on_delete=models.CASCADE,related_name='products' ,null=True)
     product_description = models.TextField(null=True,verbose_name="Ürün Açıklaması")
     product_price = models.DecimalField(max_digits=9,decimal_places=2,verbose_name="Ürün Fiyatı")    
@@ -59,10 +64,14 @@ class Products(models.Model):
 
     def __str__(self):
         return self.product_name
+ 
+
+    
     class Meta:
         # Admin panelinde nasıl gözükeceği
         verbose_name= 'Ürün'
         verbose_name_plural = 'Ürünler'
+        
         
 class CartItem(models.Model):
     cart_name = models.ForeignKey(Products,on_delete=models.CASCADE,verbose_name="Ürün Adı")
@@ -74,6 +83,7 @@ class CartItem(models.Model):
     
     def cart_total(self):
         return self.cart_quantity * self.cart_name.product_price
+     
     class Meta:
         verbose_name = "Sepete Ürün"
         verbose_name_plural = "Sepet"

@@ -73,7 +73,7 @@
 
                     {%elif user.is_superuser or user.is_staff%}
                     <li><a href="{% url 'intern_app:settings'%}" class="dropdown-item">Ayarlar</a></li>
-                    <li><a href="{%url 'admin:index' %}" class="dropdown-item">Yönetici Paneli</a></li>
+                    <li><a href="{%url 'intern_app:yonetici-paneli' %}" class="dropdown-item">Yönetici Paneli</a></li>
                     <li><a class="dropdown-item  " href="{% url 'logout' %}?next=/">Çıkış yap</a></li>
                     {%else%}
                     <li><a href="{% url 'intern_app:settings'%}" class="dropdown-item">Ayarlar</a></li>

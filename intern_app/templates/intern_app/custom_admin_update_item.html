@@ -1,15 +1,50 @@
 {%extends "custom-admin-base.html"%}
 {% load static%}
 
-{%block ekmekkirintisi%} {%endblock ekmekkirintisi%}
-{%block content%}
 
+{%block content%}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+        {{ message }}
+        <button class="close-message" aria-label="Close message">&times;</button>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+{%if model_name != "cartitem" and model_name == "categories" %}
+{%for data in get_names%}
+<h3 style=" text-align: center;text-decoration: underline 2px;">{{ data.obj.name }}'i düzenliyorsunuz.</h3>
+{%endfor%}
+{%else%}
+{%for data in get_names%}
+<h3 style=" text-align: center;text-decoration: underline 2px;">{{ data.obj }}'i düzenliyorsunuz.</h3>
+{%endfor%}
+{%endif%}
 <link rel="stylesheet" href="{%static 'intern_app/css/custom-admin-form.css'%}">
 
     <form method="POST" enctype="multipart/form-data">
+
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Güncelle</button>
     </form>
-
+    <script>
+        document.getElementById("is_subs").addEventListener("change", function() {
+            var parentSelect = document.getElementById("parent_category");
+            parentSelect.disabled = !this.checked;
+        });
+        </script>
+         <script>
+            // Bilgi mesajı ( hata veya başarı) için kapatma butonu
+    document.querySelectorAll('.close-message').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.target.closest('li').style.opacity = '0';
+            setTimeout(() => {
+                e.target.closest('li').remove();
+            }, 300);
+        });
+    });
+    </script>
 {%endblock%}

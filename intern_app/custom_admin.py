@@ -90,6 +90,7 @@ def dynamic_model_item_add(request,app_label, model_name):
             new_obj = form.save(commit=False)
             new_obj.is_sub_cat = is_sub_cat
             new_obj.save()
+            form.save_m2m()
             if is_sub_cat:
                 if not parent_category_id:
                     form.add_error(None,"Alt Kategori olarak belirlediğiniz öğenin bir üst kategorisi olmalıdır!")
@@ -105,14 +106,16 @@ def dynamic_model_item_add(request,app_label, model_name):
                         form.add_error =(None,"Seçilen üst kategori bulunamadı.")
             else:
                 new_obj.save()
-         
+               
+                messages.success(request, 'Başarıyla eklendi!')
             
             
             
             return redirect(reverse("intern_app:add_model", kwargs={"app_label": app_label, "model_name": model_name}))  
     else:
         form = ModelForm()
-
+    
+ 
     categories = Categories.get_main_categories  # Sadece ana kategoriler
 
     context = {

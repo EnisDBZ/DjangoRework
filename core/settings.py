@@ -41,8 +41,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tailwind',
+    'theme',
 ]
-
+TAILWIND_APP_NAME = 'theme'
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 MIDDLEWARE = [
      'django.middleware.locale.LocaleMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -71,6 +77,7 @@ TEMPLATES = [
                 'intern_app.context_processors.categories_processor',
                 'intern_app.context_processors.sub_categories_processor',
                 'intern_app.context_processors.admin_links',
+                'intern_app.context_processors.BillingProcessor',
       
                                                                       
             ],
@@ -120,7 +127,7 @@ LANGUAGES = [
     ('tr', _('Turkish')),
 ]
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Istanbul'
 
 USE_I18N = True
 

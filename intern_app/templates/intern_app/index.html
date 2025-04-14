@@ -50,7 +50,7 @@
 <!--Products-->
 <div class="container-fluid test">
     <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3 p-2" > <!-- Maksimum 6 sütun olacak şekilde ayarlandı -->
-        {% for product in products %}
+        {% for product in product_page %}
         
         <div class="col"> <!-- Kartları hizalamak için her kartı bir "col" içine aldık -->
             <div class="card shadow-sm border-0 rounded-4 h-100">
@@ -98,6 +98,34 @@
         </div>
         {% endfor %} 
     </div>
+</div>
+<!-- Sayfa numaraları -->
+<div class="pagination-wrapper">
+  <div class="pagination">
+    {% if product_page.has_previous %}
+      <abbr title="İlk Sayfa"> <a href="?page=1" class="page-btn page-step">&laquo;</a></abbr>
+      <abbr title="Önceki Sayfa"><a href="?page={{ product_page.previous_page_number }}" class="page-btn page-step">‹</a></abbr>
+    {% else %}
+      <span class="page-btn page-step disabled">&laquo;</span>
+      <span class="page-btn page-step disabled">‹</span>
+    {% endif %}
+
+    {% for page_num in product_page.paginator.page_range %}
+      {% if product_page.number == page_num %}
+        <abbr title="{{page_num}}"> <span class="page-btn active">{{ page_num }}</span></abbr>
+      {% else %}
+        <a href="?page={{ page_num }}" class="page-btn">{{ page_num }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {% if product_page.has_next %}
+      <abbr title="Sonraki Sayfa"> <a href="?page={{ product_page.next_page_number }}" class="page-btn page-step">›</a></abbr>
+      <abbr title="Son Sayfa"><a href="?page={{ product_page.paginator.num_pages }}" class="page-btn page-step">&raquo;</a></abbr> 
+    {% else %}
+      <span class="page-btn page-step disabled">›</span>
+      <span class="page-btn page-step disabled">&raquo;</span>
+    {% endif %}
+  </div>
 </div>
 
 <script>

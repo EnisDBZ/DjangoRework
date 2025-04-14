@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import PersonUser, Products, CartItem, Categories
+from .models import PersonUser, Products, CartItem, Categories,Billing,BilledItems
 # Register your models here.
 
 class PersonUserAdmin(admin.ModelAdmin):
@@ -41,3 +41,6 @@ admin.site.register(Categories, CategoriesAdmin)
 admin.site.register(PersonUser, PersonUserAdmin)
 admin.site.register(Products, ListedProducts)
 admin.site.register(CartItem)
+admin.site.register(Billing)
+admin.site.register(BilledItems)
+

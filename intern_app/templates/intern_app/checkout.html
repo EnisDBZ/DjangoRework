@@ -1,0 +1,223 @@
+{%load static tailwind_tags%}
+{%load static%}
+<html lang="en" data-theme="main">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Siparişinizi Tamamlayın</title>
+  <link rel="stylesheet" href="{%static 'intern_app/css/checkout.css'%}">
+  {% tailwind_css %}
+</head>
+
+<body>
+
+  <div class="flex flex-col md:flex-row gap-4 max-w-5xl mx-auto mt-4 p-2">
+
+    <!-- Form Section -->
+    <div class="du-card bg-base-100 shadow-2xl flex-1 p-4 text-sm">
+      <div class="mb-6">
+        <a href="{%url 'intern_app:index'%}" class="du-btn du-btn-lg du-btn-primary w-8 absolute">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+              clip-rule="evenodd" />
+          </svg>
+          Geri Dön
+        </a>
+      </div>
+      <h2 class="text-xl font-bold text-center mb-4">Ödeme</h2>
+
+      <form method="POST" class="space-y-4" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Contact Information -->
+        <div>
+          <h3 class="font-semibold text-center mb-3 pb-1 border-b">İletişim Bilgileri</h3>
+
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            <div>
+              <label class="block mb-1">İsim</label>
+              <input required minlength="2" type="text" class="du-input du-input-sm du-input-bordered w-full"
+                name="name" placeholder="İsim">
+            </div>
+            <div>
+              <label class="block mb-1">Soyisim</label>
+              <input required minlength="2" type="text" class="du-input du-input-sm du-input-bordered w-full"
+                name="surname" placeholder="Soyisim">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block mb-1">E-Posta</label>
+              <input required type="email" class="du-input du-input-sm du-input-bordered w-full" name="email"
+                placeholder="ornek@ornek.com">
+            </div>
+            <div>
+              <label class="block mb-1">Telefon</label>
+              <input required maxlength="11" type="text" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                name="telno" pattern="\d*" class="du-input du-input-sm du-input-bordered w-full"
+                placeholder="05XX XXX XXXX">
+            </div>
+          </div>
+        </div>
+
+        <!-- Address Information -->
+        <div>
+          <h3 class="font-semibold text-center mb-3 pb-1 border-b">Adres Bilgileri</h3>
+
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            <div>
+              <label class="block mb-1">İl</label>
+              <select required name="il" class="du-select du-select-sm du-select-bordered w-full">
+                <option disabled selected>Seçiniz</option>
+                <option>İzmir</option>
+                <option>İstanbul</option>
+              </select>
+            </div>
+            <div>
+              <label class="block mb-1">İlçe</label>
+              <select required name="ilce" class="du-select du-select-sm du-select-bordered w-full">
+                <option disabled selected>Seçiniz</option>
+                <option>Bayraklı</option>
+                <option>Karşıyaka</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="block mb-1">ZIP Kodu</label>
+            <input maxlength="5" name="zipcode" oninput="this.value=this.value.replace(/[^0-9]/g,'');" required
+              type="text" class="du-input du-input-sm du-input-bordered w-full" placeholder="35000">
+          </div>
+
+          <div>
+            <label class="block mb-1">Açık Adres</label>
+            <textarea required name="adres" class="du-textarea du-textarea-sm du-textarea-bordered w-full h-20"
+              placeholder="Açık adresiniz..."></textarea>
+          </div>
+        </div>
+        <!-- Payment Method -->
+        <div>
+          <h3 class="font-semibold text-center mb-3 pb-1 border-b">Ödeme Yöntemi</h3>
+
+          <div class="space-y-2">
+            <div class="">
+              <input type="radio" class="du-radio" name="payment" value="Banka/Kredi Kartı" id="credit-card" checked>
+              <label for="credit-card" class="ml-2">Kredi Kartı</label>
+            </div>
+            <div class="">
+              <input type="radio" class="du-radio" name="payment" value="EFT/Havale" id="bank-transfer">
+              <label for="bank-transfer" class="ml-2">EFT/Havale</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Credit Card Form (shown when credit card selected) -->
+        <div id="credit-card-form">
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            <div>
+              <label class="block mb-1">Kart Numarası</label>
+              <input required type="text" name="card_no" maxlength="16"
+                oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                class="du-input du-input-sm du-input-bordered w-full" placeholder="**** **** **** ****">
+            </div>
+            <div>
+
+              <label class="block mb-1">Son Kullanma</label>
+              {{ form.card_exp.label }}
+              <input required type="text" name="exp" class="du-input du-input-sm du-input-bordered w-full"
+                placeholder="MM/YY">
+              {{form.card_exp}}
+
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block mb-1">Kart Üzerindeki İsim</label>
+              <input required type="text" name="owner_name" class="du-input du-input-sm du-input-bordered w-full"
+                placeholder="Ad Soyad" autocomplete="tel">
+            </div>
+            <div>
+              <label class="block mb-1">CVV</label>
+              <input required type="password" name="cvv" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                class="du-input du-input-sm du-input-bordered w-full" placeholder="***" maxlength="3">
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+          <button type="submit" class="du-btn du-btn-sm du-btn-primary px-6">
+            Siparişi Tamamla
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Payment Summary Section -->
+    <div class="du-card bg-base-100 shadow-2xl flex-1 p-4 text-sm">
+      <h2 class="text-xl font-bold text-center mb-4">Ödeme Özeti</h2>
+
+      <div class="space-y-4">
+        <!-- Order Summary -->
+        <div>
+          <h3 class="font-semibold text-center mb-3 pb-1 border-b">Sipariş Detayları</h3>
+
+          <div class="py-2 border-b  ">
+            <table class="du-table w-full">
+              <thead>
+                <tr>
+                  <th>
+                    Ürün Görseli
+                  </th>
+                  <th>
+                    Ürün Adı
+                  </th>
+                  <th>
+                    Ürün Adedi
+                  </th>
+                  <th>Fiyatı</th>
+                </tr>
+              </thead>
+              <tbody class="text-center">
+                {%for items in cart_items%}
+                <tr class="border-b">
+                  <th>
+                    <div class="du-avatar">
+                      <span class="h-20 rounded"><img src="{{items.cart_name.product_image.url}}"
+                          alt="{{items.cart_name.product_name}}"></span>
+                    </div>
+                  </th>
+                  <td class="break-words whitespace-normal">
+                    <span>{{items.cart_name.product_name}}</span>
+                  </td>
+                  <td>
+                    <span>{{items.cart_quantity}} x {{items.cart_name.product_price}}₺ Adet</span>
+                  </td>
+                  <td>
+                    <span> {{items.cart_total}}₺</span>
+
+                  </td>
+                </tr>
+                {%endfor%}
+              </tbody>
+
+
+          </div>
+        </div>
+        </table>
+      </div>
+      <div class="flex justify-between py-2 font-bold">
+        <span>Toplam</span>
+        <span>{{total_price}} ₺ </span>
+      </div>
+
+
+
+</body>
+
+</html>

@@ -1,9 +1,10 @@
-from .models import CartItem, Categories
+from .models import CartItem, Categories , Billing,BilledItems, Products
 from django.shortcuts import get_object_or_404
 from django.apps import apps
 from django.contrib import admin
 from django.shortcuts import render
 from django.forms import modelform_factory
+from collections import defaultdict
 
 # Context Processors burada oluşturulan fonksiyonların şablonlarını her sayfaya kullanılabilir hale getirir.
 
@@ -59,3 +60,27 @@ def sub_categories_processor(request):
         return {'sub_categories': sub_categories}
     # Alt kategori yoksa boş döner.
     return {'sub_categories': []}
+
+def BillingProcessor(request):
+    billed_items = BilledItems()
+    if request.user.is_authenticated:
+        bills = Billing.objects.filter(user=request.user)
+        billed_items = BilledItems.objects.filter(bills__user=request.user)
+    else:
+        bills = []
+        billed_items = []
+        only_product_image = []
+
+    grouped_items = defaultdict(list)
+
+    for item in billed_items:
+        grouped_items[item.bills.id].append(item)
+
+    return {
+        "bills":bills,
+        "billed_items":billed_items,
+        "grouped_items":grouped_items,
+      
+    }
+    
+    

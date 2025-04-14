@@ -288,6 +288,11 @@
               </tbody>
               <tfoot>
                 <tr>
+                  <td colspan="1" class="">
+                  <a href="{%url 'intern_app:checkout'%}" class="btn btn-success">
+                    Siparişi Tamamla
+                  </a>
+                  </td>
                   <td colspan="999" class="text-end mt-3 fw-bold fs-5 total-price">
                     Toplam Fiyat: {{ total_price }}₺
                   </td>
@@ -302,6 +307,23 @@
       </div>
     </div>
   </div>
+  <!-- Mesaj bildirimi -->
+  {% if messages %}
+  <div class="messages-container">
+      {% for message in messages %}
+      <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+          <div class="message-content">
+              {{ message }}
+          </div>
+          <button class="close-message" aria-label="Close message">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M13 1L1 13M1 1L13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+          </button>
+      </div>
+      {% endfor %}
+  </div>
+  {%endif%}
   {%block banner%}
   <div class="banner-sol">
     <img src="{%static 'intern_app/images/pattern2_blue.png'%}" alt="">
@@ -471,7 +493,26 @@
   <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.13"></script>
   <script src="{%static 'intern_app/js/loader.js'%}"></script>
   <script src="https://unpkg.com/htmx.org@1.7.0"></script>
-
+  <script>
+    // Mesaj bildirimi script
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.close-message').forEach(button => {
+            button.addEventListener('click', function() {
+                const message = this.closest('.message');
+                message.style.animation = 'slideIn 0.3s ease-out reverse forwards';
+                setTimeout(() => message.remove(), 300);
+            });
+        });
+        
+        // Auto-remove messages after 5 seconds
+        setTimeout(() => {
+            document.querySelectorAll('.message').forEach(message => {
+                message.style.animation = 'slideIn 0.3s ease-out reverse forwards';
+                setTimeout(() => message.remove(), 300);
+            });
+        }, 5000);
+    });
+</script>
 </body>
 
 </html>

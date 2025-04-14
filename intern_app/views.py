@@ -5,11 +5,14 @@ from django.apps import apps
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
-from .models import Products, CartItem, Categories
+from .models import Products, CartItem, Categories,Billing , BilledItems
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.db.models import Q
 from django.contrib import admin
+import random
+from django.core.paginator import Paginator
+
 
 
 # Create your views here.
@@ -244,14 +247,97 @@ def signup_view(request):
 
 # Shopping #
 
+# Satın alım sayfası
+def shipping_checked(request):
+    return render(request,"intern_app/shipped.html")
+
+def checkout(request):
+    # Kullanıcın sepetindeki ürünleri alır
+    cart_items = CartItem.objects.filter(user=request.user)
+    # Toplam fiyatı alır.
+    total_price = sum(item.cart_name.product_price *
+                      item.cart_quantity for item in cart_items)
+    
+    # Sipariş bilgilerini almak
+    if request.method == "POST":
+        #new_billing değişkenine Billing modelini atadık
+        new_billing = Billing()
+       
+        new_billing.user = request.user
+        new_billing.name = request.POST.get("name")
+        new_billing.surname = request.POST.get("surname")
+        new_billing.email = request.POST.get("email")
+        new_billing.telno = request.POST.get("telno")
+        new_billing.city = request.POST.get("il")
+        new_billing.town = request.POST.get("ilce")
+        new_billing.zipcode = request.POST.get("zipcode")
+        new_billing.address = request.POST.get("adres")
+        new_billing.pay_method = request.POST.get("payment")
+        new_billing.card_no = request.POST.get("card_no")
+        new_billing.card_exp = request.POST.get("exp")
+        new_billing.card_owner = request.POST.get("owner_name")
+        new_billing.card_cvv = request.POST.get("cvv")
+
+        new_billing.billing_total_price = total_price
+ 
+        
+        # Her bir oluşan fatura için LPF(rastgelesayi) fonksyionu
+        trackno = "LPF" + str(random.randint(111111,999999))
+        # TrackNo boş olduğu sürece her oluşan fatura için trackno ekleyecek
+        while True:
+            trackno = "LPF" + str(random.randint(111111, 999999))
+            if not Billing.objects.filter(tracking_no=trackno).exists():
+                new_billing.tracking_no = trackno
+                break
+        #trackno içeriğini değiştirip kaydediyor
+        new_billing.save()
+
+
+        # Sepetimizdeki ürünleri alıyoruz
+        new_billing_items = CartItem.objects.filter(user=request.user)
+        # Sepetimizden alınan her bir ürün için önceden oluşturulan faturanın takip numarası ile beraber 
+        # fatura oluşturuyouz
+        for item in new_billing_items:
+            while True:
+                product_no = "URN" + str(random.randint(1111111, 9999999))
+                if not BilledItems.objects.filter(no=product_no).exists():
+                    BilledItems.objects.create(
+                        bills=new_billing,
+                        product=item.cart_name,
+                        no=product_no,
+                        price=item.cart_name.product_price,
+                        quantity=item.cart_quantity,
+                    )
+                    break
+       
+
+        # Satın alımdan sonra sepeti temizliyoruz.
+        CartItem.objects.filter(user=request.user).delete()
+
+        messages.success(request,"Siparişiniz başarılı bir şekilde alındı!")
+        return redirect("/")
+    context = {
+      
+        "cart_items":cart_items,
+        "total_price":total_price,
+    }
+    return render(request,"intern_app/checkout.html",context)
+
 # Ürünleri görmek için fonksiyon
 def product_view(request, category_id=None):
+
+    # Sayfa görünümü 
+    p = Paginator(Products.objects.all(),10)
+    page = request.GET.get('page')
+    product_page = p.get_page(page)
+
+
     products = Products.objects.all()
     category = None
     if category_id:
         category = get_object_or_404(Categories, id=category_id)
         products = Products.objects.filter(product_category=category)
-    return render(request, 'intern_app/index.html', {'products': products, 'category': category})
+    return render(request, 'intern_app/index.html', {'products': products, 'category': category,"product_page":product_page})
 
 # Sepetteki ürünleri güncelleme fonksiyonu
 
@@ -292,22 +378,28 @@ def cart_view(request):
     return render(request, 'intern_app/cart_modal.html', {'cart_items': cart_items, 'total_price': total_price})
 
 
-@login_required
+
 # Sepete ekleme fonksiyonu
 def add_to_cart(request, product_id):
     # Products modelinden objeleri ID'lerine göre alır
     product = Products.objects.get(id=product_id)
     if request.method == 'POST':
-        # CartItem modelinde objeleri alır
-        cart_item, created = CartItem.objects.get_or_create(
-            cart_name=product, user=request.user)
-        # name değeri quantity olanları integer türünden alır ve 1 arttırıp kaydeder
-        quantity = int(request.POST.get('quantity', 1))
-        cart_item.cart_quantity += quantity
-        cart_item.save()
-        # Bulunduğu sayfaya geri döner
-        return redirect(request.META.get('HTTP_REFERER'))
+        # KUllanıcı giriş yapmışmı kontrol et
+        if request.user.is_authenticated:
 
+            # CartItem modelinde objeleri alır
+            cart_item, created = CartItem.objects.get_or_create(
+                cart_name=product, user=request.user)
+            # name değeri quantity olanları integer türünden alır ve 1 arttırıp kaydeder
+            quantity = int(request.POST.get('quantity', 1))
+            cart_item.cart_quantity += quantity
+            cart_item.save()
+            messages.success(request,"Ürününüz sepete başarıyla eklendi!")
+            # Bulunduğu sayfaya geri döner
+            return redirect(request.META.get('HTTP_REFERER'))
+        # Giriş yapmadıysa hata mesajı ver 
+        messages.warning(request,"Giriş/Kayıt yapmadan sepete ürün ekleyemezsiniz!")
+        return redirect(request.META.get('HTTP_REFERER'))
     # Eğer post isteği değilse anasayfaya geri döner.
     return render(request, 'intern_app/index.html', {'product': product})
 

@@ -104,7 +104,7 @@ nav a {
 nav a:hover {
   color: rgb(121, 5, 5);
   cursor: pointer;
-  transform: scale(1.2);
+  transform: scale(1.2) perspective(10px);
 }
 nav a.active {
   color: rgb(121, 5, 5);
@@ -113,8 +113,10 @@ nav a:first-child {
   margin-top: 7px;
 }
 nav a.back-btn {
-  margin-top: 250px;
+  position: relative;
+  top: 200px;
 }
+
 
 .right-box {
   width: 60%;
@@ -174,4 +176,152 @@ input:hover {
 }
 .tabShow {
   display: none;
+}
+
+/* Siparişler */
+.order-scroll{
+  max-height: 300px; /* or whatever fits your design */
+  overflow-y: auto;
+  width: 100%;
+  padding-right: 10px; /* optional, gives some space for scrollbar */
+}
+.order-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.order-scroll::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 3px;
+}
+
+.order-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 16px;
+  font-family: Arial, sans-serif;
+}
+
+.order-items {
+  border: 1px solid #e0e0e0;
+  
+  padding: 16px;
+  background-color: #fff;
+  width: 100%;
+  min-width: 100px;
+  max-width: 900px; /* Adjust based on your layout */
+  box-sizing: border-box;
+}
+
+.order-item-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap; /* Allows wrapping if space is tight */
+}
+
+.order-item-list-sum {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.order-item-list-sum-image .product-image img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.order-item-list-sum-track-no {
+  flex: 1;
+  min-width: 150px;
+}
+
+.order-item-list-sum-track-no small {
+  font-size: 13px;
+  color: #666;
+}
+
+.order-item-list-sum-track-no b {
+  display: block;
+  font-size: 16px;
+  color: #444;
+}
+
+.order-item-list-sum-track-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 150px;
+}
+
+.track-status svg {
+  vertical-align: middle;
+}
+
+.track-status span {
+  font-weight: bold;
+  color: #444;
+  font-size: 14px;
+}
+
+.order-item-list-sum-price-and-create-date {
+  text-align: right;
+  flex: 1;
+  min-width: 150px;
+}
+
+.price-and-create-date span {
+  display: block;
+  font-size: 14px;
+  color: #666;
+}
+
+.price-and-create-date b {
+  font-size: 16px;
+  color: #28a745;
+}
+/* Siparişler Dropdown*/
+.order-dropdown {
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+  background-color: #fff;
+}
+
+.order-dropdown summary {
+  background-color: #ffffff;
+  padding: 1rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-dropdown[open] summary {
+  background-color: #eef2f7;
+  border-bottom: 1px solid #ddd;
+}
+
+.order-dropdown summary::after {
+  content: "▼";
+  font-size: 0.8rem;
+  color: #888;
+  transition: transform 0.3s ease;
+}
+
+.order-dropdown[open] summary::after {
+  transform: rotate(180deg);
 }

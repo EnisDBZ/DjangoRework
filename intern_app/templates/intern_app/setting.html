@@ -1,123 +1,206 @@
 {%load static%}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{%static 'intern_app/css/settings.css'%}">
-    <link rel="stylesheet" href="{%static 'intern_app/css/bootstrap-icons.css'%}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{%static 'intern_app/css/settings.css'%}" />
+    <link
+      rel="stylesheet"
+      href="{%static 'intern_app/css/bootstrap-icons.css'%}"
+    />
     <script src="{%static 'intern_app/js/jquery.js'%}"></script>
-    <title>Merhaba {{user.username}}</title>
-</head>
-<body>
+    <title>Merhaba, {{user.username}}</title>
+  </head>
+  <body>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            setTimeout(function () {
-                let alerts = document.querySelectorAll(".alert");
-                alerts.forEach(function (alert) {
-                    alert.style.animation = "fadeOut 0.5s ease-out forwards";
-                    setTimeout(() => alert.remove(), 500); // 0.5 saniye sonra DOM'dan kaldır
-                });
-            }, 3000); // 3 saniye sonra kaybolmaya başlasın
-        });
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+          let alerts = document.querySelectorAll(".alert");
+          alerts.forEach(function (alert) {
+            alert.style.animation = "fadeOut 0.5s ease-out forwards";
+            setTimeout(() => alert.remove(), 500); // 0.5 saniye sonra DOM'dan kaldır
+          });
+        }, 3000); // 3 saniye sonra kaybolmaya başlasın
+      });
     </script>
-    {% if messages %}
-    {% for message in messages %}
-        <div class="alert {{ message.tags }}">{{ message }}</div>
-    {% endfor %}
-{% endif %}
-    <div class="settings-box">  
-        <div class="left-box">
-            <nav>
-            <a onclick="tabs(0)" class="tab active">
-                <i class="bi bi-person-lines-fill"></i>
-            </a>
-            <a onclick="tabs(1)" class="tab">
-                <i class="bi bi-gear-fill"></i>
-            </a>
-        
-        <a href="#" id="redirectButton" class="back-btn">
-                <i class="bi bi-arrow-left-circle-fill"></i>
-            </a>
-            
-            </nav>
-        </div>
-        <div class="right-box">
-            <div class="profile-box tabShow">
-                <h1>Kişisel Bilgiler</h1>
-                <h2>Kullanıcı Adı</h2>
-                <input type="text" name="username" id="username" value="{{user.username}}" disabled>
-                <h2>E-Mail</h2>
-                <input type="text" name="email" id="email" value ="{{user.email}}" disabled>
-               
-                <h2>İsim</h2>
-                <form action="{%url 'intern_app:update_names'%}" method="post">
-                    {%csrf_token%}
-                <input type="text" name="isim" id="isim" value="{{user.first_name}}">
-                <h2>Soyisim</h2>
-                
-                <input type="text" name="soyisim" id="soyisim" value="{{user.last_name}}">
-                <button class="btn">Güncelle</button>
-                </form>
+    {% if messages %} {% for message in messages %}
+    <div class="alert {{ message.tags }}">{{ message }}</div>
+    {% endfor %} {% endif %}
+    <div class="settings-box">
+      <div class="left-box">
+        <nav>
+          <a onclick="tabs(0)" class="tab active">
+            <i class="bi bi-person-lines-fill"></i>
+          </a>
+          <a onclick="tabs(1)" class="tab">
+            <i class="bi bi-gear-fill"></i>
+          </a>
+          <a onclick="tabs(2)" class="tab">
+            <i class="bi bi-bag-fill"></i>
+          </a>
 
-                <h2>Hesap Oluşturulma Tarihi</h2>
-                <p>{{user.date_joined}}</p>
-            </div>
-            <div class="change-settings tabShow">
-                <h1>Hesap Ayarları</h1>
-                <h2>E-Mail</h2>
-                <form id="myFormMail" action="{%url 'intern_app:update_email'%}" method="post">
-                    {%csrf_token%}
-                <h2>Eski E-Mail</h2>
-                <input type="email" name="old_email" id="old_email">
-                <h2>Yeni E-mail</h2>
-                <input type="email" name="new_email" id="new_email">
-                <button type="submit" class="btn">Güncelle</button>
-                </form>
-                <form id="myForm" action="{% url 'intern_app:update_password'%}" method="post">
-                    {%csrf_token%}
-                <h2>Eski Şifre</h2>
-                <input type="text" name ="old_password" id="old_password">
-                <h2>Yeni Şifre</h2>
-                <input type="text" name ="new_password" id="new_password">
-                <button type="submit" class="btn">Güncelle</button>
-                </form>
-            </div>
+          <a href="#" id="redirectButton" class="back-btn">
+            <i class="bi bi-arrow-left-circle-fill"></i>
+          </a>
+        </nav>
+      </div>
+      <div class="right-box">
+        <div class="profile-box tabShow">
+          <h1>Kişisel Bilgiler</h1>
+          <h2>Kullanıcı Adı</h2>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            value="{{user.username}}"
+            disabled
+          />
+          <h2>E-Mail</h2>
+          <input
+            type="text"
+            name="email"
+            id="email"
+            value="{{user.email}}"
+            disabled
+          />
+
+          <h2>İsim</h2>
+          <form action="{%url 'intern_app:update_names'%}" method="post">
+            {%csrf_token%}
+            <input
+              type="text"
+              name="isim"
+              id="isim"
+              value="{{user.first_name}}"
+            />
+            <h2>Soyisim</h2>
+
+            <input
+              type="text"
+              name="soyisim"
+              id="soyisim"
+              value="{{user.last_name}}"
+            />
+            <button class="btn">Güncelle</button>
+          </form>
+
+          <h2>Hesap Oluşturulma Tarihi</h2>
+          <p>{{user.date_joined}}</p>
         </div>
+        <div class="change-settings tabShow">
+          <h1>Hesap Ayarları</h1>
+          <h2>E-Mail</h2>
+          <form
+            id="myFormMail"
+            action="{%url 'intern_app:update_email'%}"
+            method="post"
+          >
+            {%csrf_token%}
+            <h2>Eski E-Mail</h2>
+            <input type="email" name="old_email" id="old_email" />
+            <h2>Yeni E-mail</h2>
+            <input type="email" name="new_email" id="new_email" />
+            <button type="submit" class="btn">Güncelle</button>
+          </form>
+          <form
+            id="myForm"
+            action="{% url 'intern_app:update_password'%}"
+            method="post"
+          >
+            {%csrf_token%}
+            <h2>Eski Şifre</h2>
+            <input type="text" name="old_password" id="old_password" />
+            <h2>Yeni Şifre</h2>
+            <input type="text" name="new_password" id="new_password" />
+            <button type="submit" class="btn">Güncelle</button>
+          </form>
+        </div>
+        <div class="siparisler tabShow">
+          <h1>Siparişler</h1>
+          <div class="order-scroll">
+            <div class="order-group">
+                {% for bill in bills %}
+                <details class="order-dropdown">
+                  <summary><b>Sipariş No: {{ bill.tracking_no }}<br>
+                    <small>Toplam Fiyat:<b>{{bill.billing_total_price}} ₺</b></b></small></summary>
+                  
+              
+                  {% for item in billed_items %}
+                    {% if item.bills.id == bill.id %}
+                      <div class="order-items">
+                        <!-- your existing order-item-list markup here -->
+                        <div class="order-item-list">
+                          <div class="order-item-list-sum">
+                            <div class="order-item-list-sum-image">
+                              <div class="product-image">
+                                <img src="{{ item.product.product_image.url }}" alt="item.product_name" />
+                              </div>
+                            </div>
+                            <div class="order-item-list-sum-track-no">
+                              <div class="track-no">
+                                <small>Ürün No:</small>
+                                <b>{{ item.no }}</b>
+                              </div>
+                            </div>
+                            <div class="order-item-list-sum-track-status">
+                              <div class="track-status-sum">
+                                <div class="track-status">
+                                  {% if bill.status == "Tamamlandı" %}
+                                    <!-- check icon -->
+                                    <svg width="16" height="16" ...> ... </svg>
+                                  {% endif %}
+                                  <span>Kargo Durumu: {{ bill.status }}</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="order-item-list-sum-price-and-create-date">
+                              <div class="price-and-create-date">
+                                <span>{{ bill.create_date }}</span>
+                                <b>{{ item.quantity }} Adet</b>
+                                <b>{{ item.price }} ₺</b>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </details>
+              {% endfor %}
+      </div>
     </div>
     <script src="{%static 'intern_app/js/jquery.js'%}"></script>
     <!-- Arayüzü değiştirme -->
     <script>
-      
+      const tabBtn = document.querySelectorAll(".tab");
+      const tab = document.querySelectorAll(".tabShow");
 
-        const tabBtn = document.querySelectorAll('.tab')
-        const tab = document.querySelectorAll('.tabShow')
-
-        function tabs(panelIndex){
-            tab.forEach(function(node){
-                node.style.display = "none";
-            });
-            tab[panelIndex].style.display = "block";
-
-        }
-        tabs(0);
-
+      function tabs(panelIndex) {
+        tab.forEach(function (node) {
+          node.style.display = "none";
+        });
+        tab[panelIndex].style.display = "block";
+      }
+      tabs(0);
     </script>
     <script>
-        $(".tab").click(function(){
-            $(this).addClass("active").siblings().removeClass("active")
-        })
+      $(".tab").click(function () {
+        $(this).addClass("active").siblings().removeClass("active");
+      });
     </script>
     <!-- Ayarlardaki geri dönme butonuna tıklandığında geldiğin sayfaya göre yönlendirme -->
     <script>
-        document.getElementById("redirectButton").addEventListener("click", function() {
-            var referer = document.referrer; // başvuru urlsini al
-            
-            if (referer.includes('yonetici-paneli/')) {
-                window.location.href = "{% url 'intern_app:yonetici-paneli' %}";  // eğer url 'yonetici-paneli' ise panele geri dön
-            } else {
-                window.location.href = "{% url 'intern_app:index' %}";  // içermiyorsa ana sayfaya yönlendir
-            }
+      document
+        .getElementById("redirectButton")
+        .addEventListener("click", function () {
+          var referer = document.referrer; // başvuru urlsini al
+
+          if (referer.includes("yonetici-paneli/")) {
+            window.location.href = "{% url 'intern_app:yonetici-paneli' %}"; // eğer url 'yonetici-paneli' ise panele geri dön
+          } else {
+            window.location.href = "{% url 'intern_app:index' %}"; // içermiyorsa ana sayfaya yönlendir
+          }
         });
     </script>
-</body>
+  </body>
 </html>

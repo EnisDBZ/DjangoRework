@@ -1,0 +1,103 @@
+{%extends 'base.html'%}
+{%load static%}
+{%block content%}
+{%block banner%}
+
+{%endblock%}
+<!--Alt Kategori Ürünler-->
+<div class="container-fluid test ">
+    <div class="wrapper flex flex-row gap-4 ">
+        <!-- Categories Section -->
+        <div class="categories  relative right-30 top-4 w-full h-full md:w-1/4 px-4 py-6 bg-white shadow-2xl rounded-2xl">
+            <div class="cat-header font-semibold mb-4 text-center border-b-2 border-b-gray-400 ">
+                <h2 class=" ">Kategoriler</h2>
+            </div>
+
+            <div class="all-categories ">
+                <ul class="space-y-3 relative right-6">
+                    {% for category in categories %}
+                    <li class="*:!text-gray-800 ">
+                        <a href="{% url 'intern_app:category_products' category.slug %}"
+                            class=" hover:!text-gray-500 text-base font-medium text-gray-700  transition">
+                            {{ category.name }}
+                        </a>
+
+                        {% if category.sub_categories.all %}
+                        <ul class="ml-4 mt-2 space-y-1 border-l border-gray-200 pl-3">
+                            {% for sub_category in category.sub_categories.all %}
+                            <li class="*:!text-gray-500">
+                                <a href="{% url 'intern_app:subcategory_products' slug=sub_category.slug %}"
+                                    class="text-sm text-gray-500 hover:!text-blue-500 transition">
+                                    {{ sub_category.name }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="product-section  left-130  w-3/4 ">
+            {%if not products%}
+
+            {%endif%}
+            <div class="row row-cols-2  row-cols-md-2 row-cols-lg-3 g-3 p-2" > <!-- Maksimum 6 sütun olacak şekilde ayarlandı -->
+                {% for product in products %}
+                
+                <div class="col"> <!-- Kartları hizalamak için her kartı bir "col" içine aldık -->
+                    <div class="card shadow-sm border-0 rounded-4  h-100">
+                        <img src="{{ product.product_image.url }}" class="card-img-top p-1" 
+                            style="object-fit: contain; max-height: 150px;" 
+                            alt="{{ product.product_name }}">
+                        <div class="card-body p-2">
+                            <h6 class="card-title text-primary">{{ product.product_name }}</h6>
+                            <p class="card-text text-muted" style="font-size: 0.8rem;">Kategori:  {% for category in product.product_category.all %}
+                            {{ category.name }}
+                            {% if not forloop.last %}, {% endif %}
+                            {% endfor %}</p>
+                            <p class="card-text text-muted" style="font-size: 0.8rem;">{{ product.product_description }}</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item fw-bold text-center" style="font-size: 0.9rem;">{{ product.product_price }}₺</li>
+                        </ul>
+                        <div class="card-footer bg-white border-0 text-center p-2">
+                            <form method="POST" action="{%url 'intern_app:add_to_cart' product.id %}">
+                                {% csrf_token %}
+                                <div class="d-flex justify-content-center quantity-input align-items-center gap-1">
+                                <button type="button"
+                                class="btn red" 
+                                id="decrease-{{product.id}}" 
+                                onclick="changeQuantity(-1,{{product.id}})">
+                                <i class="bi bi-dash-lg"></i>
+                                </button>
+                                <input type="number" name="quantity" id="quantity-{{product.id}}" min="1" max="999"
+                                        value="{{ request.POST.quantity|default:1 }}" required
+                                        class="form-control text-center" style="width: 80px; font-size: 1rem;"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                <button type="button"
+                                class="btn green" 
+                                id="increase-{{product.id}}"
+                                    onclick="changeQuantity(1,{{product.id}})">
+                                    <i class="bi bi-plus-lg"></i>
+                                </button>
+                                </div>
+                                <div class="butonlar flex flex-row gap-2 pt-2 justify-center">
+                                    <button type="submit" name="action" value="add_to_cart" class="du-btn bg-transparent text-black hover:!bg-blue-800 hover:!text-white !rounded-xl w-20"><span class="text-sm">Sepete Ekle</span></button>
+                                  <div class="satin-alma-buton">
+                                    <button type="submit" name="action" value="buy_now" class="du-btn bg-green-400 hover:bg-green-700 hover:border-green-700 !rounded-xl border-green-500" ><span class="text-sm">Satın Al</span></button>
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %} 
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+{%endblock%}

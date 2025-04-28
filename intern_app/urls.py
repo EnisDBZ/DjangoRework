@@ -17,13 +17,16 @@ urlpatterns = [
     path('settings/update_names/',views.update_names,name="update_names"),
     path("", views.cart_view, name="cart"),
     path("add/<int:product_id>/",views.add_to_cart, name="add_to_cart"),
+    path("clear-quick-buy/",views.clear_quick_buy,name="clear_quick_buy"),
     path("update/<int:item_id>/", views.update_cart, name="update_cart"),
     path('remove/<int:item_id>/',views.remove_from_cart,name ="remove_from_cart"),
     path('satin-al/',views.checkout,name="checkout"),
+    path('buy_now/<int:product_id>/', views.checkout_quick_buy, name='checkout_quick_buy'),
     path("satin-al/satin-alim-onaylandi/",views.shipping_checked,name="shipping_checked"),
     path('search/',views.search_view,name="search"),
     path('categories/',views.categories_list,name="categories"),
     path('categories/<slug:slug>/', views.categories, name='category_products'),
+    path('categories/<slug:slug>/urunler/',views.category_products,name="subcategory_products"),
 
     # Custom Admin panelinin URL'leri
     path("yonetici-paneli/",custom_admin.admin_links,name="yonetici-paneli"),

@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "tailwindcss" ;
 @plugin "@tailwindcss/typography";
 @plugin "daisyui"{
   themes: light --default, dark --prefersdark,main;
@@ -49,3 +49,6 @@
   * the scope of this path.
   */
 @source "../../../**/*.{html,py,js}";
+
+
+

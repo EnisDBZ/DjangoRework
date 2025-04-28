@@ -1,0 +1,7 @@
+.du-dropdown-content {
+    display: none;
+  }
+  
+  .du-dropdown-content.active {
+    display: block;
+  }

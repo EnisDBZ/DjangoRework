@@ -1,6 +1,8 @@
 {%extends 'base.html'%}
 {%load static%}
 {%block content%}
+{%block banner%}
+{%endblock banner%}
 {% if query %}
 <div>
     <div>
@@ -10,7 +12,7 @@
             <h1>Yaptığınız "{{query}}" sorgusuna göre sonuçlar:</h1>
         </div>
         <!-- Loop through search query if there is a result -->
-        <div class="container-fluid test">
+        <div class="container-fluid test-search">
             <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3 p-2">
                 <!-- Maksimum 6 sütun olacak şekilde ayarlandı -->
                 {% for post in posts %}
@@ -47,10 +49,13 @@
                                         <i class="bi bi-plus-lg"></i>
                                     </button>
                                 </div>
-                                <div class="d-flex justify-content-center align-items-center gap-1 pt-3">
-
-                                    <button type="submit" class="btn sepet">Sepete Ekle</button>
+                                <div class="butonlar flex flex-row gap-2 pt-2 justify-center">
+                                    <button type="submit" name="action" value="add_to_cart" class="du-btn bg-transparent text-black hover:!bg-blue-800 hover:!text-white !rounded-xl w-20"><span class="text-sm">Sepete Ekle</span></button>
+                                  <div class="satin-alma-buton">
+                                    <button type="submit" name="action" value="buy_now" class="du-btn bg-green-400 hover:bg-green-700 hover:border-green-700 !rounded-xl border-green-500 transition" ><span class="text-sm">Satın Al</span></button>
                                 </div>
+                                </div>
+                                
                             </form>
                         </div>
                     </div>

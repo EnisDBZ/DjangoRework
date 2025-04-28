@@ -25,6 +25,9 @@
               {% if verbose_name == "Ürünler" %}
                 <th>Görsel</th>
               {% endif %}
+              {% if verbose_name == "Resim" %}
+                <th>Görsel</th>
+              {%endif%}
               <th>{{ verbose_name }}</th>
               {% if verbose_name == "Kategoriler" %}
                 <th>{{ category_header }}</th>
@@ -52,6 +55,9 @@
                 {% if verbose_name == "Ürünler" %}
                   <td><img src="{{ model.product_image.url }}" alt="Image" style="max-height: 70px;"></td>
                 {% endif %}
+                {%if verbose_name == "Resimler" %}
+                  <td><img src="{{model.resim_gorseli.url}}" alt="{{model}}" style="max-height: 70px;"></td>
+                {%endif%}
                 <td>{{ model }}</td>
                 <td>
                   <a href="{% url 'intern_app:obje_sil' model_name=model_name model_id=model.id %}" class="btn btn-danger btn-sm">Sil</a>

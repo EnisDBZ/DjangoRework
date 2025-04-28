@@ -1,79 +1,79 @@
 {%extends 'base.html'%}
 {%load static%}
 {%block content%}
-<h2 style="text-align: center; padding-top: 20px;">{{ sub_category.name }}</h2> <!-- ✅ Kategori başlığını göster -->
-{% if sub_categories%}
-<link rel="stylesheet" href="{%static 'intern_app/css/category.css'%}">
-<div class="container-fluid test">
-    <div class=" card_wrap row row-cols-2 row-cols-md-3 row-cols-lg-3 g-5 p-5 ms-0 " >
-        {% for sub_category in sub_categories %}
-        <div class="col">
-            <div class="card shadow-sm border-0 rounded-4 h-100">
-                <img src="{{sub_category.image.url}}" alt="{{ sub_category.name }}" class="card__image" style="object-fit: cover;">
-              
-                <a href="{% url 'intern_app:category_products' slug=sub_category.slug %}" class="stretched-link"></a>
-         
+{%block banner%}
 
-                <div class="card__content">
-                    <p class="card__title">{{sub_category.name}}
-                    </p><p class="card__description">{{sub_category.description}}</p>
-                </div>
+{%endblock%}
+
+<!--Ürünlerin bulunduğu bölüm-->
+
+<div class="container-fluid test ">
+    <div class="wrapper flex flex-row gap-4 ">
+        <!-- Categories Section -->
+        <div class="categories  relative right-30 top-4 w-full h-full md:w-1/4 px-4 py-6 bg-white shadow-2xl rounded-2xl">
+            <div class="cat-header font-semibold mb-4 text-center border-b-2 border-b-gray-400 ">
+                <h2 class=" ">Kategoriler</h2>
             </div>
-        </div>        
-        {% endfor %}
-    </div> 
-</div> 
-{%endif%}
 
-<div class="container-fluid test">
-    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3 p-2" > <!-- Maksimum 6 sütun olacak şekilde ayarlandı -->
-        {% for product in products %}
-        
-        <div class="col"> <!-- Kartları hizalamak için her kartı bir "col" içine aldık -->
-            <div class="card shadow-sm border-0 rounded-4 h-100">
-                <img src="{{ product.product_image.url }}" class="card-img-top p-1" 
-                     style="object-fit: contain; max-height: 150px;" 
-                     alt="{{ product.product_name }}">
-                <div class="card-body p-2">
-                    <h6 class="card-title text-primary">{{ product.product_name }}</h6>
-                    <p class="card-text text-muted" style="font-size: 0.8rem;">Kategori:  {% for category in product.product_category.all %}
-                      {{ category.name }}
-                      {% if not forloop.last %}, {% endif %}
-                    {% endfor %}</p>
-                    <p class="card-text text-muted" style="font-size: 0.8rem;">{{ product.product_description }}</p>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item fw-bold text-center" style="font-size: 0.9rem;">{{ product.product_price }}₺</li>
+            <div class="all-categories ">
+                <ul class="space-y-3 relative right-6">
+                    {% for category in categories %}
+                    <li class="*:!text-gray-800 ">
+                        <a href="{% url 'intern_app:category_products' category.slug %}"
+                            class=" hover:!text-gray-500 text-base font-medium text-gray-700  transition">
+                            {{ category.name }}
+                        </a>
+
+                        {% if category.sub_categories.all %}
+                        <ul class="ml-4 mt-2 space-y-1 border-l border-gray-200 pl-3">
+                            {% for sub_category in category.sub_categories.all %}
+                            <li class="*:!text-gray-500">
+                                <a href="{% url 'intern_app:subcategory_products' slug=sub_category.slug %}"
+                                    class="text-sm text-gray-500 hover:!text-blue-500 transition">
+                                    {{ sub_category.name }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
                 </ul>
-                <div class="card-footer bg-white border-0 text-center p-2">
-                    <form method="POST" action="{%url 'intern_app:add_to_cart' product.id %}">
-                        {% csrf_token %}
-                        <div class="d-flex justify-content-center quantity-input align-items-center gap-1">
-                          <button type="button"
-                           class="btn red" 
-                           id="decrease-{{product.id}}" 
-                           onclick="changeQuantity(-1,{{product.id}})">
-                           <i class="bi bi-dash-lg"></i>
-                          </button>
-                          <input type="number" name="quantity" id="quantity-{{product.id}}" min="1" max="999"
-                                 value="{{ request.POST.quantity|default:1 }}" required
-                                 class="form-control text-center" style="width: 80px; font-size: 1rem;"
-                                 oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                          <button type="button"
-                           class="btn green" 
-                           id="increase-{{product.id}}"
-                            onclick="changeQuantity(1,{{product.id}})">
-                            <i class="bi bi-plus-lg"></i>
-                          </button>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center gap-1 pt-3">
-                        <button type="submit" class="btn sepet">Sepete Ekle</button>
-                      </div>
-                    </form>
-                </div>
             </div>
         </div>
-        {% endfor %} 
+
+
+        <!-- Card Category Section -->
+        <div class="card-category w-3/4">
+            <div class="card-categry-section relative z-0 overflow-hidden">
+                {% if sub_categories%}
+                <link rel="stylesheet" href="{%static 'intern_app/css/category.css'%}">
+
+                <div class="card_wrap row row-cols-1 row-cols-md-2 g-3 p-3 ">
+                    {% for sub_category in sub_categories %}
+                    <div class="col">
+                        <div class="card shadow-sm border-0 rounded-4 h-100">
+                            <img src="{{sub_category.image.url}}" alt="{{ sub_category.name }}" class="card__image"
+                                style="object-fit: cover;">
+                            <a href="{% url 'intern_app:subcategory_products' slug=sub_category.slug %}"
+                                class="stretched-link"></a>
+                            <div class="card__content">
+                                <p class="card__title">{{sub_category.name}}</p>
+                                <p class="card__description">{{sub_category.description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {%endif%}
+            </div>
+        </div>
+                
+            </div>
+        </div>
     </div>
 </div>
+      
+        
+
 {%endblock%}

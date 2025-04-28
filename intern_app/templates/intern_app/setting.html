@@ -117,6 +117,9 @@
         </div>
         <div class="siparisler tabShow">
           <h1>Siparişler</h1>
+          {% if not bills %}
+          <p>Henüz sipariş oluşturmamışsınız</p>
+          {%endif%}
           <div class="order-scroll">
             <div class="order-group">
                 {% for bill in bills %}
@@ -158,6 +161,7 @@
                                 <span>{{ bill.create_date }}</span>
                                 <b>{{ item.quantity }} Adet</b>
                                 <b>{{ item.price }} ₺</b>
+                                <span>Toplam:{{item.item_total_price}}₺</span>
                               </div>
                             </div>
                           </div>

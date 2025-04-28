@@ -65,10 +65,12 @@ class Products(models.Model):
     product_description = models.TextField(null=True,verbose_name="Ürün Açıklaması")
     product_price = models.DecimalField(max_digits=9,decimal_places=2,verbose_name="Ürün Fiyatı")    
     product_image = models.ImageField(upload_to='products/',verbose_name="Ürün Görseli")   
+    created_at = models.DateTimeField(auto_now_add=True,null=True)
 
     def __str__(self):
         return self.product_name
- 
+    
+
 
     
     class Meta:
@@ -85,6 +87,7 @@ class CartItem(models.Model):
     def __str__(self):
         return f"{self.cart_quantity} x {self.cart_name.product_name}"
     
+    # Tekil ürünün toplam fiyatını görmek için adet x fiyat
     def cart_total(self):
         return self.cart_quantity * self.cart_name.product_price
      
@@ -92,6 +95,20 @@ class CartItem(models.Model):
         verbose_name = "Sepete Ürün"
         verbose_name_plural = "Sepet"
 
+class CartItemQuickBuy(models.Model):
+    user = models.ForeignKey(PersonUser,on_delete = models.CASCADE,verbose_name="Kullanıcı")
+    item_name = models.ForeignKey(Products, on_delete=models.CASCADE,verbose_name="Ürün Adı")
+    item_quantity = models.PositiveIntegerField(default=0,verbose_name="Ürün Sayısı")
+
+    def __str__(self):
+        return f"{self.item_quantity} x {self.item_name.product_name}"
+    
+    # Tekil ürünün toplam fiyatını görmek için adet x fiyat
+
+    def item_total(self):
+        return self.item_quantity * self.item_name.product_price
+    
+ 
 class Billing(models.Model):
     user = models.ForeignKey(PersonUser,on_delete=models.CASCADE,verbose_name="Kullanıcı")
     name = models.CharField(max_length=255,null=False,verbose_name="İsim")
@@ -138,3 +155,17 @@ class BilledItems(models.Model):
 
     def __str__(self):
         return '{} - {}'.format(self.bills.id, self.no)
+    
+    def item_total_price(self):
+        return self.price * self.quantity
+    
+class Resimler(models.Model):
+    resim_isim = models.CharField(max_length=255,verbose_name="Resim Adı")
+    resim_gorseli = models.ImageField(upload_to='reklam_gorsel/',verbose_name="Görsel")
+
+    class Meta():
+        verbose_name = "Resim"
+        verbose_name_plural = "Resimler"
+    def __str__(self):
+        return self.resim_isim
+    

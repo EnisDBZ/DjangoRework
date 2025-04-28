@@ -3,13 +3,15 @@ from django.contrib.auth import authenticate, login, logout, get_user_model, upd
 from django.contrib import messages
 from django.apps import apps
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
-from .models import Products, CartItem, Categories,Billing , BilledItems
+from .models import Products, CartItem, Categories,Billing , BilledItems,Resimler,CartItemQuickBuy
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.db.models import Q
 from django.contrib import admin
+import json
 import random
 from django.core.paginator import Paginator
 
@@ -17,7 +19,6 @@ from django.core.paginator import Paginator
 
 # Create your views here.
 
-# Kendi admin panelim #
 
 def categories_list(request):
     categories = Categories.get_main_categories()  # Tüm ana kategorileri al
@@ -41,13 +42,28 @@ def categories(request, slug):
     context = {
         'category': category,
         'products': products,
-        'sub_categories': sub_categories
+     
     }
 
     return render(request, "intern_app/categories_added.html", context)
 
+def category_products(request,slug):
+    category = get_object_or_404(Categories,slug=slug)
+
+    products = Products.objects.filter(product_category=category)
+
+    sub_categories = category.sub_categories.all()
+
+    context = {
+        'category':category,
+        'products':products,
+        'sub_categories':sub_categories,
+    }
+    return render(request,"intern_app/subcategory_products.html",context)
+
 
 def search_view(request):
+    
     # GET ile arama sorgusunu alıyoruz
     search_query = request.GET.get('search_query', '')
     if search_query:
@@ -56,7 +72,8 @@ def search_view(request):
         posts = Products.objects.filter(
             Q(product_name__icontains=search_query) |
             Q(product_name__iexact=search_query) |
-            Q(product_name__contains=search_query)
+            Q(product_name__contains=search_query) 
+            
         )
     else:
         posts = Products.objects.none()  # Eğer arama yapılmadıysa, boş liste döner
@@ -264,19 +281,19 @@ def checkout(request):
         new_billing = Billing()
        
         new_billing.user = request.user
-        new_billing.name = request.POST.get("name")
-        new_billing.surname = request.POST.get("surname")
+        new_billing.name = request.POST.get("isim")
+        new_billing.surname = request.POST.get("soyisim")
         new_billing.email = request.POST.get("email")
         new_billing.telno = request.POST.get("telno")
         new_billing.city = request.POST.get("il")
         new_billing.town = request.POST.get("ilce")
         new_billing.zipcode = request.POST.get("zipcode")
-        new_billing.address = request.POST.get("adres")
-        new_billing.pay_method = request.POST.get("payment")
-        new_billing.card_no = request.POST.get("card_no")
+        new_billing.address = request.POST.get("acikadres")
+        new_billing.pay_method = request.POST.get("odeme")
+        new_billing.card_no = request.POST.get("kartno")
         new_billing.card_exp = request.POST.get("exp")
-        new_billing.card_owner = request.POST.get("owner_name")
-        new_billing.card_cvv = request.POST.get("cvv")
+        new_billing.card_owner = request.POST.get("kart-isim")
+        new_billing.card_cvv = request.POST.get("cvc")
 
         new_billing.billing_total_price = total_price
  
@@ -323,8 +340,112 @@ def checkout(request):
     }
     return render(request,"intern_app/checkout.html",context)
 
+def checkout_quick_buy(request,product_id):
+
+    product = Products.objects.get(id=product_id)
+
+    # Kullanıcın sepetindeki ürünleri alır
+    user = request.user
+    cart_items = CartItem.objects.filter(user=user, cart_name=product).first()
+
+    quick_buy = CartItemQuickBuy.objects.get(user=request.user, item_name=product)
+
+ 
+
+    
+    # Sipariş bilgilerini almak
+    if request.method == "POST":
+        #new_billing değişkenine Billing modelini atadık
+        new_billing = Billing()
+       
+        new_billing.user = request.user
+        new_billing.name = request.POST.get("isim")
+        new_billing.surname = request.POST.get("soyisim")
+        new_billing.email = request.POST.get("email")
+        new_billing.telno = request.POST.get("telno")
+        new_billing.city = request.POST.get("il")
+        new_billing.town = request.POST.get("ilce")
+        new_billing.zipcode = request.POST.get("zipcode")
+        new_billing.address = request.POST.get("acikadres")
+        new_billing.pay_method = request.POST.get("odeme")
+        new_billing.card_no = request.POST.get("kartno")
+        new_billing.card_exp = request.POST.get("exp")
+        new_billing.card_owner = request.POST.get("kart-isim")
+        new_billing.card_cvv = request.POST.get("cvc")
+
+        if cart_items:
+
+            new_billing.billing_total_price = cart_items.cart_name.product_price
+        else:
+            new_billing.billing_total_price = quick_buy.item_name.product_price
+        
+        # Her bir oluşan fatura için LPF(rastgelesayi) fonksyionu
+        trackno = "LPF" + str(random.randint(111111,999999))
+        # TrackNo boş olduğu sürece her oluşan fatura için trackno ekleyecek
+        while True:
+            trackno = "LPF" + str(random.randint(111111, 999999))
+            if not Billing.objects.filter(tracking_no=trackno).exists():
+                new_billing.tracking_no = trackno
+                break
+        #trackno içeriğini değiştirip kaydediyor
+        new_billing.save()
+
+
+        # Sepetimizdeki ürünleri alıyoruz
+        if cart_items:
+            new_billing_items = CartItem.objects.filter(user=request.user)
+        else:
+            new_billing_items = CartItemQuickBuy.objects.filter(user=request.user)    
+        # Sepetimizden alınan her bir ürün için önceden oluşturulan faturanın takip numarası ile beraber 
+        # fatura oluşturuyouz
+          # Sepet ürünleri için fatura öğelerini oluşturuyoruz
+        if cart_items:
+            for item in cart_items:
+                while True:
+                    product_no = "URN" + str(random.randint(1111111, 9999999))
+                    if not BilledItems.objects.filter(no=product_no).exists():
+                        BilledItems.objects.create(
+                            bills=new_billing,
+                            product=item.cart_name,
+                            no=product_no,
+                            price=item.cart_name.product_price,
+                            quantity=item.cart_quantity,
+                        )
+                        break
+
+        # Hızlı satın alım ürünü için fatura öğesini oluşturuyoruz
+        if quick_buy:
+            while True:
+                product_no = "URN" + str(random.randint(1111111, 9999999))
+                if not BilledItems.objects.filter(no=product_no).exists():
+                    BilledItems.objects.create(
+                        bills=new_billing,
+                        product=quick_buy.item_name,
+                        no=product_no,
+                        price=quick_buy.item_name.product_price,
+                        quantity=quick_buy.item_quantity,
+                    )
+                    break
+
+        # Satın alımdan sonra sepeti temizliyoruz.
+        CartItem.objects.filter(user=request.user).delete()
+        CartItemQuickBuy.objects.filter(user=request.user).delete()
+
+        messages.success(request,"Siparişiniz başarılı bir şekilde alındı!")
+        return redirect("/")
+    context = {
+        "product":product,
+        "cart_items":cart_items,
+        "quick_buy":quick_buy
+      
+    }
+    return render(request,"intern_app/checkout_quick_buy.html",context)
 # Ürünleri görmek için fonksiyon
 def product_view(request, category_id=None):
+    #Resimler
+    resimler = Resimler.objects.all()
+    # Oluşturma tarihini göre kaç adet sıralanacağı
+    latest_products = Products.objects.order_by('-created_at')[:5]
 
     # Sayfa görünümü 
     p = Paginator(Products.objects.all(),10)
@@ -337,7 +458,7 @@ def product_view(request, category_id=None):
     if category_id:
         category = get_object_or_404(Categories, id=category_id)
         products = Products.objects.filter(product_category=category)
-    return render(request, 'intern_app/index.html', {'products': products, 'category': category,"product_page":product_page})
+    return render(request, 'intern_app/index.html', {'products': products, 'category': category,"product_page":product_page,"latest_products":latest_products,'resimler':resimler})
 
 # Sepetteki ürünleri güncelleme fonksiyonu
 
@@ -387,14 +508,32 @@ def add_to_cart(request, product_id):
         # KUllanıcı giriş yapmışmı kontrol et
         if request.user.is_authenticated:
 
-            # CartItem modelinde objeleri alır
-            cart_item, created = CartItem.objects.get_or_create(
-                cart_name=product, user=request.user)
-            # name değeri quantity olanları integer türünden alır ve 1 arttırıp kaydeder
-            quantity = int(request.POST.get('quantity', 1))
-            cart_item.cart_quantity += quantity
-            cart_item.save()
-            messages.success(request,"Ürününüz sepete başarıyla eklendi!")
+           
+            # "Sepete Ekle" butonuna tıklanmışsa, yalnızca sepete ekle
+            if request.POST.get('action') == 'add_to_cart':
+                # CartItem modelinde objeleri alır
+                cart_item, created = CartItem.objects.get_or_create(
+                    cart_name=product, user=request.user)
+                # name değeri quantity olanları integer türünden alır ve 1 arttırıp kaydeder
+                quantity = int(request.POST.get('quantity', 1))
+                cart_item.cart_quantity += quantity
+                cart_item.save()
+                messages.success(request,"Ürününüz sepete başarıyla eklendi!")
+                return redirect(request.META.get('HTTP_REFERER'))  # Bulunduğu sayfaya yönlendirir.
+
+            # "Satın Al" butonuna tıklanmışsa, ödeme sayfasına yönlendir
+            elif request.POST.get('action') == 'buy_now':
+                quick_buy,created = CartItemQuickBuy.objects.get_or_create(user=request.user,item_name=product)
+        
+
+                quantity = int(request.POST.get('quantity', 1))
+                quick_buy.item_quantity += quantity
+                quick_buy.save()
+                
+                
+                
+                
+                return redirect('intern_app:checkout_quick_buy', product_id=product.id)  # Ödeme sayfasına yönlendir
             # Bulunduğu sayfaya geri döner
             return redirect(request.META.get('HTTP_REFERER'))
         # Giriş yapmadıysa hata mesajı ver 
@@ -403,6 +542,19 @@ def add_to_cart(request, product_id):
     # Eğer post isteği değilse anasayfaya geri döner.
     return render(request, 'intern_app/index.html', {'product': product})
 
+@csrf_exempt
+def clear_quick_buy(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            user_id = data.get('user_id')
+            
+            CartItemQuickBuy.objects.filter(user_id=user_id).delete()
+
+            return JsonResponse({'status':'success'})
+        except Exception as e:
+            return JsonResponse({'status':'error','message':str(e)})
+    return JsonResponse({'status': 'invalid_method'})
 
 @login_required
 # Sepetten ürün silme fonksiyonu

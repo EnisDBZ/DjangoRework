@@ -1,4 +1,4 @@
-from .models import CartItem, Categories , Billing,BilledItems, Products
+from .models import CartItem, Categories , Billing,BilledItems, Products,Resimler
 from django.shortcuts import get_object_or_404
 from django.apps import apps
 from django.contrib import admin
@@ -46,8 +46,9 @@ def cart_items_processor(request):
 
 
 def categories_processor(request):
+    categories_filtered = Categories.objects.filter(parent_categories=None).order_by('name')[:5]
     categories = Categories.get_main_categories()  # Kendi metodunla al
-    return {'categories': categories}  # Template'e gönder
+    return {'categories': categories,'categories_filtered':categories_filtered}  # Template'e gönder
 
 # Alt kategorileri views.py fonksiyonunda sürekli kullanmak yerine genel kullanıma almak
 def sub_categories_processor(request):
@@ -71,8 +72,8 @@ def BillingProcessor(request):
         billed_items = []
         only_product_image = []
 
+    
     grouped_items = defaultdict(list)
-
     for item in billed_items:
         grouped_items[item.bills.id].append(item)
 
@@ -83,4 +84,7 @@ def BillingProcessor(request):
       
     }
     
-    
+def gorseller(request):
+    resimler = Resimler.objects.all()
+
+    return {'resim':resimler}

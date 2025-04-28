@@ -1,3 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+a{
+  text-decoration: none;
+}
 ::placeholder {
   color: rgb(255, 255, 255) !important;
   opacity: 0.7 !important; /* Firefox */
@@ -94,6 +99,26 @@ h1{
 
 body{
   background-color: antiquewhite !important;
+
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #A31D1D transparent;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: orange;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 20px;
+  border: 3px solid orange;
 }
 #userDropdownButton {
     height: 35px !important;
@@ -144,15 +169,13 @@ header{
 
 }
 .search-bar input[type = 'search']{
-  position: relative;
-  height: 30px !important;
-  padding-top: 10px;
+ 
   outline: none;
-  right: 20px !important;
+
   color: whitesmoke;
 }
 .search-bar{
-  height: 45px;
+  height: 30px;
 
  
 }
@@ -189,22 +212,47 @@ then set the desired styles for .card-img. */
   padding-top: 5px;
   padding-bottom: 5px;
   margin: auto;
-  height: 40%;
+  height: auto;
   width:70%;
 }
 .carousel > .carousel-inner > .carousel-item > img{
-  width:100px; /* Yeap you can change the width and height*/
-  height:295px;
-  border-radius: 250px;
+  height: 320px;
+  border-radius: 5px;
+  object-fit: fit;
 }
 
 .test{
   margin-top: 10px;
   width: 75%;
 }
+.test-search{
+  margin-top: 10px;
+  width: 90%;
+}
+.modal-dialog{
+  width:auto;
+}
 .modal-content {
+
+  z-index: 1;
   width: 700px !important;
-  right: 110px !important;
+  right: 150px !important;
+}
+.odeme-tamamla{
+  display: none;
+  z-index: 0;
+  padding: 10px;
+  border-radius:0px 0px 10px 10px ;
+  display: flex;
+  position: relative;
+ 
+  bottom: 16px;
+  width:696px;
+  background-color: white;
+}
+.table-scroll {
+  max-height: 300px; /* ya da height: 50% */
+  overflow-y: auto;
 }
 .search-button{
   background-color: transparent;
@@ -234,7 +282,7 @@ then set the desired styles for .card-img. */
   width:10rem;
   position: absolute;
     top: 25px;
-    right: 150px;
+    right: 100px;
     display: flex;
     align-items: center;
 
@@ -380,7 +428,7 @@ input[type=number]::-webkit-inner-spin-button {
 }
 .sepet{
   border-color: #00ff48;
-  width: 200px;
+  
 }
 
 /* Ana kategoriye hover yapıldığında dropdown menü açılır */
@@ -448,30 +496,31 @@ input[type=number]::-webkit-inner-spin-button {
   display: block;
 }
 .banner-sol {
+  overflow: hidden;
   float: left;
   position: sticky;
   top: 20px;  /* Sayfa kaydırıldıkça üstte biraz boşluk bırakır */
   left: 10px;
-  width: 150px;
-  height: 550px;
-  border: 2px solid #333;  /* Daha modern bir renk */
+  width: 160px;
+  height: 600px;
+  border: 2px solid #3333334b;  /* Daha modern bir renk */
   border-radius: 10px;  /* Köşeleri yuvarlatır */
   background-color: #f4f4f4;  /* Arka plan rengi */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Hafif bir gölge ekler */
-  padding: 16px;  /* İçerideki öğelere boşluk ekler */
+ /* padding: 1px;  /* İçerideki öğelere boşluk ekler */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;  /* İçerik üstten başlar */
-  z-index: 999;  /* Diğer öğelerin üstünde olmasını sağlar */
+  z-index: 998;  /* Diğer öğelerin üstünde olmasını sağlar */
 }
 
 /* Banner sol kısmındaki içeriklerin stilini geliştiriyoruz */
 .banner-sol img {
   width: 100%;
-  height: auto;
+  height: 100%;
   border-radius: 8px;  /* Görsellerin köşelerini yuvarlatır */
-  margin-bottom: 20px;
+ 
 }
 
 .banner-sol h3 {
@@ -505,30 +554,31 @@ input[type=number]::-webkit-inner-spin-button {
   }
 }
 .banner-sag {
+  overflow: hidden;
   float: right;
   position: sticky;
   top: 20px;  /* Sayfa kaydırıldıkça üstte biraz boşluk bırakır */
   right: 10px;
-  width: 150px;
-  height: 550px;
-  border: 2px solid #333;  /* Daha modern bir renk */
+  width: 160px;
+  height: 600px;
+  border: 2px solid #3333334b;  /* Daha modern bir renk */
   border-radius: 10px;  /* Köşeleri yuvarlatır */
   background-color: #f4f4f4;  /* Arka plan rengi */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Hafif bir gölge ekler */
-  padding: 16px;  /* İçerideki öğelere boşluk ekler */
+  /*padding: 16px;  /* İçerideki öğelere boşluk ekler */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;  /* İçerik üstten başlar */
-  z-index: 999;  /* Diğer öğelerin üstünde olmasını sağlar */
+  z-index: 998;  /* Diğer öğelerin üstünde olmasını sağlar */
 }
 
 /* Banner sağ kısmındaki içeriklerin stilini geliştiriyoruz */
 .banner-sag img {
   width: 100%;
-  height: 560px;
+  height: 100%;
   border-radius: 8px;  /* Görsellerin köşelerini yuvarlatır */
-  margin-bottom: 20px;
+
   
 }
 
@@ -655,7 +705,8 @@ input[type=number]::-webkit-inner-spin-button {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
-  font-family: 'Gochi Hand', cursive, sans-serif;
+  font-family: 'Roboto', cursive, sans-serif;
+  padding:10px;
 }
 
 .page-btn {
@@ -694,4 +745,18 @@ abbr{
   border-bottom: none !important;
   cursor: inherit !important;
   text-decoration: none !important;
+}
+.item>a>img,.item>img{
+  border-radius: 50%;
+  
+  border: solid 1px white;
+  width: fit-content;
+}
+.item{
+  width: 75%;
+}
+#owl_produc {
+  display: flex;
+  justify-content: center;  /* Carousel'i ortalar */
+  align-items: center;
 }

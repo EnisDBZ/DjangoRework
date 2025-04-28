@@ -64,6 +64,13 @@
             <button type="submit">Ekle</button>
         </form>
         {%endif%}
+    {%if model_name == 'resimler'%}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+        
+            <button type="submit">Ekle</button>
+        </form>
+        {%endif%}
     <script>
     document.getElementById("is_subs").addEventListener("change", function() {
         var parentSelect = document.getElementById("parent_category");

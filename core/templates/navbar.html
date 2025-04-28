@@ -1,0 +1,146 @@
+{%load static tailwind_tags%}
+{%load static%}
+{% tailwind_css %}
+<header>
+  <nav class="du-navbar shadow flex flex-col  ">
+
+      <div class="wrapper flex h-13 w-full relative right-10  justify-between">
+        <!--Logo-->
+        <div class="logo ">
+
+          <div class="logo-alt">
+            <div class="logo-img relative left-50">
+              <a href="{%url 'intern_app:index'%}">
+                
+                <img class="w-48"  src="{%static 'intern_app/images/lider-logo-beyaz.svg'%}" alt="">
+              </a>
+            </div>
+          </div>
+        </div>
+        <!--Search Bar-->
+        <div class="search-and-buttos  flex items-center gap-5    ">
+          <div class="wrapper-2 flex flex-row    ">
+
+            <div class="search-bar-wrapper p-3  ">
+              <form id="search-form" class="text-center flex align-middle " role="search" action="{% url 'intern_app:search' %}" method="GET" value="{{ request.GET.search_query }}">
+                  {%csrf_token%}
+                <div class="search-bar   flex flex-row">
+                  <input type="search" class=" border-b-2 w-99 bg-transparent" name="search_query" required
+                  aria-label="Search" autocomplete="off" placeholder="İstediğiniz ürünü arayın.">
+                <button class="search-buton ">
+                  <svg xmlns="http://www.w3.org/2000/svg" id='glass' width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                      d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z">
+                    </path>
+                  </svg>
+                </button>
+             
+                </div>
+                  
+              </form>
+            </div>
+            <div class="buttons flex flex-row left-10 p-2 space-x-2">
+              <div class="profil-button flex items-center">
+                <div class="profile">
+                  <div class="du-dropdown du-dropdown-hover">
+                    {% csrf_token %}
+                    {% if user.is_authenticated %}
+                    <div tabindex="0" role="button" class="du-btn hover:!bg-gray-300 bg-white text-black m-1">
+                      <i class="bi bi-person"></i>Merhaba,{{ user.username }}
+                    </div>
+                    <ul tabindex="0" class="du-dropdown-content du-menu z-999 w-40 rounded-box  *:hover:!bg-gray-300 **:active:!bg-gray-600 bg-white p-2 shadow-sm">
+                      <li class="rounded-t"><a href="{% url 'intern_app:settings' %}"><button class="text-black" onclick="document.activeElement.blur()">Ayarlar</button></a></li>
+                      {% if user.is_superuser or user.is_staff %}
+                      <li><a href="{% url 'intern_app:yonetici-paneli' %}"><button onclick="console.log('log before blur'); document.activeElement.blur()"><span class="text-black">Yönetici Paneli</span></button></a></li>
+                      {% endif %}
+                      <li class="rounded-b border-t border-gray-300"><a type="button" class="text-red-400 " onclick="document.activeElement.blur()" href="{% url 'logout' %}?next=/"><span class="text-red-400">Çıkış Yap</span></a></li>
+                    </ul>
+                    {% else %}
+                    <a tabindex="0" href="{% url 'login' %}" type="button" class="du-btn bg-white text-black m-1"><i class="bi bi-person"></i>Giriş/Kayıt Yap</a>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            
+              <div class="sepett-btn flex items-center">
+                <div class="sepett">
+                  <a class="du-btn hover:!bg-green-600 bg-green-400 text-black m-1 du-btn-cart" href="#" role="button" aria-expanded="false">
+                    <i class="bi bi-basket3 pe-2"></i>
+                    Sepetim
+                  </a>
+                </div>
+              </div>
+            </div>
+            
+        
+    
+
+       
+      </div>
+                  
+                  
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Kategoriler -->
+      <div class="wrapper-kategori top-3 relative">
+        <div class="kategori-icerik  flex flex-row">
+          <div class="kategoriler">
+            <ul class="flex  gap-2">
+              <li>
+                <a class="text-white  hover:!text-gray-300" href="{% url 'intern_app:index' %}">Anasayfa |</a>
+              </li>
+              <li>
+                <div class="du-dropdown custom-sub   du-dropdown-hover ">
+                  <div tabindex="0" class="text-white cursor-pointer flex items-center gap-1">
+                    <i class="bi bi-list"></i> Kategoriler
+                  </div>
+                  <ul tabindex="0" class="du-dropdown-content  du-menu bg-white  text-black rounded-box z-50 w-52 p-2 shadow-sm">
+                    <li class="border-b-2 items-center text-center hover:bg-gray-300 rounded-t active:!bg-gray-400">
+                      <a href="{% url 'intern_app:categories' %}" class="text-black ">Tüm Kategoriler</a>
+                    </li>
+                    
+                    {% for category in categories %}
+                      {% if category.slug %}
+                        <li class="du-dropdown du-dropdown-hover  custom-sub du-dropdown-right ">
+                          <a class="text-black hover:bg-gray-300 active:!bg-gray-400 flex justify-between " 
+                             href="{% url 'intern_app:category_products' category.slug %}">
+                             {{ category.name }}
+                             
+                          </a>
+                          
+                          {% if category.sub_categories.all %}
+                            <ul class="du-dropdown-content    bg-white text-black rounded-box absolute m-10 z-50 w-52 p-6  shadow-sm ml-3">
+                              {% for sub_category in category.sub_categories.all %}
+                              <div class="sub-items-align flex flex-col relative right-5">
+
+                                <li class="">
+                                  <a class="text-black hover:bg-gray-300 active:!bg-gray-400" href="{%url 'intern_app:category_products' slug=sub_category.slug %}">{{ sub_category.name }}</a>
+                                </li>
+                              </div>
+                              {% endfor %}
+                            </ul>
+                          {% endif %}
+                        </li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                </div>
+              </li>
+            
+              <li class="flex gap-x-5">
+                {%for category in categories_filtered%}
+                <a class="text-white hover:!text-gray-300 " href="{%url 'intern_app:category_products' category.slug%}">{{category.name}}</a>
+                {%endfor%}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+
+  </nav>
+</header>

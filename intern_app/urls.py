@@ -7,8 +7,17 @@ app_name = "intern_app"
 
 urlpatterns = [
     path('',views.product_view,name = "index"),
+    path('<str:item_name>-<int:item_id>/',views.item_details,name="item_details"),
     path('',views.redirect_url_ , name ="redirect_url"),
     path('settings/',views.setting,name="settings"),
+    path("settings/kart-ekle/",views.card_ekle,name="card_ekle"),
+    path("settings/kart-guncelle/<int:item_id>",views.card_guncelle,name="card_guncelle"),
+    path('settings/kart-sil/<int:item_id>/',views.card_sil,name="card_sil"),
+    path('settings/adres-ekle/',views.adres_ekle,name="adres_ekle"),
+    path('settings/adres-guncelle/<int:adres_id_guncelleme>/',views.adres_guncelleme,name="adres_guncelleme"),
+    path('set-default-ajax/', views.only_default_update_address, name='only_default_update_address'),
+    path('set-default-ajax-cc/', views.only_default_update_cc, name='only_default_update_cc'),
+    path('settings/adres-sil/<int:adres_id>/',views.adres_sil,name="adres_sil"),
     path('login/',views.login_view,name="login"),
     path('signup/',views.signup_view, name ="signup"),
     path('logout/',views.logout_view, name="logout"),

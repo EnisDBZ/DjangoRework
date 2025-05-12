@@ -1,7 +1,8 @@
 from django.db import models
 from autoslug import AutoSlugField
+from django.urls import reverse
 from django.contrib.auth.models import AbstractUser,Permission
-from django.core.validators import EmailValidator,MinLengthValidator
+from django.core.validators import EmailValidator,MinLengthValidator, RegexValidator
 
 # Create your models here.
 
@@ -24,6 +25,9 @@ class Categories(models.Model):
     def get_main_categories():
         # Başka bir kategorinin alt kategorisi OLMAYAN ana kategorileri getir
         return Categories.objects.filter(parent_categories__isnull=True)
+    
+    def get_absolute_url(self):
+        return reverse('intern_app:subcategory_products',kwargs={"slug":self.slug})
   
 
     def is_sub(self):
@@ -169,3 +173,33 @@ class Resimler(models.Model):
     def __str__(self):
         return self.resim_isim
     
+class Address(models.Model):
+    user = models.ForeignKey(PersonUser,on_delete=models.CASCADE)
+    address_title = models.CharField(max_length=255,default="Varsayılan Adres")
+    name = models.CharField(max_length=255,null=False,verbose_name="İsim")
+    surname = models.CharField(max_length=255,null=False,verbose_name="Soyisim")
+    email = models.EmailField(validators=[EmailValidator()],null=False,verbose_name="E-Posta")
+    telno = models.CharField(validators=[RegexValidator(regex=r'^\d{11}$')],max_length=11,null=False,verbose_name="Telefon Numarası")
+    city = models.CharField(max_length=255,null=False,verbose_name="İl")
+    town = models.CharField(max_length=255,null=False,verbose_name="İlçe")
+    zipcode = models.CharField(validators=[RegexValidator(regex=r'\d{5}$')],max_length=5,null=False,verbose_name="Zip Kodu")
+    open_address = models.CharField(max_length=300,null=False,verbose_name="Açık Adres")
+    isDefault = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.address_title
+    
+class CreditCard(models.Model):
+    user = models.ForeignKey(PersonUser,on_delete=models.CASCADE)
+    card_title = models.CharField(max_length=255,default="Varsayılan Kart")
+    card_no = models.CharField(validators=[RegexValidator(regex=r'^\d{16}$',message="Kart numarasi 16 haneli olmalıdır!")],max_length=16,null=False,error_messages={"min_length":"Minimum 16 hane girmeniz gerekli"},verbose_name="Kart Numarası")
+    card_exp = models.CharField(max_length=5,null=False,verbose_name="Kart Son Kullanma Tarihi")
+    card_owner = models.CharField(validators=[RegexValidator(regex = r'^([a-zA-ZçÇğĞıİöÖşŞüÜ]{2,70} ?){2,4}$',message="İsim ve soyisminiz 2 ila 70 karakter arasında olmalı.")],error_messages={"min_length":"İsim ve soyisminiz toplamda 4 haneden az olmamalıdır!"},max_length=255,null=False,verbose_name="Kart Sahibi İsim-Soyisim")
+    card_cvv = models.CharField(validators=[RegexValidator(regex=r'^\d{3}$',message="CVV 3 haneli olmalıdır!")],error_messages={"min_length":"CVV Minimum 3 haneli olmalıdır"},max_length=3,null=False,verbose_name="Kart CVV")
+    isDefault = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.card_title 
+    
+    def last_four(self):
+        return "**** **** **** " + self.card_no[-4:]

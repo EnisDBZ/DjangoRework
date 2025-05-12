@@ -86,13 +86,13 @@ height: auto;
   
     <div class=" p-1  ">  <!-- Kartlar arasındaki boşluğu azaltmak için px-2 yerine px-1 -->
       <div class="card shadow-sm border-0 rounded-4" >
-        <img src="{{ product.product_image.url }}" 
-            class="card-img-top p-1" 
-            style="object-fit: contain; max-height: 150px;" 
-            alt="{{ product.product_name }}">
+        <a href="{%url 'intern_app:item_details' item_name=product.product_name item_id=product.id %}"><img src="{{ product.product_image.url }}" 
+          class="card-img-top p-1" 
+          style="object-fit: contain; max-height: 150px;" 
+          alt="{{ product.product_name }}"></a>
 
         <div class="card-body p-2">
-          <h6 class="card-title text-primary">{{ product.product_name }}</h6>
+          <h6 class="card-title text-primary"><a href="{%url 'intern_app:item_details' item_name=product.product_name item_id=product.id %}">{{ product.product_name }}</a></h6>
           <p class="card-text text-muted" style="font-size:0.8rem;">
             <small>Eklenme Tarihi:{{product.created_at|date:"d M Y"}}</small>
 
@@ -162,11 +162,11 @@ height: auto;
         
         <div class="col"> <!-- Kartları hizalamak için her kartı bir "col" içine aldık -->
             <div class="card shadow-sm border-0 rounded-4 h-100">
-                <img src="{{ product.product_image.url }}" class="card-img-top p-1" 
-                     style="object-fit: contain; max-height: 150px;" 
-                     alt="{{ product.product_name }}">
+                <a href="{%url 'intern_app:item_details' item_name=product.product_name item_id=product.id %}"><img src="{{ product.product_image.url }}" class="card-img-top p-1" 
+                  style="object-fit: contain; max-height: 150px;" 
+                  alt="{{ product.product_name }}"></a>
                 <div class="card-body p-2">
-                    <h6 class="card-title text-primary">{{ product.product_name }}</h6>
+                    <h6 class="card-title text-primary"><a href="{%url 'intern_app:item_details' item_name=product.product_name item_id=product.id %}">{{ product.product_name }}</a></h6>
                     <p class="card-text text-muted" style="font-size: 0.8rem;">Kategori:  {% for category in product.product_category.all %}
                       {{ category.name }}
                       {% if not forloop.last %}, {% endif %}

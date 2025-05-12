@@ -1,5 +1,6 @@
 {%load static%}
-<html lang="en">
+{%load static tailwind_tags%}
+<html class="w-auto overflow-hidden" lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,6 +11,7 @@
     />
     <script src="{%static 'intern_app/js/jquery.js'%}"></script>
     <title>Merhaba, {{user.username}}</title>
+    {%tailwind_css%}
   </head>
   <body>
     <script>
@@ -23,8 +25,9 @@
         }, 3000); // 3 saniye sonra kaybolmaya başlasın
       });
     </script>
+   
     {% if messages %} {% for message in messages %}
-    <div class="alert {{ message.tags }}">{{ message }}</div>
+    <div class="alert {{ message.tags }} z-999">{{ message }}</div>
     {% endfor %} {% endif %}
     <div class="settings-box">
       <div class="left-box">
@@ -38,6 +41,7 @@
           <a onclick="tabs(2)" class="tab">
             <i class="bi bi-bag-fill"></i>
           </a>
+     
 
           <a href="#" id="redirectButton" class="back-btn">
             <i class="bi bi-arrow-left-circle-fill"></i>
@@ -46,46 +50,494 @@
       </div>
       <div class="right-box">
         <div class="profile-box tabShow">
-          <h1>Kişisel Bilgiler</h1>
-          <h2>Kullanıcı Adı</h2>
-          <input
-            type="text"
-            name="username"
-            id="username"
-            value="{{user.username}}"
-            disabled
-          />
-          <h2>E-Mail</h2>
-          <input
-            type="text"
-            name="email"
-            id="email"
-            value="{{user.email}}"
-            disabled
-          />
+          <div class="wrapper">
+            <div class="profile-sum pt-3">
+              <div class="coklu-secim  flex items-center justify-start rounded-xl **:p-1  relative h-10 text-2xl text-(--text-color) gap-10">
+                
+              
 
-          <h2>İsim</h2>
-          <form action="{%url 'intern_app:update_names'%}" method="post">
-            {%csrf_token%}
-            <input
-              type="text"
-              name="isim"
-              id="isim"
-              value="{{user.first_name}}"
-            />
-            <h2>Soyisim</h2>
+                   <a onclick="panel(0)" class="secim-buton aktif-secim ">
 
-            <input
-              type="text"
-              name="soyisim"
-              id="soyisim"
-              value="{{user.last_name}}"
-            />
-            <button class="btn">Güncelle</button>
-          </form>
+                     <h3>Kişisel Bilgiler</h3>
+                   </a>
+               
+                  <a onclick="panel(1)" class="secim-buton ">
+                  
+                    <h3 >Adresler</h3>
+                 </a>
+             
+               
+                  
+                  <a onclick="panel(2)" class="secim-buton ">
+                      
+                    <h3 >Kayıtlı Kartlar</h3>
+                  </a>
+             
+              
+                
+              </div>
+              <div class="ozet-profil panel" id="panel-0">
 
-          <h2>Hesap Oluşturulma Tarihi</h2>
-          <p>{{user.date_joined}}</p>
+                <h2>Kullanıcı Adı</h2>
+                <input
+                  type="text"
+                  name="username"
+                  id="username"
+                  value="{{user.username}}"
+                  disabled
+                />
+                <h2>E-Mail</h2>
+                <input
+                  type="text"
+                  name="email"
+                  id="email"
+                  value="{{user.email}}"
+                  disabled
+                />
+      
+                <h2>İsim</h2>
+                <form action="{%url 'intern_app:update_names'%}" method="post">
+                  {%csrf_token%}
+                  <input
+                    type="text"
+                    name="isim"
+                    id="isim"
+                    value="{{user.first_name}}"
+                  />
+                  <h2>Soyisim</h2>
+      
+                  <input
+                    type="text"
+                    name="soyisim"
+                    id="soyisim"
+                    value="{{user.last_name}}"
+                  />
+                  <button class="btn">Güncelle</button>
+                </form>
+      
+                <h2>Hesap Oluşturulma Tarihi</h2>
+                <p>{{user.date_joined}}</p>
+              </div>
+              <!-- Adresler  -->
+              <div class="shipping-address panel grid grid-rows-2 " id="panel-1" style="display: none;">
+                <h1>Adreslerim </h1>
+                {%if not adres%}
+                <h2>Henüz adres eklememişsiniz</h2>
+                {%endif%}
+                <div class="wrap grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                  {% for ads in adres %}
+                  <div class="shipping-main-container hover:bg-gray-200 transform  shadow-[0px_4px_10px_rgba(0,0,0,0.55)] rounded-xl p-3 relative">
+                    <div class="shipping-container ">
+                      <div class="shipping-wrapper ">
+                        
+                        
+                          <div class="baslik flex text-black  justify-between  items-center">
+                            <div class="baslik-alt ">
+
+                              <h5>{{ ads.address_title }}</h5>
+                            </div>
+                            <div class="buton123 ">
+
+                              <button class="du-btn bg-transparent border-0 shadow-none text-black hover:text-(--text-color) " id="openbtn" onclick="modal_{{ads.id}}.showModal()" >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                         
+                       
+                          <div class="acik-adres" >
+                            <p>{{ads.open_address}}</p>
+                          </div>
+                         
+            
+                        <div class="modal **:text-black">
+                          <!-- You can open the modal using ID.showModal() method -->
+                          <dialog id="modal_{{ads.id}}" class="du-modal">
+                            <div class="du-modal-box bg-white ">
+                              <form method="dialog">
+                                <button id="closebtn" class="du-btn du-btn-sm du-btn-circle du-btn-ghost  text-black bg-white absolute right-2 top-2">✕</button>
+                              </form>
+                              <div class="title text-lg font-bold flex  justify-center *:truncate ">
+                                
+                                  <h3>{{ads.address_title}} isimli adresi düzenliyorsunuz.</h3>
+
+                              
+                              </div>
+                     
+                              <div class="wrapper justify-center w-full flex  ">
+                                <form method="POST" enctype="multipart/form-data" action="{%url 'intern_app:adres_guncelleme' ads.id%}" >
+                                  {%csrf_token%}
+                                  <div class="adres-bolumu ">
+
+                                    <div class="adres-basligi **:w-full ">
+                                      <label for="adres-baslik-guncelle">Adres Başlığı</label>
+                                      <input type="text" required value="{{ads.address_title}}"  name="adres-baslik-guncelle">
+                                    </div>
+                                  </div>
+                                  <div class=" kisisel-bilgi-bolumu  flex flex-col">
+                                    <div class="isim-soyisim flex flex-row **:block justify-between relative **:w-full">
+    
+                                      <div class="isim1  relative ">
+                                        <label for="isim-adres-guncelle">İsim</label>
+                                        <input type="text" required minlength="2" value="{{ads.name}}" oninput="this.value = this.value.replace(/[^a-zA-ZçÇğĞıİöÖşŞüÜ]/g, '')" name="isim-adres-guncelle">
+                                      </div>
+                                      <div class="soyisim1 relative ">
+                                        <label for="soyisim-adres-guncelle">Soyisim</label>
+                                        <input type="text" required minlength="2" value="{{ads.surname}}" oninput="this.value = this.value.replace(/[^a-zA-ZçÇğĞıİöÖşŞüÜ]/g, '')" name="soyisim-adres-guncelle">
+                                      </div>
+                                      
+                                    </div>
+    
+                                    <div class="email relative **:w-full  flex flex-row justify-between  ">
+    
+                                      <div class="email1">
+                                          <label for="email-adres-guncelle">E-Posta</label>
+                                          <input type="text" required value="{{ads.email}}" oninput="this.value=this.value.replace(/[^a-zA-Z0-9@._-]/g,'');" name="email-adres-guncelle">
+                                      </div>
+                                      <div class="telno1 relative ">
+                                        <label for="telno-adres-guncelle">Telefon No</label>
+                                        <input type="text" required maxlength="11" value="{{ads.telno}}" oninput="this.value=this.value.replace(/[^0-9]/g,'')" name="telno-adres-guncelle">
+                                    </div>
+                                    </div>
+                                  </div>
+                                  <div class="adres-bolumu flex flex-col  ">
+                                    <div class="wrapper-for-fun relative    **:w-full  **:block flex   flex-row">
+    
+                                      <div class="city ">
+                                          <label for="city-adres-guncelle">İl</label>
+                                          <input type="text" required value="{{ads.city}}" oninput="this.value = this.value.replace(/[^a-zA-ZçÇğĞıİöÖşŞüÜ]/g, '')" name="city-adres-guncelle">
+                                      </div>
+                                      <div class="town relative right-1">
+                                          <label for="town-adres-guncelle ">İlçe</label>
+                                          <input type="text" required value="{{ads.town}}" oninput="this.value = this.value.replace(/[^a-zA-ZçÇğĞıİöÖşŞüÜ]/g, '')" name="town-adres-guncelle">
+                                      </div>
+                                      <div class="zipcode relative right-2 ">
+                                          <label for="zipcode-adres-guncelle">ZIP Kodu</label>
+                                          <input type="text" required value="{{ads.zipcode}}" oninput="this.value = this.value.replace(/[^0-9]/g,'')" name="zipcode-adres-guncelle">
+                                      </div>
+                                    </div>
+                                    <div class="lonely-acik-adres relative  **:block pt-2 ">
+    
+                                      <div class="acik-adres">
+                                          <label for="acikadres-adres-guncelle">Açık Adres</label>
+                                          <input type="text" required value="{{ads.open_address}}" name="acikadres-adres-guncelle"></input>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="varsayilan p-1">
+                                    {%if ads.isDefault == True %}
+                                    <label for="varsayilan1-guncelle">
+                                      <input class="du-checkbox " checked="checked" type="checkbox"  name="varsayilan1-guncelle">
+                                      Varsayılan Mı?
+                                    </label>
+                                    {%else%}
+                                    <label for="varsayilan1-guncelle">
+                                      <input class="du-checkbox " type="checkbox"  name="varsayilan1-guncelle">
+                                      Varsayılan Mı?
+                                    </label>
+                                    {%endif%}
+                                  </div>
+                                  <div class="kaydet">
+                                    <button type="submit" class="du-btn bg-white text-black hover:bg-gray-300">
+                                      
+
+                                        Güncelle
+                                     
+                                    </button>
+                                    <button class="du-btn bg-red-500 text-white hover:bg-red-800">
+
+                                      <a href="{%url 'intern_app:adres_sil' ads.id%}">
+                                        Adresi Sil
+                                      </a>
+                                    </button>
+                                  </div>
+                                </form>
+                                
+                              </div>
+                            </div>
+                          </dialog>
+                        </div>
+                      
+                     {%if ads.isDefault%}
+                      <div class="varsayilan ">
+                        <p><input class="du-checkbox text-black" type="checkbox" checked="checked" disabled>Varsayılan adres</p>
+                      </div>
+                      {%endif%}
+                    </div>
+                    
+                  </div>
+                </div>
+                {% endfor %}
+                </div>
+                 
+            
+                <div class="ekle pt-5">
+                  <button onclick="yeni_adres_ekle.showModal()" class="du-btn bg-(--text-color) text-white hover:bg-[#A13636] ">Yeni Adres Ekle</button>
+                </div>
+                <div class="modal">
+                  <!-- You can open the modal using ID.showModal() method -->
+                  <dialog id="yeni_adres_ekle" class="du-modal">
+                    <div class="du-modal-box text-black bg-white">
+                      <form method="dialog">
+                        <button id="closebtn" class="du-btn du-btn-sm du-btn-circle du-btn-ghost  text-black bg-white absolute  right-2 top-2">✕</button>
+                      </form>
+                      <div class="title text-lg font-bold flex justify-center  *:truncate">
+
+                        <h3>Yeni bir adres ekliyorsunuz.</h3>
+                      </div>
+                      <div class="wrapper">
+                        <form method="POST" enctype="multipart/form-data " action="{% url 'intern_app:adres_ekle' %}">
+                          {%csrf_token%}
+                          <div class=" kisisel-bilgi-bolumu flex flex-col">
+                            <div class="adres-basligi relative ">
+                              <label for="adres-baslik">Adres Başlığı</label>
+                              <input type="text" required  name="adres-baslik">
+                            </div>
+                            <div class="isim-soyisim flex flex-row justify-between **:w-full **:block relative ">
+                              <div class="isim1  relative  ">
+                                <label for="isim-adres">İsim</label>
+                                <input type="text" required oninput="this.value = this.value.replace(/[^a-zA-ZçÇğĞıİöÖşŞüÜ]/g, '')" name="isim-adres">
+                              </div>
+                              <div class="soyisim1 relative ">
+                                <label for="soyisim-adres">Soyisim</label>
+                                <input type="text" required oninput="this.value = this.value.replace(/[^a-zA-ZçÇğĞıİöÖşŞüÜ]/g, '')" name="soyisim-adres">
+                              </div>
+                              
+                            </div>
+
+                            <div class="email relative **:w-full justify-between flex flex-row  ">
+
+                              <div class="email1">
+                                  <label for="email-adres">E-Posta</label>
+                                  <input type="text" required oninput="this.value=this.value.replace(/[^a-zA-Z0-9@._-]/g,'');" name="email-adres">
+                              </div>
+                              <div class="telno1 relative ">
+                                <label for="telno-adres">Telefon No</label>
+                                <input type="text"  required maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g,'')" name="telno-adres">
+                            </div>
+                            </div>
+                          </div>
+                          <div class="adres-bolumu flex flex-col  ">
+                            <div class="wrapper-for-fun relative **:w-full **:block flex flex-row">
+
+                              <div class="city ">
+                                  <label for="city-adres">İl</label>
+                                  <input type="text" required oninput="this.value = this.value.replace(/[^a-zA-ZçÇğĞıİöÖşŞüÜ]/g, '')" name="city-adres">
+                              </div>
+                              <div class="town relative right-1">
+                                  <label for="town-adres">İlçe</label>
+                                  <input type="text" required oninput="this.value = this.value.replace(/[^a-zA-ZçÇğĞıİöÖşŞüÜ]/g, '')" name="town-adres">
+                              </div>
+                              <div class="zipcode relative right-2">
+                                  <label for="zipcode-adres">ZIP Kodu</label>
+                                  <input type="text" maxlength="5" minlength="5" required oninput="this.value = this.value.replace(/[^0-9]/g,'')" name="zipcode-adres">
+                              </div>
+                            </div>
+                            <div class="lonely-acik-adres relative  **:block pt-2">
+
+                              <div class="acik-adres">
+                                  <label for="acikadres-adres">Açık Adres</label>
+                                  <input type="text"  required name="acikadres-adres">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="varsayilan p-1">
+                            <label for="varsayilan1">
+                              <input class="du-checkbox text-black " checked="checked" type="checkbox"  name="varsayilan1">
+                              Varsayılan Mı?
+                            </label>
+                          </div>
+                          <div class="kaydet">
+                            <button type="submit" class="du-btn bg-white text-black hover:bg-gray-300">
+                              Kaydet
+                            </button>
+                          </div>
+                        </form>
+                        
+                      </div>
+                    </div>
+                  </dialog>
+                </div>
+              </div>
+              
+            </div>
+            <!-- Kredi Kartları -->
+            <div class="card-section panel grid grid-rows-2" id="panel-2" style="display: none;">
+              <h1>Kartlarım</h1>
+              <div class="card-wrapper grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {%for cc in credit_card%}
+                <div class="credit-card-outer du-card bg-gray-600 hover:bg-gray-800 transition-all shadow-[0px_4px_10px_rgba(0,0,0,0.55)] rounded-xl">
+                  <div class="credit-card-inner du-card-body ">
+                    <div class="creditcard-info">
+                      <div class="baslik flex  justify-between items-center">
+                        <div class="baslik-alt">
+                          {{cc}}
+
+                        </div>
+                        <div class="duzenle">
+                          <button class="du-btn bg-transparent border-0 shadow-none hover:text-(--text-color) " onclick="kart_{{cc.id}}.showModal()">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                            </svg>                                
+                          </button>
+                        </div>
+                      </div>
+                      <div class="kart-numara text-lg">{{cc.last_four}}</div>
+                      <div class="kart-altbilgi flex flex-row justify-between ">
+                        <div class="kart-sahip">{{cc.card_owner}}</div>
+                        <div class="kart-exp ">{{cc.card_exp}}</div>
+                      </div>
+                      {%if cc.isDefault%}
+                      <div class="varsayilan !italic ">
+                        <p class="!text-gray-200">Varsayılan ★</p>
+                      </div>
+                      {%endif%}
+                    </div>
+                  </div>
+                </div>
+                {%endfor%}
+              </div>
+              <div class="ekle pt-5">
+                <button onclick="yeni_kart_ekle.showModal()" class="du-btn bg-(--text-color) text-white hover:bg-[#A13636] ">Yeni Kart Ekle</button>
+              </div>
+             
+              <div class="modal">
+                <!-- You can open the modal using ID.showModal() method -->
+                <dialog id="yeni_kart_ekle" class="du-modal">
+                  <div class="du-modal-box text-black bg-white">
+                    <form method="dialog">
+                      <button id="closebtn" class="du-btn du-btn-sm du-btn-circle du-btn-ghost text-black  bg-white absolute  right-2 top-2">✕</button>
+                    </form>
+                    <div class="title flex justify-center *:truncate">
+                      <h3 class="text-lg font-bold">Yeni bir kart ekliyorsunuz.</h3>
+
+                    </div>
+                    <div class="wrapper flex justify-center">
+                      <form method="POST" enctype="multipart/form-data " action="{%url 'intern_app:card_ekle'%}">
+                        {%csrf_token%}
+                        <div class=" kisisel-bilgi-bolumu flex flex-col">
+                          <div class="adres-basligi relative  *:block">
+                            <label for="kart-baslik">Kart Başlığı</label>
+                            <input type="text"  required  name="kart-baslik">
+                            
+                          </div>
+                          <div class="kart-isim-no flex flex-row **:w-full justify-between **:block relative  ">
+                            <div class="kart-isim   ">
+                              <label for="kart-isim">Kart Üzerindeki İsim</label>
+                              <input type="text" class="w-100" required oninput="this.value = this.value.replace(/[^a-zA-ZçÇğĞıİöÖşŞüÜ]/g,' ')" name="kart-fullisim">
+                            </div>
+                            <div class="kart-no ">
+                              <label for="kart-no">Kart No</label>
+                              <input type="text" minlength="16" maxlength="16" required oninput="this.value = this.value.replace(/[^0-9]/g, '')" name="kart-no">
+                            </div>
+                            
+                          </div>
+
+                          <div class="exp-telno relative flex flex-row **:w-full ">
+
+                            <div class="exp">
+                                <label for="kart-exp">Kart S.K.T</label>
+                                <input class="expiry" minlength="5" maxlength="5" type="text" required oninput="this.value=this.value.replace(/[^0-9]/g,'');" name="kart-exp">
+                            </div>
+                            <div class="telno1 ">
+                              <label for="kart-cvv">CVV</label>
+                              <input type="password"  required minlength="3" maxlength="3" oninput="this.value = this.value.replace(/[^0-9]/g,'')" name="kart-cvv">
+                          </div>
+                          </div>
+                        </div>
+                        <div class="varsayilan p-1">
+                          <label for="kart-varsayilan">
+                            <input class="du-checkbox text-black " checked="checked" type="checkbox"  name="kart-varsayilan">
+                            Varsayılan Mı?
+                          </label>
+                        </div>
+                        <div class="kaydet">
+                          <button type="submit" class="du-btn bg-white text-black hover:bg-gray-300">
+                            Ekle
+                          </button>
+                        </div>
+                      </form>
+                      
+                    </div>
+                  </div>
+                </dialog>
+              </div>
+              {%for cc in credit_card%}
+              <div class="modal">
+                <!-- You can open the modal using ID.showModal() method -->
+                <dialog id="kart_{{cc.id}}" class="du-modal">
+                  <div class="du-modal-box text-black bg-white">
+                    <form method="dialog">
+                      <button id="closebtn" class="du-btn du-btn-sm du-btn-circle du-btn-ghost  text-black bg-white absolute  right-2 top-2">✕</button>
+                    </form>
+                    <div class="ttitle flex justify-center *:truncate">
+                      <h3 class="text-lg font-bold">{{cc}} adlı kartınızı düzenliyorsunuz.</h3>
+
+                    </div>
+                    <div class="wrapper">
+                      <form method="POST" enctype="multipart/form-data " action="{%url 'intern_app:card_guncelle' cc.id%}">
+                        {%csrf_token%}
+                        <div class=" kisisel-bilgi-bolumu flex flex-col">
+                          <div class="adres-basligi relative *:block ">
+                            <label for="kart-baslik-guncelle">Kart Başlığı</label>
+                            <input type="text" value="{{cc.card_title}}" required minlength="2"  name="kart-baslik-guncelle">
+                            
+                          </div>
+                          <div class="kart-isim-no justify-center **:w-full flex flex-row **:block relative ">
+                            <div class="kart-isim  ">
+                              <label for="kart-isim-guncelle">Kart Üzerindeki İsim-Soyisim</label>
+                              <input type="text" value="{{cc.card_owner}}" class="w-100" minlength="5" required oninput="this.value = this.value.replace(/[^a-zA-ZçÇğĞıİöÖşŞüÜ]/g,' ')" name="kart-fullisim-guncelle">
+                            </div>
+                            <div class="kart-no ">
+                              <label for="kart-no-guncelle">Kart No</label>
+                              <input type="text" value="{{cc.card_no}}"  minlength="16" maxlength="16" required oninput="this.value = this.value.replace(/[^0-9]/g, '')" name="kart-no-guncelle">
+                            </div>
+                            
+                          </div>  
+
+                          <div class="exp-telno relative justify-between flex flex-row **:w-full ">
+
+                            <div class="exp">
+                                <label for="kart-exp-guncelle">Kart S.K.T</label>
+                                <input class="expiry" value="{{cc.card_exp}}" minlength="5" maxlength="5" type="text" required oninput="this.value=this.value.replace(/[^0-9]/g,'');" name="kart-exp-guncelle">
+                            </div>
+                            <div class="telno1 ">
+                              <label for="kart-cvv-guncelle">CVV</label>
+                              <input type="text"  value="{{cc.card_cvv}}"  required minlength="3" maxlength="3" oninput="this.value = this.value.replace(/[^0-9]/g,'')" name="kart-cvv-guncelle">
+                          </div>
+                          </div>
+                        </div>
+                        <div class="varsayilan  p-1">
+                          <label for="kart-varsayilan-guncelle">
+                            {%if cc.isDefault == True %}
+                            <input class="du-checkbox text-black "  checked="checked" type="checkbox"  name="kart-varsayilan-guncelle">
+                            {%else%}
+                            <input class="du-checkbox text-black "  type="checkbox"  name="kart-varsayilan-guncelle">
+                            {%endif%}
+                            Varsayılan Mı?
+                          </label>
+                        </div>
+                        <div class="butonlar">
+                          <button type="submit" class="du-btn bg-white text-black hover:bg-gray-300">
+                            Güncelle
+                          </button>
+                          <button class="du-btn bg-error hover:bg-red-600">
+                            <a href="{%url 'intern_app:card_sil' cc.id%}">
+                              Sil
+                            </a>
+                          </button>
+                        </div>
+                      </form>
+                      
+                    </div>
+                  </div>
+                </dialog>
+              </div>
+              {%endfor%}
+            </div>
+          </div>
         </div>
         <div class="change-settings tabShow">
           <h1>Hesap Ayarları</h1>
@@ -114,7 +566,7 @@
             <input type="text" name="new_password" id="new_password" />
             <button type="submit" class="btn">Güncelle</button>
           </form>
-        </div>
+      </div>
         <div class="siparisler tabShow">
           <h1>Siparişler</h1>
           {% if not bills %}
@@ -125,7 +577,11 @@
                 {% for bill in bills %}
                 <details class="order-dropdown">
                   <summary><b>Sipariş No: {{ bill.tracking_no }}<br>
+      
+                    
+                  
                     <small>Toplam Fiyat:<b>{{bill.billing_total_price}} ₺</b></b></small></summary>
+               
                   
               
                   {% for item in billed_items %}
@@ -171,8 +627,8 @@
                   {% endfor %}
                 </details>
               {% endfor %}
-      </div>
-    </div>
+          </div>
+        </div>
     <script src="{%static 'intern_app/js/jquery.js'%}"></script>
     <!-- Arayüzü değiştirme -->
     <script>
@@ -192,6 +648,25 @@
         $(this).addClass("active").siblings().removeClass("active");
       });
     </script>
+    <script>
+     function panel(index){
+      const paneller = document.querySelectorAll(".panel");
+      const butonlar = document.querySelectorAll(".secim-buton");
+      paneller.forEach((panel,i) =>{
+        panel.style.display = (i === index) ?"block" : "none";
+      });
+      butonlar.forEach((btn,i) => {
+        btn.classList.toggle("aktif-secim",i === index);
+      });
+     }
+     window.onload = () =>panel(0);
+
+    </script>
+    <script>
+      $(".sekme_goster").click(function () {
+        $(this).addClass("aktif-secim").siblings().removeClass("aktif-secim");
+      });
+    </script>
     <!-- Ayarlardaki geri dönme butonuna tıklandığında geldiğin sayfaya göre yönlendirme -->
     <script>
       document
@@ -206,5 +681,28 @@
           }
         });
     </script>
-  </body>
+   <script>
+    // Kart tarih kısmında hem alfabeleri engellemek hemde 2 karakter girildikten sonra
+    // otomatik olarak ortaya "/" koyma fonksiyonu
+    const expiryInputs = document.getElementsByClassName("expiry");
+
+Array.from(expiryInputs).forEach((input) => {
+  input.addEventListener("input", (e) => {
+    let value = e.target.value.replace(/\D/g, "");
+
+    if (value.length >= 3) {
+      value = value.slice(0, 2) + '/' + value.slice(2, 4);
+    }
+
+    e.target.value = value;
+  });
+
+  input.addEventListener("blur", () => {
+    const value = input.value;
+    const regex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+
+  });
+});
+  </script>
+</body>
 </html>

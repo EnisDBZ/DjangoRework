@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
-from .models import Products, CartItem, Categories,Billing , BilledItems,Resimler,CartItemQuickBuy
+from .models import Products, CartItem, Categories,Billing , BilledItems,Resimler,CartItemQuickBuy, CreditCard , Address
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.db.models import Q
@@ -87,7 +87,12 @@ def index(request):
 
 @login_required
 def setting(request):
-    return render(request, 'intern_app/setting.html')
+    credit_card = CreditCard.objects.filter(user=request.user)
+
+    context = {
+        'credit_card':credit_card
+    }
+    return render(request, 'intern_app/setting.html',context)
 
 
 # Authentication #
@@ -274,7 +279,11 @@ def checkout(request):
     # Toplam fiyatı alır.
     total_price = sum(item.cart_name.product_price *
                       item.cart_quantity for item in cart_items)
-    
+    # Kullanıcıya ait kayıtlı kredi/banka kartlarını al
+    credit_card = CreditCard.objects.filter(user=request.user).order_by("-isDefault").first()
+    # Kullanıcıya ait kayıtlı adresleri al
+    adres_checkout = Address.objects.filter(user=request.user)
+
     # Sipariş bilgilerini almak
     if request.method == "POST":
         #new_billing değişkenine Billing modelini atadık
@@ -333,11 +342,17 @@ def checkout(request):
 
         messages.success(request,"Siparişiniz başarılı bir şekilde alındı!")
         return redirect("/")
+
+
+
     context = {
       
         "cart_items":cart_items,
         "total_price":total_price,
+        "credit_cart":credit_card,
+        "adres_checkout":adres_checkout,
     }
+
     return render(request,"intern_app/checkout.html",context)
 
 def checkout_quick_buy(request,product_id):
@@ -348,7 +363,7 @@ def checkout_quick_buy(request,product_id):
     user = request.user
     cart_items = CartItem.objects.filter(user=user, cart_name=product).first()
 
-    quick_buy = CartItemQuickBuy.objects.get(user=request.user, item_name=product)
+    quick_buy = CartItemQuickBuy.objects.filter(user=request.user, item_name=product).first()
 
  
 
@@ -542,6 +557,8 @@ def add_to_cart(request, product_id):
     # Eğer post isteği değilse anasayfaya geri döner.
     return render(request, 'intern_app/index.html', {'product': product})
 
+
+# Satın al butonuna tıklandıktan sonra eğer ödeme sayfasından çıkılırsa alınan öğeyi sıfırla
 @csrf_exempt
 def clear_quick_buy(request):
     if request.method == "POST":
@@ -566,3 +583,194 @@ def remove_from_cart(request, item_id):
 
     # Bulunduğu sayfaya geri döner
     return redirect(request.META.get('HTTP_REFERER'))
+
+
+def adres_listele(request):
+    adres_ilk = Address.objects.filter(user=request.user).order_by("-isDefault").first()
+
+    adres = Address.objects.filter(user=request.user)
+
+    context = {
+        "adres_ilk":adres_ilk,
+        "adres":adres
+    }
+    return render(request,"intern_app/checkout.html",context)
+
+
+def adres_ekle(request):
+    user = request.user
+  
+    if request.method == "POST":
+        
+        if Address.objects.filter(user=request.user).count()>= 5:
+            messages.error(request,"5'den fazla adres ekleyemezsiniz.Yeni adres eklemek için kullanmadığınız bir adet adresi silin.")
+            return redirect('intern_app:settings')
+    
+        adres = Address()
+
+        adres.user = request.user
+        adres.address_title = request.POST.get("adres-baslik")
+        adres.name = request.POST.get("isim-adres")
+        adres.surname = request.POST.get("soyisim-adres")
+        adres.email = request.POST.get("email-adres")
+        adres.telno = request.POST.get("telno-adres")
+        adres.city = request.POST.get("city-adres")
+        adres.town = request.POST.get("town-adres")
+        adres.zipcode = request.POST.get("zipcode-adres")
+        adres.open_address = request.POST.get("acikadres-adres")
+        adres.isDefault = request.POST.get("varsayilan1") == "on"
+
+        if adres.isDefault:
+            Address.objects.filter(user=request.user,isDefault = True).update(isDefault=False)
+
+        adres.save()
+        messages.success(request,"Adresiniz başarıyla oluşturuldu!")
+        return redirect('intern_app:settings')
+    
+    return render(request,'intern_app/setting.html' )
+    
+def adres_guncelleme(request,adres_id_guncelleme):
+    adres = Address.objects.get(id=adres_id_guncelleme)
+
+    if request.method == "POST":
+        
+
+        adres.user = request.user
+        adres.address_title = request.POST.get("adres-baslik-guncelle")
+        adres.name = request.POST.get("isim-adres-guncelle")
+        adres.surname = request.POST.get("soyisim-adres-guncelle")
+        adres.email = request.POST.get("email-adres-guncelle")
+        adres.telno = request.POST.get("telno-adres-guncelle")
+        adres.city = request.POST.get("city-adres-guncelle")
+        adres.town = request.POST.get("town-adres-guncelle")
+        adres.zipcode = request.POST.get("zipcode-adres-guncelle")
+        adres.open_address = request.POST.get("acikadres-adres-guncelle")
+        adres.isDefault = request.POST.get("varsayilan1-guncelle") == "on"
+        
+        if adres.isDefault:
+            Address.objects.filter(user=request.user,isDefault = True).update(isDefault=False)
+
+        adres.save()
+        messages.success(request,"Adresiniz başarıyla güncellendi!")
+        return redirect("intern_app:settings")
+    
+    return render(request,"intern_app/setting.html")
+
+
+def only_default_update_address(request):
+    address_id = request.POST.get("address_id")
+    
+    user=request.user
+
+    try:
+        selected_address = Address.objects.get(id=address_id,user=user)
+    except Address.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Adres bulunamadı.'}, status=404)
+    
+    Address.objects.filter(user=user, isDefault=True).update(isDefault=False)
+    selected_address.isDefault = True
+    selected_address.save()
+
+    return JsonResponse({'success': True, 'message': 'Varsayılan adres güncellendi.', 'default_id': selected_address.id})
+
+def only_default_update_cc(request):
+    cc_id = request.POST.get("cc_id")
+    
+    user = request.user
+
+    try:
+        selected_cc = CreditCard.objects.get(id=cc_id,user=user)
+    except CreditCard.DoesNotExist:
+        return JsonResponse({'success':False,'message':'Kart bulunamadı.'},status = 404)
+    
+    CreditCard.objects.filter(user=user,isDefault=True).update(isDefault=False)
+    selected_cc.isDefault = True
+    selected_cc.save()
+    return JsonResponse({'success': True,'message': 'Varsayılan kart güncellendi.', 'default_id': selected_cc.id})
+
+
+def adres_sil(request,adres_id):
+    adres = Address.objects.get(id=adres_id)
+
+    adres.delete()
+    messages.success(request,"Adres başarıyla silindi!")
+    return redirect(request.META.get('HTTP_REFERER'))
+
+def card_ekle(request):
+
+    if request.method == "POST":
+
+        if CreditCard.objects.filter(user=request.user).count()>= 3:
+            messages.error(request,"3'den fazla kart ekleyemezsiniz. Yeni kart kaydetmek için herhangi birini silin!")
+            return redirect('intern_app:settings')
+
+
+        card = CreditCard()
+
+        card.user = request.user
+        card.card_title = request.POST.get("kart-baslik")
+        card.card_no = request.POST.get("kart-no")
+        card.card_exp = request.POST.get("kart-exp")
+        card.card_owner = request.POST.get("kart-fullisim")
+        card.card_cvv = request.POST.get("kart-cvv")
+        card.isDefault = request.POST.get("kart-varsayilan") == "on"
+        
+        if card.isDefault:
+            CreditCard.objects.filter(user=request.user,isDefault = True).update(isDefault = False)
+        try:
+            card.full_clean()
+            card.save()
+            messages.success(request,"Kartınız başarıyla kaydedildi! ")
+        except ValidationError as e:
+            for field,messages_list in e.message_dict.items():
+                for msg in messages_list:
+                    messages.error(request,f"{msg}")
+                    
+            return redirect("intern_app:settings")
+        return redirect("intern_app:settings")
+    return render(request,"intern_app/setting.html")
+
+def card_guncelle(request,item_id):
+
+    card = CreditCard.objects.get(id = item_id)
+
+    if request.method == "POST":
+        card.card_title = request.POST.get("kart-baslik-guncelle")
+        card.card_no = request.POST.get("kart-no-guncelle")
+        card.card_exp = request.POST.get("kart-exp-guncelle")
+        card.card_owner = request.POST.get("kart-fullisim-guncelle")
+        card.card_cvv = request.POST.get("kart-cvv-guncelle")
+        card.isDefault = request.POST.get("kart-varsayilan-guncelle") == "on"
+
+        if card.isDefault:
+            CreditCard.objects.filter(user=request.user,isDefault = True).update(isDefault = False)
+        
+        try:
+            card.full_clean()
+            card.save()
+            messages.success(request, "Kart detayları başarıyla güncellendi!")
+        except ValidationError as e:
+            for field,messages_list in e.message_dict.items():
+                for msg in messages_list:
+                    messages.error(request, f"{msg}")
+                    
+            return redirect("intern_app:settings")
+
+        return redirect("intern_app:settings")
+    return render(request,"intern_app/setting.html",{
+        "open_card_model" : True
+    })
+
+
+def card_sil(request,item_id):
+    card = CreditCard.objects.get(id=item_id)
+
+    card.delete()
+    messages.success(request,"Kartınız başarıyla silindi!")
+    return redirect('intern_app:settings')
+
+
+def item_details(request,item_name,item_id):
+    products = get_object_or_404(Products,product_name=item_name,id=item_id)
+
+    return render(request,"intern_app/item-details.html", {'products':products})

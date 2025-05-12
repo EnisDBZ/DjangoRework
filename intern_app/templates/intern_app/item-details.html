@@ -1,0 +1,43 @@
+{%extends 'base.html'%}
+{%load static%}
+{%load static tailwind_tags%}
+{%tailwind_css%}
+{%block content%}
+
+<div class="max-w-6xl mx-auto p-4">
+    <div class="du-card du-card-bordered shadow-xl grid grid-cols-1 md:grid-cols-2 gap-8 bg-white p-6 rounded-2xl">
+      <!-- Ürün Görseli -->
+      <div>
+        <img src="{{products.product_image.url}}" alt="Ürün Görseli" class="rounded-xl w-full  object-cover" />
+      </div>
+
+      <!-- Ürün Bilgisi -->
+      <div class="flex flex-col justify-between">
+        <div>
+          <h2 class="text-3xl font-bold mb-2">{{products.product_name}}</h2>
+          <p class="text-lg text-gray-600 mb-4">{{products.product_description}}.</p>
+
+          <div class="du-badge du-badge-success du-text-sm du-mb-2">Stokta</div>
+
+          <div class="text-2xl font-semibold text-green-600 mb-6">{{products.product_price}}₺</div>
+          <div class="flex gap-3 mt-4">
+            <form method="POST" action="{%url 'intern_app:add_to_cart' products.id%}">
+                {% csrf_token %}
+                <button type="submit" name="action" value="add_to_cart" class="du-btn bg-transparent text-black hover:!bg-blue-800 hover:!text-white !rounded-xl w-20"><span class="text-sm">Sepete Ekle</span></button>
+                <button type="submit" name="action" value="buy_now" class="du-btn bg-green-400 hover:bg-green-700 hover:border-green-700 !rounded-xl border-green-500" ><span class="text-sm">Anında Satın Al</span></button>
+            </form>
+           </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Ürün Açıklaması -->
+    <div class="du-card du-card-bordered shadow-lg bg-white mt-8 p-6 rounded-2xl">
+      <h3 class="text-2xl font-semibold mb-4">Detaylı Açıklama</h3>
+      <p class="text-gray-700 leading-relaxed">
+        Bu alanda ürünle ilgili daha uzun bir açıklama yer alır. Teknik detaylar, kullanım önerileri, garanti bilgileri vb. içerikler burada olabilir.
+      </p>
+    </div>
+  </div>
+{%endblock%}

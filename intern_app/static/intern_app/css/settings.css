@@ -1,8 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
-
+:root{
+  --border-color: #ff5252af;
+  --text-color:#ff5252;
+  --test-color:var(--text-color);
+}
 body::-webkit-scrollbar {
-  display: none;
+  display: none ;
 }
 body {
   background-image: url("/static/intern_app/images/pattern2_blue.png") !important;
@@ -11,31 +15,48 @@ body {
   font-family: "Segoe UI", sans-serif;
   overflow-x: hidden;
 }
+
 title {
   text-transform: uppercase;
 }
 .alert {
+  width: 25rem;
   position: fixed;
-  top: 10px;
-  opacity: 0;
-  transform: translateY(-10px);
-  animation: fadeIn 0.5s ease-in forwards;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 5px;
-  color: #fff;
-  display: inline-block;
+  left: 10px;
+  top:10px;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  animation: fadeIn 0.3s ease-in-out;
 }
 
-/* Başarı Mesajı (Yeşil) */
-.alert.success {
-  background-color: #28a745;
+.success {
+  background-color: #d1fae5;
+  color: #065f46;
+  border-left: 4px solid #10b981;
 }
 
-/* Hata Mesajı (Kırmızı) */
-.alert.error {
-  z-index: 999;
-  background-color: #dc3545;
+.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border-left: 4px solid #ef4444;
+}
+
+.warning {
+  background-color: #fef3c7;
+  color: #92400e;
+  border-left: 4px solid #f59e0b;
+}
+
+.info {
+  background-color: #dbeafe;
+  color: #1e40af;
+  border-left: 4px solid #3b82f6;
 }
 
 /* Fade-in animasyonu */
@@ -133,6 +154,9 @@ h1 {
   margin-top: 40px;
   margin-bottom: 35px;
 }
+
+
+
 h2,
 p {
   font-family: "Roboto", sans-serif;
@@ -142,23 +166,29 @@ p {
   letter-spacing: 2px;
   margin-top: 10px;
 }
-input {
+input[type="text"],input[type="email"],input[type="password"] {
   border: 0;
-  border-bottom: solid rgb(194, 0, 0) 1px;
-  width: 80%;
+  border: solid rgb(194, 0, 0,0.2) 1px;
+  width: 90%;
   font-family: "Montserrat", sans-serif;
   font-size: 0.7em;
   padding: 7px 0;
   outline: none;
   color: #070707;
   background: #fff;
-  border-radius: 0px 0px 7px 7px;
+  border-radius: 7px 7px 7px 7px;
   text-align: center;
-}
+  transition: 0.3s ease-in;
 
-input:hover {
+}
+input[type="checkbox"]{
+  transition: 0.3s ease-in;
+
+}
+input:hover{
   background-color: rgba(255, 0, 0, 0.164);
 }
+
 .btn {
   font-family: "roboto", sans-serif;
   text-transform: uppercase;
@@ -326,4 +356,20 @@ input:hover {
 
 .order-dropdown[open] summary::after {
   transform: rotate(180deg);
+}
+
+
+.aktif-secim{
+  background-color:#ff5252;
+  color: white;
+  transition: 0.3s ease-in-out;
+  border-radius: 20px;
+  cursor: pointer;
+  padding: 4;
+  border: 1px solid rgba(0, 0, 0, 0.585);
+}
+.secim-buton{
+  border-radius: 5px;
+  cursor: pointer;
+  
 }

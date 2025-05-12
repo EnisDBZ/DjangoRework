@@ -19,10 +19,16 @@
                 <div class="col">
                     <!-- Kartları hizalamak için her kartı bir "col" içine aldık -->
                     <div class="card shadow-sm border-0 rounded-4 h-100">
-                        <img src="{{ post.product_image.url }}" class="card-img-top p-1"
-                            style="object-fit: contain; max-height: 150px;" alt="{{ post.product_name }}">
+                        <a href="{%url 'intern_app:item_details' item_name=post.product_name item_id=post.id %}">
+
+                            <img src="{{ post.product_image.url }}" class="card-img-top p-1"
+                                style="object-fit: contain; max-height: 150px;" alt="{{ post.product_name }}">
+                        </a>
                         <div class="card-body p-2">
-                            <h6 class="card-title text-primary">{{ post.product_name }}</h6>
+                            <a href="{%url 'intern_app:item_details' item_name=post.product_name item_id=post.id %}">
+
+                                <h6 class="card-title text-primary">{{ post.product_name }}</h6>
+                            </a>
                             <p class="card-text text-muted" style="font-size: 0.8rem;">{{ post.product_description }}
                             </p>
                         </div>

@@ -24,6 +24,22 @@
         
         {% csrf_token %}
         {{ form.as_p }}
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Tüm formları gez
+                document.querySelectorAll("form").forEach(function (form) {
+                    // Form içinde hiç buton yoksa
+                    if (!form.querySelector("button")) {
+                        const button = document.createElement("button");
+                        button.type = "submit";
+                        button.textContent = "Ekle";
+                        form.appendChild(button); // Formun sonuna ekle
+                    }
+                });
+            });
+            </script>
+        
+        
         {%endif%}
         {%if model_name == 'categories'%}
         <div class="skibidi_alt">

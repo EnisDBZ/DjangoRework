@@ -1,4 +1,4 @@
-from .models import CartItem, Categories , Billing,BilledItems, Products,Resimler
+from .models import CartItem, Categories , Address, Billing,BilledItems, Products,Resimler,CreditCard
 from django.shortcuts import get_object_or_404
 from django.apps import apps
 from django.contrib import admin
@@ -88,3 +88,27 @@ def gorseller(request):
     resimler = Resimler.objects.all()
 
     return {'resim':resimler}
+
+def adres_listeleme_context(request):
+    if request.user.is_authenticated:
+        adres_ilk = Address.objects.filter(user=request.user).order_by("-isDefault").first()
+        adres = Address.objects.filter(user=request.user)
+    else:
+        adres_ilk = None
+        adres = Address.objects.none()
+
+    return {'adres_ilk': adres_ilk, "adres": adres}
+
+
+def kart_listeleme_context(request):
+    if request.user.is_authenticated:
+        credit_card_first = CreditCard.objects.filter(user=request.user).order_by("-isDefault").first()
+        credit_card = CreditCard.objects.filter(user=request.user)
+    else:
+        credit_card_first = None
+        credit_card = CreditCard.objects.none()
+
+    return {
+        "credit_card": credit_card,
+        "credit_card_first": credit_card_first,
+    }

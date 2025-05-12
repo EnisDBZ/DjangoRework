@@ -78,7 +78,8 @@ TEMPLATES = [
                 'intern_app.context_processors.sub_categories_processor',
                 'intern_app.context_processors.admin_links',
                 'intern_app.context_processors.BillingProcessor',
-      
+                'intern_app.context_processors.adres_listeleme_context',
+                'intern_app.context_processors.kart_listeleme_context',
                                                                       
             ],
         },

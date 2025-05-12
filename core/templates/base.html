@@ -92,11 +92,15 @@
             <p>Sepetiniz boş.</p>
             {% endif %}
         </div>
+        {%if not  total_price %}
+       
+        {%else%}
         <div class="modal-footer odeme-tamamla d-flex justify-content-between align-items-center">
           <a href="{% url 'intern_app:checkout' %}" class="btn btn-success">Siparişi Tamamla</a>
           <span class="total-price fw-bold fs-5">Toplam Fiyat: {{ total_price }}₺</span>
         </div>
       </div>
+      {%endif%}
      
     </div>
     </div>

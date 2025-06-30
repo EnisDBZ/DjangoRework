@@ -46,6 +46,19 @@
         <!-- Card Category Section -->
         <div class="card-category w-3/4">
             <div class="card-categry-section relative z-0 overflow-hidden">
+                <div class="du-breadcrumbs">
+                    <ul class="breadcrumbs">
+                        <li><a href="{% url 'intern_app:index' %}">Anasayfa</a></li>
+                        <li> <a href="{% url 'intern_app:categories'%}">Tüm Kategoriler</a></li>
+                        {%for category in categories%}
+                     
+                        {%if request.path == category.get_absolute_url_cat %}
+                        <li> {{ category.name }}</li>
+                        {%endif%}
+                        {%endfor%}
+                        
+                    </ul>
+                </div>
                 {% if sub_categories%}
                 <link rel="stylesheet" href="{%static 'intern_app/css/category.css'%}">
 

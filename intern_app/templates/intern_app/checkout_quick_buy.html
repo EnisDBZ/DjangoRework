@@ -168,27 +168,30 @@
                 </div>
               
                 <div id="kart-info" class="w-full h-auto rounded-2xl bg-gradient-to-r from-white to-base-300 text-black p-3 shadow-lg flex flex-col justify-between">
-                  <div class="flex justify-between items-center">
-                    <div class="text-sm tracking-wider">{{credit_card_first}}</div>
-                   
-                      <label for="kart-drawer" class="du-btn rounded-xl text-sm font-medium px-4 py-2 border border-black bg-white text-black hover:bg-gray-100 hover:shadow-[0_0_15px_4px_rgba(0,0,0,0.1)] transition-all duration-300 ease-in-out">
-                      Ekle/Değiştir
-                    </label>
-                    
-                  </div>
-                
-                  <div class="text-lg font-mono tracking-widest mt-1 ">
-                    {{credit_card_first.last_four}}
-                  </div>
-                
-                  <div class="flex justify-between items-center text-sm mt-2">
-                    <div>
-                      <div class="uppercase text-xs">Kart Sahibi</div>
-                      <div class="font-semibold">{{credit_card_first.card_owner}}</div>
+                  <div id="wrapper-for-kart" class="wrapper-for-kart">
+
+                    <div class="flex justify-between items-center">
+                      <div class="text-sm tracking-wider">{{credit_card_first}}</div>
+                     
+                        <label for="kart-drawer" class="du-btn rounded-xl text-sm font-medium px-4 py-2 border border-black bg-white text-black hover:bg-gray-100 hover:shadow-[0_0_15px_4px_rgba(0,0,0,0.1)] transition-all duration-300 ease-in-out">
+                        Ekle/Değiştir
+                      </label>
+                      
                     </div>
-                    <div>
-                      <div class="uppercase text-xs">Geçerlilik Süresi</div>
-                      <div class="font-semibold">{{credit_card_first.card_exp}}</div>
+                  
+                    <div class="text-lg font-mono tracking-widest mt-1 ">
+                      {{credit_card_first.last_four}}
+                    </div>
+                  
+                    <div class="flex justify-between items-center text-sm mt-2">
+                      <div>
+                        <div class="uppercase text-xs">Kart Sahibi</div>
+                        <div class="font-semibold">{{credit_card_first.card_owner}}</div>
+                      </div>
+                      <div>
+                        <div class="uppercase text-xs">Geçerlilik Süresi</div>
+                        <div class="font-semibold">{{credit_card_first.card_exp}}</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -547,7 +550,7 @@
             });
             // Sadece seçileni işaretle
             this.checked = true;
-            $("#kart-info").load(location.href + " #kart-info");
+            $("#wrapper-for-kart").load(location.href + " #wrapper-for-kart");
             $("#degerler").load(location.href + " #degerler");
           } else {
             alert(data.message);

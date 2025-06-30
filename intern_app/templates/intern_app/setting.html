@@ -274,7 +274,11 @@
                  
             
                 <div class="ekle pt-5">
-                  <button onclick="yeni_adres_ekle.showModal()" class="du-btn bg-(--text-color) text-white hover:bg-[#A13636] ">Yeni Adres Ekle</button>
+                  {%if adres_count >= 5%} 
+                  <i class="text-(--text-color)">İzin verilen maksimum adres sayısına ulaştınız!</i> 
+                  {%else%}
+                  <button  onclick="yeni_adres_ekle.showModal()" class="du-btn bg-(--text-color) text-white hover:bg-[#A13636] ">Yeni Adres Ekle</button>
+                  {%endif%}
                 </div>
                 <div class="modal">
                   <!-- You can open the modal using ID.showModal() method -->
@@ -399,8 +403,12 @@
                 </div>
                 {%endfor%}
               </div>
-              <div class="ekle pt-5">
-                <button onclick="yeni_kart_ekle.showModal()" class="du-btn bg-(--text-color) text-white hover:bg-[#A13636] ">Yeni Kart Ekle</button>
+              <div class="ekle pt-5"> 
+                {%if card_count >= 3%} 
+                <i class="text-(--text-color)">İzin verilen maksimum kart sayısına ulaştınız!</i>
+                {%else%}
+                <button  onclick="yeni_kart_ekle.showModal()" class="du-btn  bg-(--text-color) text-white hover:bg-[#A13636]">Yeni Kart Ekle</button>
+                {%endif%}
               </div>
              
               <div class="modal">

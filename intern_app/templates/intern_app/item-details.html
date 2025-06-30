@@ -10,7 +10,7 @@
       <div>
         <img src="{{products.product_image.url}}" alt="Ürün Görseli" class="rounded-xl w-full  object-cover" />
       </div>
-
+     
       <!-- Ürün Bilgisi -->
       <div class="flex flex-col justify-between">
         <div>
@@ -23,8 +23,30 @@
           <div class="flex gap-3 mt-4">
             <form method="POST" action="{%url 'intern_app:add_to_cart' products.id%}">
                 {% csrf_token %}
-                <button type="submit" name="action" value="add_to_cart" class="du-btn bg-transparent text-black hover:!bg-blue-800 hover:!text-white !rounded-xl w-20"><span class="text-sm">Sepete Ekle</span></button>
-                <button type="submit" name="action" value="buy_now" class="du-btn bg-green-400 hover:bg-green-700 hover:border-green-700 !rounded-xl border-green-500" ><span class="text-sm">Anında Satın Al</span></button>
+                 <!-- Sepete Ekle formu -->
+                  <div class="wrap ">
+                    <div class="adet-arttirma pb-2">
+                      <div class="flex  justify-center quantity-input items-center  gap-3">
+                          <button type="button" class="transition-all duration-300  hover:!bg-red-500 active:!bg-red-700" id="decrease-{{products.id}}"
+                              onclick="changeQuantity(-1,{{products.id}})">
+                              <i class="bi bi-dash-lg"></i>
+                          </button>
+                          <input type="number" name="quantity" id="quantity-{{products.id}}" min="1" max="999"
+                              value="{{ request.POST.quantity|default:1 }}" required
+                              class="form-control text-center" style="width: 80px; font-size: 1rem;"
+                              oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                          <button type="button" class="hover:!bg-green-500 active:!bg-green-700 " id="increase-{{products.id}}"
+                              onclick="changeQuantity(1,{{products.id}})">
+                              <i class="bi bi-plus-lg"></i>
+                          </button>
+                      </div>
+                    </div>
+                <div class="butonlar">
+                  <button type="submit" name="action" value="add_to_cart" class="du-btn bg-transparent text-black hover:!bg-blue-800 hover:!text-white !rounded-xl w-20"><span class="text-sm">Sepete Ekle</span></button>
+                  <button type="submit" name="action" value="buy_now" class="du-btn bg-green-400 hover:bg-green-700 hover:border-green-700 !rounded-xl border-green-500" ><span class="text-sm">Anında Satın Al</span></button>
+                </div>
+
+                  </div>
             </form>
            </div>
         </div>

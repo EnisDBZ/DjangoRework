@@ -4,6 +4,7 @@
 {%block banner%}
 
 {%endblock%}
+
 <!--Alt Kategori Ürünler-->
 <div class="container-fluid test ">
     <div class="wrapper flex flex-row gap-4 ">
@@ -32,7 +33,7 @@
                             
                             <li class="">
                                 <a href="{{ sub_url}}"
-                                    class="text-sm {%if request.path == sub_url %} !text-red-700 {%else%} !text-gray-500 {%endif%} hover:!text-blue-500 transition">
+                                    class="text-sm {%if request.path == sub_url %} !text-red-700 hover:!text-red-700 {%else%} !text-gray-500 {%endif%} hover:!text-blue-500 transition">
                                     {{ sub_category.name }}
                                 </a>
                             </li>
@@ -46,6 +47,27 @@
             </div>
         </div>
         <div class="product-section  left-130  w-3/4 ">
+            <div class="du-breadcrumbs">
+                <ul class="breadcrumbs">
+                    <li><a href="{% url 'intern_app:index' %}">Anasayfa</a></li>
+                    <li><a href="{% url 'intern_app:categories'%}">Tüm Kategoriler</a></li>
+            
+                    {% for category in categories %}
+                        {% if request.path == category.get_absolute_url_cat %}
+                            <li>{{ category.name }}</li>
+                        {% endif %}
+            
+                        {% for sub_category in category.sub_categories.all %}
+                            {% if request.path == sub_category.get_absolute_url %}
+                                <li>
+                                    <a href="{{ category.get_absolute_url_cat }}">{{ category.name }}</a>
+                                </li>
+                                <li>{{ sub_category.name }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
             {%if not products%}
 
             {%endif%}

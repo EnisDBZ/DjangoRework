@@ -88,9 +88,14 @@ def index(request):
 @login_required
 def setting(request):
     credit_card = CreditCard.objects.filter(user=request.user)
-
+    card_count = request.user.credit_card.all()
+    adres_count = request.user.adres_user.all()
+   
     context = {
-        'credit_card':credit_card
+        'credit_card':credit_card,
+        'card_count':card_count.count(),
+        'adres_count':adres_count.count(),
+       
     }
     return render(request, 'intern_app/setting.html',context)
 
@@ -759,6 +764,7 @@ def card_guncelle(request,item_id):
         return redirect("intern_app:settings")
     return render(request,"intern_app/setting.html",{
         "open_card_model" : True
+     
     })
 
 

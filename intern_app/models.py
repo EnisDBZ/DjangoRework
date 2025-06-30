@@ -28,6 +28,8 @@ class Categories(models.Model):
     
     def get_absolute_url(self):
         return reverse('intern_app:subcategory_products',kwargs={"slug":self.slug})
+    def get_absolute_url_cat(self):
+        return reverse('intern_app:category_products',kwargs={"slug":self.slug})
   
 
     def is_sub(self):
@@ -174,7 +176,7 @@ class Resimler(models.Model):
         return self.resim_isim
     
 class Address(models.Model):
-    user = models.ForeignKey(PersonUser,on_delete=models.CASCADE)
+    user = models.ForeignKey(PersonUser,on_delete=models.CASCADE,related_name='adres_user')
     address_title = models.CharField(max_length=255,default="Varsayılan Adres")
     name = models.CharField(max_length=255,null=False,verbose_name="İsim")
     surname = models.CharField(max_length=255,null=False,verbose_name="Soyisim")
@@ -190,7 +192,7 @@ class Address(models.Model):
         return self.address_title
     
 class CreditCard(models.Model):
-    user = models.ForeignKey(PersonUser,on_delete=models.CASCADE)
+    user = models.ForeignKey(PersonUser,on_delete=models.CASCADE, related_name="credit_card")
     card_title = models.CharField(max_length=255,default="Varsayılan Kart")
     card_no = models.CharField(validators=[RegexValidator(regex=r'^\d{16}$',message="Kart numarasi 16 haneli olmalıdır!")],max_length=16,null=False,error_messages={"min_length":"Minimum 16 hane girmeniz gerekli"},verbose_name="Kart Numarası")
     card_exp = models.CharField(max_length=5,null=False,verbose_name="Kart Son Kullanma Tarihi")

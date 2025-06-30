@@ -96,11 +96,13 @@
               <li>
                 <div class="du-dropdown custom-sub   du-dropdown-hover ">
                   <div tabindex="0" class="text-white cursor-pointer flex items-center gap-1">
-                    <i class="bi bi-list"></i> Kategoriler
+                    <i class="bi bi-list class"></i>Kategoriler
                   </div>
-                  <ul tabindex="0" class="du-dropdown-content  du-menu bg-white  text-black rounded-box z-50 w-52 p-2 shadow-sm">
-                    <li class="border-b-2 items-center text-center hover:bg-gray-300 rounded-t active:!bg-gray-400">
-                      <a href="{% url 'intern_app:categories' %}" class="text-black ">Tüm Kategoriler</a>
+                  <ul tabindex="0" class="du-dropdown-content  du-menu bg-white  rounded-box z-50 w-52 p-2 shadow-sm">
+                    <li class="border-b-2 items-center text-center  hover:bg-gray-300 active:bg-gray-400 z-99 rounded-t">
+                      <a href="{% url 'intern_app:categories' %}" 
+                         class="block w-full h-full text-black items-center  py-2 hover:bg-gray-300 active:!bg-transparent   ">
+                         Tüm Kategoriler</a>
                     </li>
                     
                     {% for category in categories %}

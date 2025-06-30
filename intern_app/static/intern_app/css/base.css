@@ -98,7 +98,7 @@ h1{
 
 
 body{
-  background-color: antiquewhite !important;
+  background-color: rgb(255, 255, 255,0.9) !important;
 
 }
 * {
@@ -208,17 +208,16 @@ then set the desired styles for .card-img. */
   width: 75% !important;
 }
 #carouselExampleCaptions{
-  border-radius: 250px !important;
-  padding-top: 5px;
+  
+  
   padding-bottom: 5px;
   margin: auto;
   height: auto;
   width:70%;
 }
 .carousel > .carousel-inner > .carousel-item > img{
-  height: 320px;
-  border-radius: 5px;
-  object-fit: fit;
+  
+  object-fit: contain;
 }
 
 .test{
@@ -747,13 +746,12 @@ abbr{
   text-decoration: none !important;
 }
 .item>a>img,.item>img{
-  border-radius: 50%;
+  background-color: white;
   
-  border: solid 1px white;
   width: fit-content;
 }
 .item{
-  width: 75%;
+  width: 100%;
 }
 #owl_produc {
   display: flex;

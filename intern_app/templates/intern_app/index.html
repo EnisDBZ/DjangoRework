@@ -21,10 +21,12 @@ height: auto;
       margin:auto;
       margin-top: 10px;
       position: relative;
+      mix-blend-mode: multiply;
+     
 ">
 <div class="owl-carousel owl-theme ">
   {%for resim in resimler%}
-  <div class="item">
+  <div class="item gap-0">
     <a href="">
       <img src="{{resim.resim_gorseli.url}}" alt="{{resim.resim_isim}}"> 
       <div class="justify-center text-center text-black">{{resim.resim_isim}}</div>
